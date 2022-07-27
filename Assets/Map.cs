@@ -52,7 +52,9 @@ public class Map : MonoBehaviour
     /// <summary>プレイヤーの開始時の向き</summary>
     public Direction StartForward { get; set; }
 
+    /// <summary>マップの生成に用いる</summary>
     Dictionary<MassType, MassData> MassDataDict { get; set; }
+    /// <summary>マップの生成に用いる、その文字が定義されているかを判定</summary>
     Dictionary<char, MassData> MapCharDict { get; set; }
 
     List<List<Mass>> Data { get; set; }
@@ -87,6 +89,7 @@ public class Map : MonoBehaviour
                     ch = MapCharDict.First().Key;
                 }
 
+                // 文字に対応したMassData
                 var massData = MapCharDict[ch];
                 var mass = new Mass();
                 var pos = CalcMapPos(i, Data.Count);
