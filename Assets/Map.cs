@@ -96,6 +96,11 @@ public class Map : MonoBehaviour
                 // 下のif文は後々修正する
                 if (massData.isCharacter)
                 {
+                    mass.existObject = Instantiate(massData.prefab, transform);
+                    var mapObject = mass.existObject.GetComponent<MapObjectBase>();
+                    mapObject.SetPosAndForward(new Vector2Int(i, Data.Count), Direction.South);
+
+                    // キャラクターの時は道も一緒に作成する
                     massData = this[MassType.Road];
                 }
                 mass.type = massData.type;
@@ -131,5 +136,31 @@ public class Map : MonoBehaviour
         pos.x = x * _massOffset.x;
         pos.z = y * _massOffset.y * -1;
         return pos;
+    }
+    public Vector3 CalcMapPos(Vector2Int pos) => CalcMapPos(pos.x, pos.y);
+
+    public Vector2Int CalcDirection(Direction dir)
+    {
+        switch (dir)
+        {
+            case Direction.North: return Vector2Int.down;
+            case Direction.South: return Vector2Int.up;
+            case Direction.East: return Vector2Int.right;
+            case Direction.West: return Vector2Int.left;
+            default: throw new NotImplementedException();
+        }
+    }
+
+    public (Mass mass, Vector2Int movedPos) GetMovePos(Vector2Int currentPos, Direction moveDir)
+    {
+        var offset = CalcDirection(moveDir);
+        var movedPos = currentPos + offset;
+        if (movedPos.x < 0 || movedPos.y < 0) return (null, currentPos);
+        if (movedPos.y >= MapSize.y) return (null, currentPos);
+        var line = Data[movedPos.y];
+        if (movedPos.x >= line.Count) return (null, currentPos);
+
+        var mass = line[movedPos.x];
+        return (mass, movedPos);
     }
 }
