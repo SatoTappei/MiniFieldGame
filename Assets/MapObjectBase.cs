@@ -26,6 +26,19 @@ public class MapObjectBase : MonoBehaviour
     public Group _currentGroup = Group.Other;
     [SerializeField] Weapon _weapon;
     Map _map;
+    bool _visible = true;
+    public bool Visible
+    {
+        get => _visible;
+        set
+        {
+            _visible = value;
+            foreach(var renderer in GetComponents<Renderer>().Concat(GetComponentsInChildren<Renderer>()))
+            {
+                renderer.enabled = value;
+            }
+        }
+    }
     public Map Map { get => _map != null ? _map : (_map = FindObjectOfType<Map>()); }
     /// <summary>装備する際に設定処理が必要なのでプロパティ経由で設定する</summary>
     public Weapon CurrentWeapon
@@ -153,6 +166,7 @@ public class MapObjectBase : MonoBehaviour
         _pos = target;
         var movedMass = Map[_pos.x, _pos.y];
         movedMass.existObject = gameObject;
+        Visible = movedMass.Visible;
 
         // モデルの移動処理
         _isNowMoving = true;

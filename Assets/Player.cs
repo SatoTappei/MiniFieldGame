@@ -19,6 +19,8 @@ public class Player : MapObjectBase
     }
 
     [Range(0, 100)] public float _cameraDistance;
+    /// <summary>周りのマスが見える範囲</summary>
+    [Range(1, 10)] public int VisibleRange = 5;
     public Vector3 _cameraDirection = new Vector3(0, 10, -3);
     public int _level = 1;
     public int _food = 99;
@@ -36,6 +38,8 @@ public class Player : MapObjectBase
 
         StartCoroutine(CameraMove());
         StartCoroutine(ActionCoroutine());
+
+        UpdateVisibleMass();
     }
 
     IEnumerator CameraMove()
@@ -71,6 +75,8 @@ public class Player : MapObjectBase
             }
             UpdateFood();
             NowAction = Action.None;
+
+            UpdateVisibleMass();
 
             // イベントを確認
             CheckEvent();
@@ -136,8 +142,60 @@ public class Player : MapObjectBase
         }
         // 全ての敵が移動完了するまで待つ
         yield return new WaitWhile(() => FindObjectsOfType<Enemy>().All(_e => !_e._isNowMoving));
-        // 終了処理
-        DoWaitEvent = true;
+
+        // ゴール判定
+        var mass = Map[_pos.x, _pos.y];
+        if(mass.type == MassType.Goal)
+        {
+            StartCoroutine(Goal());
+        }
+        else
+        {
+            // 終了処理
+            DoWaitEvent = false;
+        }
+    }
+
+    IEnumerator Goal()
+    {
+        // ゴール時にウェイトを入れたければ使う
+        yield return new WaitForSeconds(0.0f);
+
+        var mapSceneManager = FindObjectOfType<MapSceneManager>();
+        mapSceneManager.GenerateMap();
+
+        var player = FindObjectOfType<Player>();
+        player._life = _life;
+        player._attack = _attack;
+        player._food = _food;
+        player._exp = _exp;
+        player._level = _level;
+        player.CurrentWeapon = CurrentWeapon;
+        
+        // 処理の都合上、Attackが上がるのでそれを打ち消すためのもの
+        if(CurrentWeapon != null)
+        {
+            player._attack -= CurrentWeapon._attack;
+        }
+
+        var saveData = new SaveData();
+        saveData._level = _level;
+        saveData._life = _life;
+        saveData._attack = _attack;
+        saveData._exp = _exp;
+        if(CurrentWeapon != null)
+        {
+            saveData._attack -= CurrentWeapon._attack;
+            saveData._weaponName = CurrentWeapon._name;
+            saveData._weaponAttack = CurrentWeapon._attack;
+        }
+        else
+        {
+            saveData._weaponName = "";
+            saveData._weaponAttack = 0;
+        }
+        saveData._mapData = Map.MapData;
+        saveData.Save();
     }
 
     public override void Dead()
@@ -146,6 +204,8 @@ public class Player : MapObjectBase
 
         var mapManager = FindObjectOfType<MapSceneManager>();
         mapManager._gameOver.SetActive(true);
+
+        SaveData.Destroy();
     }
 
     public override bool AttackTo(MapObjectBase other)
@@ -197,8 +257,37 @@ public class Player : MapObjectBase
             StartCoroutine(NotMoveCoroutine(movedPos));
             return;
         }
+        else if(otherObject is Trap)
+        {
+            var trap = (otherObject as Trap);
+            StampTrap(trap, mass, movedPos);
+            StartCoroutine(NotMoveCoroutine(movedPos));
+            return;
+        }
 
         base.MoveToExistObject(mass, movedPos);
+    }
+
+    protected void StampTrap(Trap trap, Map.Mass mass, Vector2Int movedPos)
+    {
+        MessageWindow.AppendMessage($"!! Trap !!");
+        switch (trap._currentType)
+        {
+            case Trap.Type.LifeDown:
+                _life -= trap._value;
+                MessageWindow.AppendMessage($"LifeDown.. -{trap._value}");
+                break;
+            case Trap.Type.FoodDown:
+                _food -= trap._value;
+                MessageWindow.AppendMessage($"FoodDown.. -{trap._value}");
+                break;
+            default: throw new NotImplementedException();
+        }
+
+        // 罠はマップから削除する
+        mass.existObject = null;
+        mass.type = MassType.Road;
+        Destroy(trap.gameObject);
     }
 
     protected void OpenTreasure(Treasure treasure, Map.Mass mass, Vector2Int movedPos)
@@ -227,5 +316,40 @@ public class Player : MapObjectBase
         mass.existObject = null;
         mass.type = MassType.Road;
         Destroy(treasure.gameObject);
+    }
+
+    void UpdateVisibleMass()
+    {
+        var map = Map;
+        var startPos = _pos - Vector2Int.one * VisibleRange;
+        var endPos = _pos + Vector2Int.one * VisibleRange;
+        for(var y = startPos.y; y <= endPos.y; ++y)
+        {
+            if (y < 0) continue;
+            if (Map.MapSize.y <= y) break;
+
+            for (var x = startPos.x; x <= endPos.x; ++x)
+            {
+                if (x < 0) continue;
+                if (map.MapSize.x <= x) break;
+                map[x, y].Visible = true;
+            }
+        }
+    }
+
+    public void Recover(SaveData saveData)
+    {
+        CurrentWeapon = null;
+        _level = saveData._level;
+        _life = saveData._life;
+        _attack = saveData._attack;
+        _exp = saveData._exp;
+        if(saveData._weaponName != "")
+        {
+            var weapon = ScriptableObject.CreateInstance<Weapon>();
+            weapon._name = saveData._weaponName;
+            weapon._attack = saveData._weaponAttack;
+            CurrentWeapon = weapon;
+        }
     }
 }

@@ -606,15 +606,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameOver: {fileID: 644978566}
+  IsAutoGenerate: 1
+  Generateparam:
+    size: {x: 20, y: 20}
+    GoalMinDistance: 10
+    LimitMassPercent: 0.5
+    RoadMassPercent: 0.7
   _mapData: '0I0P0
 
     0++0J
 
     0E00K
 
-    0++00
+    0++0T
 
-    G0000
+    G000U
 
 '
 --- !u!1 &644868766

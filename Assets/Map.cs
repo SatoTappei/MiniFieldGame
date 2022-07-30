@@ -42,11 +42,34 @@ public class MassData
 
 public class Map : MonoBehaviour
 {
+    [Serializable]
+    public class GenerateParam
+    {
+        public Vector2Int size = new Vector2Int(20, 20);
+        public int GoalMinDistance = 10;
+        [Range(0, 1)] public float LimitMassPercent = 0.5f;
+        [Range(0, 1)] public float RoadMassPercent = 0.7f;
+    }
+
     public class Mass
     {
         public MassType type;
         public GameObject massGameObject;
         public GameObject existObject;
+
+        public bool Visible
+        {
+            get => massGameObject.activeSelf;
+            set
+            {
+                if (massGameObject.activeSelf == value) return;
+                massGameObject.SetActive(value);
+                if (existObject != null && existObject.TryGetComponent<MapObjectBase>(out var obj))
+                {
+                    obj.Visible = value;
+                }
+            }
+        }
     }
 
     public MassData[] _massDataList;
@@ -62,7 +85,7 @@ public class Map : MonoBehaviour
     Dictionary<MassType, MassData> MassDataDict { get; set; }
     /// <summary>マップの生成に用いる、その文字が定義されているかを判定</summary>
     Dictionary<char, MassData> MapCharDict { get; set; }
-
+    public List<string> MapData { get; private set; }
     List<List<Mass>> Data { get; set; }
     public Mass this[int x, int y]
     {
@@ -113,6 +136,7 @@ public class Map : MonoBehaviour
                 mass.massGameObject = Instantiate(massData.prefab, transform);
                 mass.massGameObject.transform.position = pos;
                 lineData.Add(mass);
+                mass.Visible = false;
             }
             Data.Add(lineData);
 
@@ -121,6 +145,7 @@ public class Map : MonoBehaviour
             mapSize.y++;
         }
         MapSize = mapSize;
+        MapData = map;
     }
 
     /// <summary>マスを初期化する</summary>
@@ -193,6 +218,119 @@ public class Map : MonoBehaviour
             case Direction.East: return Direction.North;
             case Direction.West: return Direction.South;
             default: throw new NotImplementedException();
+        }
+    }
+
+    public void DestroyMap()
+    {
+        for (var i = transform.childCount - 1; 0 <= i; --i)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+    }
+
+    public void GenerateMap(GenerateParam generateParam)
+    {
+        InitMassData();
+
+        var mapData = new List<List<char>>();
+        var wallData = this[MassType.Wall];
+        var line = new List<char>();
+        for (var x = 0; x < generateParam.size.x; ++x) { line.Add(wallData.mapChar); }
+        for(var y = 0; y < generateParam.size.y; ++y) { mapData.Add(new List<char>(line)); }
+
+        PlacePlayerAndGoal(mapData, generateParam);
+        PlaceMass(mapData, generateParam);
+
+        BuildMap(mapData.Select(_l => _l.Aggregate("", (_s, _c) => _s + _c)).ToList());
+    }
+
+    void PlacePlayerAndGoal(List<List<char>> mapData,GenerateParam generateParam)
+    {
+        var rnd = new System.Random();
+        var playerPos = new Vector2Int(rnd.Next(generateParam.size.x), rnd.Next(generateParam.size.y));
+
+        var goalPos = playerPos;
+        do
+        {
+            goalPos = new Vector2Int(rnd.Next(generateParam.size.x), rnd.Next(generateParam.size.y));
+        } while ((int)(playerPos - goalPos).magnitude < generateParam.GoalMinDistance);
+
+        // プレイヤーとゴールを結ぶ、その際、中間点を通るようにしている。
+        var centerPos = playerPos;
+        do
+        {
+            centerPos = new Vector2Int(rnd.Next(generateParam.size.x), rnd.Next(generateParam.size.y));
+        } while ((playerPos == centerPos) || goalPos == centerPos);
+
+        var roadData = this[MassType.Road];
+        DrawLine(mapData, playerPos, centerPos, roadData.mapChar);
+        DrawLine(mapData, centerPos, goalPos, roadData.mapChar);
+
+        var playerData = this[MassType.Player];
+        var goalData = this[MassType.Goal];
+        mapData[playerPos.y][playerPos.x] = playerData.mapChar;
+        mapData[goalPos.y][goalPos.x] = goalData.mapChar;
+    }
+
+    void DrawLine(List<List<char>> mapData, Vector2Int start, Vector2Int end, char ch)
+    {
+        var pos = start;
+        var vec = (Vector2)(end - start);
+        vec.Normalize();
+        var diff = Vector2.zero;
+        while(pos != end)
+        {
+            diff += vec;
+            if (Mathf.Abs(diff.x) >= 1)
+            {
+                var offset = diff.x > 0 ? 1 : -1;
+                pos.x += offset;
+                diff.x -= offset;
+                mapData[pos.y][pos.x] = ch;
+            }
+            if (Mathf.Abs(diff.y) >= 1)
+            {
+                var offset = diff.y > 0 ? 1 : -1;
+                pos.y += offset;
+                diff.y -= offset;
+                mapData[pos.y][pos.x] = ch;
+            }
+        }
+    }
+
+    void PlaceMass(List<List<char>> mapData, GenerateParam generateParam)
+    {
+        var rnd = new System.Random();
+        var massSum = generateParam.size.x * generateParam.size.y;
+        var placeMassCount = massSum * generateParam.LimitMassPercent;
+        var wallData = this[MassType.Wall];
+        var roadData = this[MassType.Road];
+        var placeMassKeys = MassDataDict.Keys.Where(_k => _k != MassType.Wall && _k != MassType.Player && _k != MassType.Goal && _k != MassType.Road).ToList();
+
+        while (0 < placeMassCount)
+        {
+            var pos = Vector2Int.zero;
+            var loopCount = placeMassCount * 10;
+            do
+            {
+                // mapData[pos.y][pos.x] != wallData.MapChar条件の無限ループ回避用
+                if (loopCount-- < 0) break;
+                pos = new Vector2Int(rnd.Next(generateParam.size.x), rnd.Next(generateParam.size.y));
+            } while (mapData[pos.y][pos.x] != wallData.mapChar);
+
+            var t = rnd.Next(1000) / 1000.0f;
+            if (t < generateParam.RoadMassPercent)
+            {
+                mapData[pos.y][pos.x] = roadData.mapChar;
+            }
+            else
+            {
+                var placeMassKey = placeMassKeys[rnd.Next(placeMassKeys.Count)];
+                var placeMass = this[placeMassKey];
+                mapData[pos.y][pos.x] = placeMass.mapChar;
+            }
+            placeMassCount--;
         }
     }
 }
