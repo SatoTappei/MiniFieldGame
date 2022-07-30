@@ -20,11 +20,20 @@ public class Player : MapObjectBase
 
     [Range(0, 100)] public float _cameraDistance;
     public Vector3 _cameraDirection = new Vector3(0, 10, -3);
+    public int _level = 1;
+    public int _food = 99;
+    MessageWindow _messageWindow;
     public Action NowAction { get; private set; } = Action.None;
     public bool DoWaitEvent { get; set; } = false;
+    public MessageWindow MessageWindow {
+        get => _messageWindow != null ? _messageWindow : (_messageWindow = MessageWindow.Find());
+    }
 
     void Start()
     {
+        var playerUI = FindObjectOfType<PlayerUI>();
+        playerUI.Set(this);
+
         StartCoroutine(CameraMove());
         StartCoroutine(ActionCoroutine());
     }
@@ -60,11 +69,27 @@ public class Player : MapObjectBase
                     yield return new WaitWhile(() => _isNowMoving);
                     break;
             }
+            UpdateFood();
             NowAction = Action.None;
 
             // イベントを確認
             CheckEvent();
             yield return new WaitWhile(() => DoWaitEvent);
+        }
+    }
+
+    void UpdateFood()
+    {
+        _food--;
+        if(_food <= 0)
+        {
+            _food = 0;
+            _life--;
+            MessageWindow.AppendMessage($"Food Damage!! Life({_life}) - 1");
+            if(_life <= 0)
+            {
+                Dead();
+            }
         }
     }
 
@@ -97,7 +122,110 @@ public class Player : MapObjectBase
 
     void CheckEvent()
     {
-        // TODO:拡張する
+        // 敵の移動はこのメソッド内で行う、イベントの1つとしてマップ上の敵を動かす
         DoWaitEvent = false;
+        StartCoroutine(RunEvents());
+    }
+
+    IEnumerator RunEvents()
+    {
+        // 敵の移動処理
+        foreach(var enemy in FindObjectsOfType<Enemy>())
+        {
+            enemy.MoveStart();
+        }
+        // 全ての敵が移動完了するまで待つ
+        yield return new WaitWhile(() => FindObjectsOfType<Enemy>().All(_e => !_e._isNowMoving));
+        // 終了処理
+        DoWaitEvent = true;
+    }
+
+    public override void Dead()
+    {
+        base.Dead();
+
+        var mapManager = FindObjectOfType<MapSceneManager>();
+        mapManager._gameOver.SetActive(true);
+    }
+
+    public override bool AttackTo(MapObjectBase other)
+    {
+        MessageWindow.AppendMessage($"Attack! Life({other._life}) - {_attack}");
+        other._life -= _attack;
+        other.Damaged(_attack);
+        if (other._life <= 0)
+        {
+            MessageWindow.AppendMessage($"Enemy Dead! Exp +{other._exp}");
+            other.Dead();
+            _exp += other._exp;
+            if(_exp >= 10)
+            {
+                LevelUp();
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void LevelUp()
+    {
+        _level += 1;
+        _life += 5;
+        _attack += 1;
+        _exp = 0;
+
+        MessageWindow.AppendMessage($"Level UP! {_level - 1} > {_level}");
+        MessageWindow.AppendMessage($"Life + 5! Atk + 1!");
+    }
+
+    public override void Damaged(int damage)
+    {
+        base.Damaged(damage);
+        MessageWindow.AppendMessage($"Damage! Life({_life}) {-damage}");
+    }
+
+    protected override void MoveToExistObject(Map.Mass mass, Vector2Int movedPos)
+    {
+        var otherObject = mass.existObject.GetComponent<MapObjectBase>();
+        if(otherObject is Treasure)
+        {
+            var treasure = (otherObject as Treasure);
+            OpenTreasure(treasure, mass, movedPos);
+            StartCoroutine(NotMoveCoroutine(movedPos));
+            return;
+        }
+
+        base.MoveToExistObject(mass, movedPos);
+    }
+
+    protected void OpenTreasure(Treasure treasure, Map.Mass mass, Vector2Int movedPos)
+    {
+        MessageWindow.AppendMessage($"Open Treasure!!");
+        switch (treasure._currentType)
+        {
+            case Treasure.Type.LifeUp:
+                _life += treasure._value;
+                MessageWindow.AppendMessage($"Life Up! +{treasure._value}");
+                break;
+            case Treasure.Type.FoodUp:
+                _food += treasure._value;
+                MessageWindow.AppendMessage($"Food Up! +{treasure._value}");
+                break;
+            case Treasure.Type.Weapon:
+                // 装備中の武器の攻撃力に足し合わせる
+                MessageWindow.AppendMessage($"Charge Weapon! +{treasure.CurrentWeapon}");
+                var newWeapon = treasure.CurrentWeapon.Merge(CurrentWeapon);
+                CurrentWeapon = newWeapon;
+                break;
+            default: throw new NotImplementedException();
+        }
+
+        // 宝箱を開けたらマップから削除する
+        mass.existObject = null;
+        mass.type = MassType.Road;
+        Destroy(treasure.gameObject);
     }
 }

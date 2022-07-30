@@ -14,6 +14,12 @@ public enum MassType
     Wall,
     Player,
     Goal,
+    Enemy,
+    Treasure,
+    FoodTreasure,
+    WeaponTreasure,
+    Trap,
+    FoodTrap,
 }
 
 public enum Direction
@@ -162,5 +168,31 @@ public class Map : MonoBehaviour
 
         var mass = line[movedPos.x];
         return (mass, movedPos);
+    }
+
+    /// <summary>‰E‰ñ‚è‚Ì‚ÌŸ‚Ì•ûŒü‚ğ•Ô‚·</summary>
+    public static Direction TurnRightDirection(Direction dir)
+    {
+        switch (dir)
+        {
+            case Direction.North: return Direction.East;
+            case Direction.South: return Direction.West;
+            case Direction.East: return Direction.South;
+            case Direction.West: return Direction.North;
+            default: throw new NotImplementedException();
+        }
+    }
+
+    /// <summary>¶‰ñ‚è‚Ì‚ÌŸ‚Ì•ûŒü‚ğ•Ô‚·</summary>
+    public static Direction TurnLeftDirection(Direction dir)
+    {
+        switch (dir)
+        {
+            case Direction.North: return Direction.West;
+            case Direction.South: return Direction.East;
+            case Direction.East: return Direction.North;
+            case Direction.West: return Direction.South;
+            default: throw new NotImplementedException();
+        }
     }
 }

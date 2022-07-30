@@ -8,13 +8,50 @@ using System.Linq;
 /// </summary>
 public class MapObjectBase : MonoBehaviour
 {
+    public enum Group
+    {
+        Player,
+        Enemy,
+        Other,
+    }
+
     [Range(0, 100)] public float _moveSecond = 0.1f;
     public bool _isNowMoving { get; private set; } = false;
     public Vector2Int _pos;
     public Vector2Int _prevPos { get; protected set; }
     public Direction _forward;
+    public int _life = 5;
+    public int _attack = 2;
+    public int _exp = 0;
+    public Group _currentGroup = Group.Other;
+    [SerializeField] Weapon _weapon;
     Map _map;
     public Map Map { get => _map != null ? _map : (_map = FindObjectOfType<Map>()); }
+    /// <summary>装備する際に設定処理が必要なのでプロパティ経由で設定する</summary>
+    public Weapon CurrentWeapon
+    {
+        get => _weapon;
+        set
+        {
+            if(_weapon != null)
+            {
+                _weapon.Detach(this);
+            }
+            _weapon = value;
+            if(_weapon != null)
+            {
+                _weapon.Attach(this);
+            }
+        }
+    }
+    
+    void Awake()
+    {
+        if(CurrentWeapon != null)
+        {
+            CurrentWeapon.Attach(this);
+        }
+    }
 
     /// <summary>位置と前方向を設定するメソッド</summary>
     public void SetPosAndForward(Vector2Int pos, Direction forward)
@@ -50,6 +87,17 @@ public class MapObjectBase : MonoBehaviour
 
     protected virtual void MoveToExistObject(Map.Mass mass, Vector2Int movedPos)
     {
+        var otherObject = mass.existObject.GetComponent<MapObjectBase>();
+        if (IsAttackableObject(this, otherObject))
+        {
+            if (AttackTo(otherObject))
+            {
+                // 攻撃の結果相手を倒したらそのマスに移動する
+                StartCoroutine(MoveCoroutine(movedPos));
+                return;
+            }
+        }
+
         StartCoroutine(NotMoveCoroutine(movedPos));
     }
 
@@ -61,6 +109,38 @@ public class MapObjectBase : MonoBehaviour
     protected virtual void MoveToNotMoving(Map.Mass mass, Vector2Int movedPos)
     {
         StartCoroutine(NotMoveCoroutine(movedPos));
+    }
+
+    /// <summary>対象が攻撃可能か</summary>
+    public static bool IsAttackableObject(MapObjectBase self,MapObjectBase other)
+    {
+        return self._currentGroup != other._currentGroup
+            && (self._currentGroup != Group.Other && other._currentGroup != Group.Other);
+    }
+
+    public virtual bool AttackTo(MapObjectBase other)
+    {
+        other._life -= _attack;
+        other.Damaged(_attack);
+        if(other._life <= 0)
+        {
+            other.Dead();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public virtual void Damaged(int damage)
+    {
+
+    }
+
+    public virtual void Dead()
+    {
+        Destroy(gameObject);
     }
 
     IEnumerator MoveCoroutine(Vector2Int target)
@@ -88,7 +168,7 @@ public class MapObjectBase : MonoBehaviour
         _isNowMoving = false;
     }
 
-    IEnumerator NotMoveCoroutine(Vector2Int target)
+    protected IEnumerator NotMoveCoroutine(Vector2Int target)
     {
         var movedPos = Map.CalcMapPos(target);
 
