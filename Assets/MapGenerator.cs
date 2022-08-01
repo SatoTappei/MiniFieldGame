@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using System.Linq;
 
 /// <summary>
@@ -12,21 +11,23 @@ public class MapGenerator : MonoBehaviour
     /// <summary>
     /// 生成するタイルのデータ
     /// </summary>
-    [Serializable]
-    public class TileData
+    [System.Serializable]
+    public class Tile
     {
         public GameObject _prefab;
         public char _char;
     }
 
     /// <summary>生成するタイルのデータ</summary>
-    [SerializeField] TileData[] _tileDatas;
+    [SerializeField] Tile[] _tileDatas;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
-    Dictionary<char, GameObject> _tileDic = new Dictionary<char, GameObject>();
+    Dictionary<char, Tile> _tileDic = new Dictionary<char, Tile>();
+    /// <summary>生成したタイルを格納する、上にプレイヤーや敵を配置するのに使う</summary>
+    List<GameObject> _generatedTiles = new List<GameObject>();
 
     void Awake()
     {
-        _tileDatas.ToList().ForEach(l => _tileDic.Add(l._char, l._prefab));
+        _tileDatas.ToList().ForEach(l => _tileDic.Add(l._char, l));
     }
 
     void Start()
@@ -39,7 +40,7 @@ public class MapGenerator : MonoBehaviour
         
     }
 
-    /// <summary>テキストデータからマップを生成する</summary>
+    /// <summary>文字列からマップを生成する</summary>
     public void GenerateMap(string mapStr)
     {
         // 文字列を一列ずつに分解する
@@ -48,12 +49,26 @@ public class MapGenerator : MonoBehaviour
         {
             for (int j = 0; j < lines[i].Length; j++)
             {
-                // 対応する文字があれば生成する
-                if (_tileDic.TryGetValue(lines[i][j], out GameObject tile))
-                    Instantiate(tile, new Vector3(i, 0, j), Quaternion.identity);
+                // 対応する文字があれば生成して、そのタイルを生成後のタイルのリストに追加する
+                if (_tileDic.TryGetValue(lines[i][j], out Tile tile))
+                {
+                    var obj = Instantiate(tile._prefab, new Vector3(i, 0, j), Quaternion.identity);
+                    _generatedTiles.Add(obj);
+                }
                 else
                     Debug.LogWarning("生成できませんでした。文字が登録されてないです。");
             }
         }
+    }
+
+    /// <summary>生成したマップにプレイヤーを配置する</summary>
+    public void SetPlayer()
+    {
+        // プレイヤーが移動可能なタイル(普通の床)のリストを作成
+        List<GameObject> canMoveTiles = new List<GameObject>(_generatedTiles.Where(l => l.GetComponent<TileData>().Type == TileType.Floor));
+
+        GameObject player = GameObject.FindWithTag("Player");
+        int r = Random.Range(0, canMoveTiles.Count);
+        player.transform.position = canMoveTiles[r].transform.position;
     }
 }
