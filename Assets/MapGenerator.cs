@@ -20,6 +20,8 @@ public class MapGenerator : MonoBehaviour
 
     /// <summary>生成するタイルのデータ</summary>
     [SerializeField] Tile[] _tileDatas;
+    /// <summary>生成したタイルを登録する親オブジェクト</summary>
+    [SerializeField] Transform _tileParent;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
     Dictionary<char, Tile> _tileDic = new Dictionary<char, Tile>();
     /// <summary>生成したタイルを格納する、上にプレイヤーや敵を配置するのに使う</summary>
@@ -54,6 +56,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     var obj = Instantiate(tile._prefab, new Vector3(i, 0, j), Quaternion.identity);
                     _generatedTiles.Add(obj);
+                    obj.transform.SetParent(_tileParent);
                 }
                 else
                     Debug.LogWarning("生成できませんでした。文字が登録されてないです。");
@@ -62,11 +65,12 @@ public class MapGenerator : MonoBehaviour
     }
 
     /// <summary>生成したマップにプレイヤーを配置する</summary>
-    public void SetPlayer()
+    public void SetPlayer(TileType canMove)
     {
-        // プレイヤーが移動可能なタイル(普通の床)のリストを作成
-        List<GameObject> canMoveTiles = new List<GameObject>(_generatedTiles.Where(l => l.GetComponent<TileData>().Type == TileType.Floor));
+        // プレイヤーが移動可能なタイルのリストを作成
+        List<GameObject> canMoveTiles = new List<GameObject>(_generatedTiles.Where(l => l.GetComponent<TileData>().Type == canMove));
 
+        // プレイヤーの位置をランダムなタイルの上に設定
         GameObject player = GameObject.FindWithTag("Player");
         int r = Random.Range(0, canMoveTiles.Count);
         player.transform.position = canMoveTiles[r].transform.position;
