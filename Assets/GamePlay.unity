@@ -379,7 +379,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 6334237687799360702}
+  m_LookAt: {fileID: 0}
   m_Follow: {fileID: 6334237687799360702}
   m_Lens:
     FieldOfView: 60
@@ -828,6 +828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c51f7bc289a424dadc3297593229a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canMoveTile: 
 --- !u!33 &7777268049432043020
 MeshFilter:
   m_ObjectHideFlags: 0
