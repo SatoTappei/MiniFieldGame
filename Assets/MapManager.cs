@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// マップの生成を制御する
+/// マップを制御する
 /// </summary>
 public class MapManager : MonoBehaviour
 {

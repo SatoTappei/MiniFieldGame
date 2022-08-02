@@ -29,7 +29,7 @@ public class PlayerController : ActorBase
 
     void Update()
     {
-        // TODO:現状1回しか移動できない、移動するとカメラが回転してしまう
+        // TODO:ボタン入力を連続すると移動できなくなるので直す…というかターンの概念を作る
 
         ActorDir inpugDir = GetKeyToDir();
         // 行動中ではない時に、上下左右の入力があった場合
@@ -38,9 +38,10 @@ public class PlayerController : ActorBase
             // 行動中にする
             _inAction = true;
             // 移動先の座標を取得
-            PosXZ tartgetPosXZ = GetTargetTile(_currentPosXZ, inpugDir);
+            PosXZ tartgetPosXZ = GetTargetTile(inpugDir);
             // 目標の座標に向け移動させる
-            StartCoroutine(Move(_currentPosXZ, tartgetPosXZ));
+            transform.rotation = Quaternion.Euler(0, (float)inpugDir, 0);
+            StartCoroutine(Move(tartgetPosXZ));
         }
     }
 
@@ -71,9 +72,9 @@ public class PlayerController : ActorBase
     }
 
     /// <summary>指定した座標に補完しつつ移動させる</summary>
-    IEnumerator Move(PosXZ current, PosXZ target)
+    IEnumerator Move(PosXZ target)
     {
-        Vector3 currentPos = new Vector3(current.x, 0, current.z);
+        Vector3 currentPos = new Vector3(_currentPosXZ.x, 0, _currentPosXZ.z);
         Vector3 targetPos = new Vector3(target.x, 0, target.z);
 
         int count = 0;
@@ -84,6 +85,9 @@ public class PlayerController : ActorBase
             yield return null;
             count++;
         }
+
+        // 移動が完了したら現在のタイル上の位置を移動先の座標に変更する
+        _currentPosXZ = target;
     }
 
     /// <summary>入力に対応したキャラクターの向きを返す</summary>
@@ -101,9 +105,9 @@ public class PlayerController : ActorBase
     }
 
     /// <summary>現在の座標と方向から移動先の座標を取得</summary>
-    PosXZ GetTargetTile(PosXZ current,ActorDir dir)
+    PosXZ GetTargetTile(ActorDir dir)
     {
-        PosXZ target = current;
+        PosXZ target = _currentPosXZ;
 
         if (dir == ActorDir.Up) target.z++;
         else if (dir == ActorDir.Down) target.z--;
