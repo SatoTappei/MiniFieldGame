@@ -4,6 +4,9 @@ public class S2_Field : MonoBehaviour
 {
     public GameObject floor;
     public GameObject wall;
+    public GameObject line;
+    public GameObject enemies;
+    public S2_ActorMovement playerMovement;
 
     S2_Array2D map;
     const float oneTile = 1.0f;
@@ -49,21 +52,72 @@ public class S2_Field : MonoBehaviour
                 }
             }
         }
+        ShowGridEffects();
     }
 
     /// <summary>生成したマップのリセット</summary>
     public void MapReset()
     {
+        for (int i = 0; i < enemies.transform.childCount; i++)
+        {
+            Destroy(enemies.transform.GetChild(i).gameObject);
+        }
+
         Transform walls = floor.transform.GetChild(0);
         for (int i = 0; i < walls.childCount; i++)
         {
             Destroy(walls.GetChild(i).gameObject);
+        }
+        Transform effects = floor.transform.GetChild(1);
+        for(int i = 0; i < effects.childCount; i++)
+        {
+            Destroy(effects.GetChild(i).gameObject);
         }
     }
 
     /// <summary>指定した座標が壁かどうかをチェック</summary>
     public bool IsCollide(int xgrid, int zgrid)
     {
-        return map.Get(xgrid, zgrid) != 0;
+        if (map.Get(xgrid, zgrid) != 0) return true;
+        if (xgrid == playerMovement._newGrid.x && zgrid == playerMovement._newGrid.z)
+            return true;
+        foreach(var enemyMovement in enemies.GetComponentsInChildren<S2_ActorMovement>())
+        {
+            if (xgrid == enemyMovement._newGrid.x && zgrid == enemyMovement._newGrid.z)
+                return true;
+        }
+        return false;
+    }
+
+    /// <summary>マス目のエフェクトを表示する</summary>
+    void ShowGridEffects()
+    {
+        for (int x = 1; x < map.width; x++)
+        {
+            GameObject obj = Instantiate(line, floor.transform.GetChild(1));
+            obj.transform.position = new Vector3(x * oneTile - oneTile / 2, 0.1f, -oneTile / 2);
+            obj.transform.localScale = new Vector3(1, 1, floorSize * oneTile);
+        }
+        for(int z = 1; z < map.height; z++)
+        {
+            GameObject obj = Instantiate(line, floor.transform.GetChild(1));
+            obj.transform.position = new Vector3(-oneTile / 2, 0.1f, z * oneTile - oneTile / 2);
+            obj.transform.rotation = Quaternion.Euler(0, 90, 0);
+            obj.transform.localScale = new Vector3(1, 1, floorSize * oneTile);
+        }
+    }
+
+    /// <summary>マップデータを返す</summary>
+    public S2_Array2D GetMapData()
+    {
+        S2_Array2D mapdata = new S2_Array2D(map.width, map.height);
+        for (int z = 0; z < map.height; z++)
+        {
+            for(int x = 0; x < map.width; x++)
+            {
+                mapdata.Set(x, z, map.Get(x, z));
+            }
+        }
+        return mapdata;
     }
 }

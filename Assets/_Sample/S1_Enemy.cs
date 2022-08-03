@@ -7,7 +7,7 @@ using System;
 /// <summary>
 /// “G‚ğ§Œä‚·‚é
 /// </summary>
-public class Enemy : MapObjectBase
+public class S1_Enemy : MapObjectBase
 {
     [Serializable]
     public class Scope

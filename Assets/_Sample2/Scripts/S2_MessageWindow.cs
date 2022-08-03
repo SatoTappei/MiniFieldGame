@@ -47,7 +47,7 @@ public class S2_MessageWindow : MonoBehaviour
             isFalling = transform.childCount > 0;
             string m = S2_Message.get();
             Text msg = Instantiate(_text, transform);
-            msg.transform.position = transform.position + new Vector3(-400, 0, 0);
+            msg.transform.position = transform.position + new Vector3(-2000, 0, 0);
             msg.text = m;
         }
     }

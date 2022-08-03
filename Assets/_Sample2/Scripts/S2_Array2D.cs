@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class S2_Array2D
 {
     public int width;
     public int height;
-    int[,] data;
+    [SerializeField]int[] data;
 
     public S2_Array2D(int w, int h)
     {
         width = w;
         height = h;
-        data = new int[width, height];
+        data = new int[width * height];
     }
 
     /// <summary>X/ZÀ•W‚É‚ ‚é’l‚ğæ“¾‚·‚é</summary>
@@ -20,7 +21,7 @@ public class S2_Array2D
     {
         if (x >= 0 && z >= 0 && x < width && z < height)
         {
-            return data[x, z];
+            return data[x + z * width];
         }
         return -1;
     }
@@ -30,7 +31,7 @@ public class S2_Array2D
     {
         if (x >= 0 && z >= 0 && x < width && z < height)
         {
-            data[x, z] = v;
+            data[x + z * width] = v;
             return v;
         }
         return -1;

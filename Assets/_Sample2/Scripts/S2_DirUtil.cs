@@ -95,4 +95,22 @@ public static class DirUtil
         if (field.IsCollide(newP.x, newP.z)) return position;
         return newP;
     }
+
+    /// <summary>ƒ‰ƒ“ƒ_ƒ€‚ÈŒü‚«‚ð•Ô‚·</summary>
+    public static EDir RandomDirection()
+    {
+        int dirnum = Random.Range(0, 4);
+        switch (dirnum)
+        {
+            case 0:
+                return EDir.Left;
+            case 1:
+                return EDir.Up;
+            case 2:
+                return EDir.Right;
+            case 3:
+                return EDir.Down;
+        }
+        return EDir.Down;
+    }
 }

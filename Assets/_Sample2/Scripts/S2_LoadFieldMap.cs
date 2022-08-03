@@ -7,6 +7,8 @@ public class S2_LoadFieldMap : MonoBehaviour
 {
     public string mapName;
     public S2_Field field;
+    public S2_ActorMovement player;
+    public Transform enemies;
 
     void Start()
     {
@@ -46,6 +48,35 @@ public class S2_LoadFieldMap : MonoBehaviour
                             for(int x = 0; x < w; x++)
                             {
                                 data.Set(x, z, int.Parse(sdata[ToMirrorX(x, w) + z * w]) - 1);
+                            }
+                        }
+                        break;
+                }
+            }
+            // Step4-5 なんかバグってるので適当に代わりの処理
+            //player.SetPosition(1, 1);
+            foreach (var objgp in map.Elements("objectgroup"))
+            {
+                switch (objgp.Attribute("id").Value)
+                {
+                    case "2":
+                        foreach (var obj in objgp.Elements("object"))
+                        {
+                            int x = int.Parse(obj.Attribute("x").Value);
+                            int z = int.Parse(obj.Attribute("y").Value);
+                            int pw = int.Parse(obj.Attribute("width").Value);
+                            int ph = int.Parse(obj.Attribute("height").Value);
+                            string name = obj.Attribute("name").Value;
+                            if (name == "Player")
+                            {
+                                player.SetPosition(ToMirrorX(x / pw, w), z / ph);
+                                continue;
+                            }
+                            if (name.Contains("Enemy"))
+                            {
+                                GameObject enemyObj = (GameObject)Resources.Load("Prefabs/" + name);
+                                GameObject enemy = Instantiate(enemyObj, enemies.transform); // <= ここなんかバグっている、enemiesの参照がない
+                                enemy.GetComponent<S2_ActorMovement>().SetPosition(ToMirrorX(x / pw, w), z / ph);
                             }
                         }
                         break;

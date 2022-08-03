@@ -136,12 +136,12 @@ public class Player : MapObjectBase
     IEnumerator RunEvents()
     {
         // “G‚ÌˆÚ“®ˆ—
-        foreach(var enemy in FindObjectsOfType<Enemy>())
+        foreach(var enemy in FindObjectsOfType<S1_Enemy>())
         {
             enemy.MoveStart();
         }
         // ‘S‚Ä‚Ì“G‚ªˆÚ“®Š®—¹‚·‚é‚Ü‚Å‘Ò‚Â
-        yield return new WaitWhile(() => FindObjectsOfType<Enemy>().All(_e => !_e._isNowMoving));
+        yield return new WaitWhile(() => FindObjectsOfType<S1_Enemy>().All(_e => !_e._isNowMoving));
 
         // ƒS[ƒ‹”»’è
         var mass = Map[_pos.x, _pos.y];
