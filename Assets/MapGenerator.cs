@@ -74,6 +74,6 @@ public class MapGenerator : MonoBehaviour
         GameObject player = GameObject.FindWithTag("Player");
         int r = Random.Range(0, canMoveTiles.Count);
         player.transform.position = canMoveTiles[r].transform.position;
-        player.GetComponent<PlayerController>().InitPosXZ();
+        player.GetComponent<PlayerManager>().InitPosXZ();
     }
 }

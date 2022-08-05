@@ -221,6 +221,7 @@ MonoBehaviour:
   mapName: Assets/_Sample2/Maps/TestMap.tmx
   field: {fileID: 708921588}
   player: {fileID: 1806603535891467253}
+  enemies: {fileID: 255560834}
 --- !u!1 &812664939
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,6 +253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   field: {fileID: 708921588}
   player: {fileID: 1806603535891467252}
+  enemies: {fileID: 255560833}
 --- !u!4 &812664941
 Transform:
   m_ObjectHideFlags: 0
