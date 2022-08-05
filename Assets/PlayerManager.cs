@@ -119,14 +119,16 @@ public class PlayerManager : ActorBase
     {
         Debug.Log(gameObject.name + " キーの入力待ちです");
 
-        // TODO:直す、移動のキーと攻撃のキーに直す
-        if (Input.GetKeyDown(KeyCode.M))
+        // いずれかのキーが押されたら
+        if (Input.anyKeyDown)
         {
-            FindObjectOfType<PlaySceneManager>().PushKey = KeyCode.M;
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            FindObjectOfType<PlaySceneManager>().PushKey = KeyCode.A;
+            PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
+            // 移動キーならプレイヤーが移動する処理の流れを行う
+            if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
+                psm.SetTurnState(TurnState.PlayerMoveStart);
+            // 攻撃キーならプレイヤーが攻撃する処理の流れを行う
+            else if (Input.GetButtonDown("Fire1"))
+                psm.SetTurnState(TurnState.PlayerActionStart);
         }
     }
 

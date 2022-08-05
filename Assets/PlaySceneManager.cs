@@ -42,15 +42,16 @@ public class PlaySceneManager : MonoBehaviour
     ActorBase _player;
     /// <summary>敵さんを制御する</summary>
     List<ActorBase> _enemies = new List<ActorBase>();
-    /// <summary>StandBy中にプレイヤーが押したキーを格納する</summary>
-    KeyCode _pushKey;
 
+    /// <summary>
+    /// スクリプトの外からStateを進めることがある
+    /// 現状:StandByから入力を受け取って移動か行動に分岐
+    /// </summary>
+    public void SetTurnState(TurnState state) => _currentTurnState = state;
     /// <summary>このスクリプトのStateで管理するためにプレイヤー側から自身をセットする</summary>
     public void SetPlayer(ActorBase player) => _player = player;
     /// <summary>このスクリプトのStateで管理するために敵側から自身をセットする</summary>
     public void AddEnemy(ActorBase enemy) => _enemies.Add(enemy);
-    /// <summary>プレイヤーから行動もしくはアクションのキー入力を受け取る</summary>
-    public KeyCode PushKey { set => _pushKey = value; }
 
     void Awake()
     {
@@ -76,14 +77,6 @@ public class PlaySceneManager : MonoBehaviour
             case TurnState.StandBy:
                 _player.StandBy();
                 _enemies.ForEach(e => e.StandBy());
-                if(_pushKey == KeyCode.M)
-                {
-                    _currentTurnState = TurnState.PlayerMoveStart;
-                }
-                else if (_pushKey == KeyCode.A)
-                {
-                    _currentTurnState = TurnState.PlayerActionStart;
-                }
                 break;
             // プレイヤーが移動を選択した場合の処理
             case TurnState.PlayerMoveStart:
