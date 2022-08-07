@@ -24,10 +24,10 @@ public enum TurnState
     StandBy,            // プレイヤーの入力待ち
     PlayerMoveStart,    // プレイヤーが移動を選択した
     PlayerMove,     
-    PlayerMoveEnd,
+    //PlayerMoveEnd,
     PlayerActionStart,  // プレイヤーが行動を選択した
     PlayerAction,       
-    PlyaerActionEnd,
+    //PlyaerActionEnd,
     TurnEnd,
 }
 
@@ -39,9 +39,9 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>現在のターンがどの状態かを保持しておく</summary>
     TurnState _currentTurnState;
     /// <summary>プレイヤーを制御する</summary>
-    ActorBase _player;
-    /// <summary>敵さんを制御する</summary>
-    List<ActorBase> _enemies = new List<ActorBase>();
+    PlayerManager _player;
+    /// <summary>たくさんの敵さんを制御する</summary>
+    List<EnemyManager> _enemies = new List<EnemyManager>();
 
     /// <summary>
     /// スクリプトの外からStateを進めることがある
@@ -49,9 +49,9 @@ public class PlaySceneManager : MonoBehaviour
     /// </summary>
     public void SetTurnState(TurnState state) => _currentTurnState = state;
     /// <summary>このスクリプトのStateで管理するためにプレイヤー側から自身をセットする</summary>
-    public void SetPlayer(ActorBase player) => _player = player;
+    public void SetPlayer(PlayerManager player) => _player = player;
     /// <summary>このスクリプトのStateで管理するために敵側から自身をセットする</summary>
-    public void AddEnemy(ActorBase enemy) => _enemies.Add(enemy);
+    public void AddEnemy(EnemyManager enemy) => _enemies.Add(enemy);
 
     void Awake()
     {
@@ -80,33 +80,60 @@ public class PlaySceneManager : MonoBehaviour
                 break;
             // プレイヤーが移動を選択した場合の処理
             case TurnState.PlayerMoveStart:
-                _player.MoveStart();
-                _enemies.ForEach(e => e.MoveStart());
+                StartCoroutine(ProcPlayerMove());
+                _currentTurnState = TurnState.PlayerMove;
                 break;
             case TurnState.PlayerMove:
-                _player.Move();
-                _enemies.ForEach(e => e.Move());
-                break;
-            case TurnState.PlayerMoveEnd:
-                _player.MoveEnd();
-                _enemies.ForEach(e => e.MoveEnd());
+                // プレイヤーが移動をするターン中、毎フレーム実行する処理
                 break;
             // プレイヤーが行動を選択した場合の処理
             case TurnState.PlayerActionStart:
-                _player.ActionStart();
-                _enemies.ForEach(e => e.ActionStart());
+                StartCoroutine(ProcPlayerAction());
+                _currentTurnState = TurnState.PlayerAction;
                 break;
             case TurnState.PlayerAction:
-                _player.Action();
-                _enemies.ForEach(e => e.Action());
-                break;
-            case TurnState.PlyaerActionEnd:
-                _player.ActionEnd();
-                _enemies.ForEach(e => e.ActionEnd());
+                // プレイヤーが行動をするターン中、毎フレーム実行する処理
                 break;
             // ターンの終了時の処理
             case TurnState.TurnEnd:
+                _currentTurnState = TurnState.Init;
                 break;
         }
+    }
+
+    // プレイヤーが移動をするターンの処理
+    IEnumerator ProcPlayerMove()
+    {
+        // 敵全員が行動を決定する
+        _enemies.ForEach(e => e.RequestAI());
+        // プレイヤーが移動する
+        _player.MoveStart();
+        // 敵が移動する
+        _enemies.ForEach(e => e.MoveStart());
+        // TODO:敵が移動終わるまで次の処理に進まないようにする
+        yield return null;
+        // 敵が行動する
+        _enemies.ForEach(e => e.ActionStart());
+        // TODO:敵が行動終わるまで次の処理に進まないようにする
+        yield return null;
+        _currentTurnState = TurnState.TurnEnd;
+    }
+
+    // プレイヤーが行動をするターンの処理
+    IEnumerator ProcPlayerAction()
+    {
+        // プレイヤーが行動する
+        _player.ActionStart();
+        // 敵全員が行動を決定する
+        _enemies.ForEach(e => e.RequestAI());
+        // 敵が行動する
+        _enemies.ForEach(e => e.ActionStart());
+        // TODO:敵が行動終わるまで次の処理に進まないようにする
+        yield return null;
+        // 敵を移動させる
+        _enemies.ForEach(e => e.MoveStart());
+        // TODO:敵が移動終わるまで次の処理に進まないようにする
+        yield return null;
+        _currentTurnState = TurnState.TurnEnd;
     }
 }

@@ -25,7 +25,7 @@ public abstract class ActorBase : MonoBehaviour
     };
 
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
-    protected const float MoveTileTime = 30.0f;
+    protected const float MoveTileTime = 60.0f;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile;
     /// <summary>現在のキャラクターの向き</summary>
@@ -43,6 +43,38 @@ public abstract class ActorBase : MonoBehaviour
     void Update()
     {
         
+    }
+
+    /// <summary>指定した座標に補完しつつ移動させる</summary>
+    protected IEnumerator Move(PosXZ target)
+    {
+        Vector3 currentPos = new Vector3(_currentPosXZ.x, 0, _currentPosXZ.z);
+        Vector3 targetPos = new Vector3(target.x, 0, target.z);
+
+        int count = 0;
+        while (transform.position != targetPos)
+        {
+            float value = count / MoveTileTime;
+            transform.position = Vector3.Lerp(currentPos, targetPos, value);
+            yield return null;
+            count++;
+        }
+
+        // 移動が完了したら現在のタイル上の位置を移動先の座標に変更する
+        _currentPosXZ = target;
+    }
+
+    /// <summary>現在の座標と方向から移動先の座標を取得</summary>
+    protected PosXZ GetTargetTile(Direction dir)
+    {
+        PosXZ target = _currentPosXZ;
+
+        if (dir == Direction.Up) target.z++;
+        else if (dir == Direction.Down) target.z--;
+        else if (dir == Direction.Right) target.x++;
+        else if (dir == Direction.Left) target.x--;
+
+        return target;
     }
 
     /// <summary>ターンの最初に呼ばれる処理</summary>

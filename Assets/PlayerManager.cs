@@ -7,6 +7,11 @@ using UnityEngine;
 /// </summary>
 public class PlayerManager : ActorBase
 {
+    /// <summary>移動する際の移動先の座標</summary>
+    PosXZ _tartgetPosXZ;
+    /// <summary>入力された方向、キャラクターの移動に使用する</summary>
+    Direction _inputDir;
+
     void OnEnable()
     {
         // PlaySceneManagerのStateで制御するために自身を登録しておく
@@ -20,20 +25,7 @@ public class PlayerManager : ActorBase
 
     void Update()
     {
-        // TODO:ボタン入力を連続すると移動できなくなるので直す…というかターンの概念を作る
-
-        Direction inpugDir = GetKeyToDir();
-        // 行動中ではない時に、上下左右の入力があった場合
-        if (!_inAction && inpugDir != Direction.Neutral)
-        {
-            // 行動中にする
-            _inAction = true;
-            // 移動先の座標を取得
-            PosXZ tartgetPosXZ = GetTargetTile(inpugDir);
-            // 目標の座標に向け移動させる
-            transform.rotation = Quaternion.Euler(0, (float)inpugDir, 0);
-            StartCoroutine(Move(tartgetPosXZ));
-        }
+        
     }
 
     /// <summary>
@@ -44,41 +36,6 @@ public class PlayerManager : ActorBase
     {
         _currentPosXZ.x = (int)transform.position.x;
         _currentPosXZ.z = (int)transform.position.z;
-    }
-
-    ///// <summary>プレイヤーのターンが始まったら呼ばれる処理</summary>
-    //void TurnStart()
-    //{
-    //    Debug.Log("プレイヤーターン開始");
-    //    StartCoroutine(Action());
-    //}
-
-    ///// <summary>プレイヤーを行動させる</summary>
-    //IEnumerator Action()
-    //{
-    //    // TODO:行動の処理を書く、"移動"もしくは"攻撃"をしたらプレイヤーの行動は終了
-    //    yield return new WaitUntil(()=>Input.GetKeyDown(KeyCode.Space)); // テスト Spaceキーを押すまで待つ
-    //    PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
-    //   // psm.EndPlayerTurn = true;
-    //}
-
-    /// <summary>指定した座標に補完しつつ移動させる</summary>
-    IEnumerator Move(PosXZ target)
-    {
-        Vector3 currentPos = new Vector3(_currentPosXZ.x, 0, _currentPosXZ.z);
-        Vector3 targetPos = new Vector3(target.x, 0, target.z);
-
-        int count = 0;
-        while (transform.position != targetPos)
-        {
-            float value = count / MoveTileTime;
-            transform.position = Vector3.Lerp(currentPos, targetPos, value);
-            yield return null;
-            count++;
-        }
-
-        // 移動が完了したら現在のタイル上の位置を移動先の座標に変更する
-        _currentPosXZ = target;
     }
 
     /// <summary>入力に対応したキャラクターの向きを返す</summary>
@@ -95,19 +52,6 @@ public class PlayerManager : ActorBase
         return Direction.Neutral;
     }
 
-    /// <summary>現在の座標と方向から移動先の座標を取得</summary>
-    PosXZ GetTargetTile(Direction dir)
-    {
-        PosXZ target = _currentPosXZ;
-
-        if (dir == Direction.Up) target.z++;
-        else if (dir == Direction.Down) target.z--;
-        else if (dir == Direction.Right) target.x++;
-        else if (dir == Direction.Left) target.x--;
-
-        return target;
-    }
-
     /// <summary>ターンの最初に呼ばれる処理</summary>
     public override void TurnInit()
     {
@@ -122,9 +66,13 @@ public class PlayerManager : ActorBase
         // いずれかのキーが押されたら
         if (Input.anyKeyDown)
         {
+            Direction inputDir = GetKeyToDir();
+            // 移動先の座標を取得
+            _tartgetPosXZ = GetTargetTile(inputDir);
+
             PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
             // 移動キーならプレイヤーが移動する処理の流れを行う
-            if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
+            if (inputDir != Direction.Neutral)
                 psm.SetTurnState(TurnState.PlayerMoveStart);
             // 攻撃キーならプレイヤーが攻撃する処理の流れを行う
             else if (Input.GetButtonDown("Fire1"))
@@ -135,7 +83,9 @@ public class PlayerManager : ActorBase
     /// <summary>キャラクターが移動を開始するときに呼ばれる処理</summary>
     public override void MoveStart()
     {
-        Debug.Log(gameObject.name + " 移動開始します");
+        // 目標の座標に向け移動させる
+        transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
+        StartCoroutine(Move(_tartgetPosXZ));
     }
 
     /// <summary>キャラクターが移動中に呼ばれる処理</summary>

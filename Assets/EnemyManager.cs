@@ -23,6 +23,12 @@ public class EnemyManager : ActorBase
 
     }
 
+    /// <summary>このターンの敵の行動を決定する</summary>
+    public void RequestAI()
+    {
+        Debug.Log(gameObject.name + "敵が行動を考えます");
+    }
+
     /// <summary>ターンの最初に呼ばれる処理</summary>
     public override void TurnInit()
     {
@@ -39,6 +45,7 @@ public class EnemyManager : ActorBase
     public override void MoveStart()
     {
         Debug.Log(gameObject.name + " 移動開始します");
+        // TODO:敵が移動する処理を書く
     }
 
     /// <summary>キャラクターが移動中に呼ばれる処理</summary>
