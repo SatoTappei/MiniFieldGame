@@ -39,15 +39,12 @@ public class PlayerManager : ActorBase
     }
 
     /// <summary>入力に対応したキャラクターの向きを返す</summary>
-    Direction GetKeyToDir()
+    Direction GetKeyToDir(float vert, float hori)
     {
-        float vert = Input.GetAxisRaw("Vertical");
-        float hori = Input.GetAxisRaw("Horizontal");
-
-        if (vert > 0) return Direction.Up;
-        else if (vert < 0) return Direction.Down;
-        else if (hori > 0) return Direction.Right;
-        else if (hori < 0) return Direction.Left;
+        if (vert == 1) return Direction.Up;
+        else if (vert == -1) return Direction.Down;
+        else if (hori == 1) return Direction.Right;
+        else if (hori == -1) return Direction.Left;
         
         return Direction.Neutral;
     }
@@ -58,7 +55,7 @@ public class PlayerManager : ActorBase
         Debug.Log(gameObject.name + " ターンの初めに初期化します");
     }
 
-    /// <summary>キー入力待ち中に呼ばれる処理</summary>
+    /// <summary>キー入力待ち中に毎フレーム呼ばれる処理</summary>
     public override void StandBy()
     {
         Debug.Log(gameObject.name + " キーの入力待ちです");
@@ -66,13 +63,15 @@ public class PlayerManager : ActorBase
         // いずれかのキーが押されたら
         if (Input.anyKeyDown)
         {
-            Direction inputDir = GetKeyToDir();
+            float vert = Input.GetAxisRaw("Vertical");
+            float hori = Input.GetAxisRaw("Horizontal");
+            _inputDir = GetKeyToDir(vert, hori);
             // 移動先の座標を取得
-            _tartgetPosXZ = GetTargetTile(inputDir);
+            _tartgetPosXZ = GetTargetTile(_inputDir);
 
             PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
             // 移動キーならプレイヤーが移動する処理の流れを行う
-            if (inputDir != Direction.Neutral)
+            if (_inputDir != Direction.Neutral)
                 psm.SetTurnState(TurnState.PlayerMoveStart);
             // 攻撃キーならプレイヤーが攻撃する処理の流れを行う
             else if (Input.GetButtonDown("Fire1"))
