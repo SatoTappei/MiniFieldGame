@@ -25,7 +25,7 @@ public abstract class ActorBase : MonoBehaviour
     };
 
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
-    protected const float MoveTileTime = 60.0f;
+    protected const float MoveTileTime = 15.0f;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile;
     /// <summary>テスト:攻撃用時に出るエフェクト、必要ないなら消す</summary>

@@ -60,7 +60,7 @@ public class PlayerManager : ActorBase
             if (_inputDir != Direction.Neutral)
                 psm.SetTurnState(TurnState.PlayerMoveStart);
             // 攻撃キーならプレイヤーが攻撃する処理の流れを行う
-            else if (Input.GetButtonDown("Fire1"))
+            else if (Input.GetButtonDown("Submit"))
                 psm.SetTurnState(TurnState.PlayerActionStart);
         }
     }
