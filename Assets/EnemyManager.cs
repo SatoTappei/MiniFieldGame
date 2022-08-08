@@ -7,6 +7,11 @@ using UnityEngine;
 /// </summary>
 public class EnemyManager : ActorBase
 {
+    /// <summary>このターンに攻撃をする場合はtrue、移動の場合はfalseになる</summary>
+    bool _doActionThisTurn;
+
+    /// <summary>PlaySceneManagerがこのぷろぱちぃを見てメソッドを呼び出す</summary>
+    public bool DoActionThisTurn { get => _doActionThisTurn; }
 
     void OnEnable()
     {
@@ -26,7 +31,9 @@ public class EnemyManager : ActorBase
     /// <summary>このターンの敵の行動を決定する</summary>
     public void RequestAI()
     {
-        Debug.Log(gameObject.name + "敵が行動を考えます");
+        // TODO:敵のAIを作る(現在はランダムで行動を決定する)
+        int r = Random.Range(1, 3);
+        _doActionThisTurn = r == 1 ? true : false;
     }
 
     /// <summary>ターンの最初に呼ばれる処理</summary>
@@ -45,7 +52,19 @@ public class EnemyManager : ActorBase
     public override void MoveStart()
     {
         Debug.Log(gameObject.name + " 移動開始します");
-        // TODO:敵が移動する処理を書く
+        // プレイヤーが移動する場合はStandByの時点で座標が決まっているため
+        // 現状は移動を開始するときに移動する座標を決めている。
+        // バグがある場合は、移動する座標を決める処理を行う場所を変える
+        
+        // TODO:現状はランダムで4方向に移動する
+        (int, int)[] dirs = { (1, 0), (0, 1), (-1, 0), (0, -1) };
+        int r = Random.Range(0, 4);
+        _inputDir = GetKeyToDir(dirs[r].Item1, dirs[r].Item2);
+        // 移動先の座標を取得
+        _tartgetPosXZ = GetTargetTile(_inputDir);
+
+        transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
+        StartCoroutine(Move(_tartgetPosXZ));
     }
 
     /// <summary>キャラクターが移動中に呼ばれる処理</summary>
@@ -64,6 +83,7 @@ public class EnemyManager : ActorBase
     public override void ActionStart()
     {
         Debug.Log(gameObject.name + " 行動を開始します");
+        Instantiate(_attackEffect, transform.position, Quaternion.identity);
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>

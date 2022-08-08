@@ -7,11 +7,6 @@ using UnityEngine;
 /// </summary>
 public class PlayerManager : ActorBase
 {
-    /// <summary>移動する際の移動先の座標</summary>
-    PosXZ _tartgetPosXZ;
-    /// <summary>入力された方向、キャラクターの移動に使用する</summary>
-    Direction _inputDir;
-
     void OnEnable()
     {
         // PlaySceneManagerのStateで制御するために自身を登録しておく
@@ -38,17 +33,6 @@ public class PlayerManager : ActorBase
         _currentPosXZ.z = (int)transform.position.z;
     }
 
-    /// <summary>入力に対応したキャラクターの向きを返す</summary>
-    Direction GetKeyToDir(float vert, float hori)
-    {
-        if (vert == 1) return Direction.Up;
-        else if (vert == -1) return Direction.Down;
-        else if (hori == 1) return Direction.Right;
-        else if (hori == -1) return Direction.Left;
-        
-        return Direction.Neutral;
-    }
-
     /// <summary>ターンの最初に呼ばれる処理</summary>
     public override void TurnInit()
     {
@@ -63,6 +47,8 @@ public class PlayerManager : ActorBase
         // いずれかのキーが押されたら
         if (Input.anyKeyDown)
         {
+            // TODO:行動もキーで行うときにバグる？
+            // 移動キーの入力の判定を行って移動方向を決定する
             float vert = Input.GetAxisRaw("Vertical");
             float hori = Input.GetAxisRaw("Horizontal");
             _inputDir = GetKeyToDir(vert, hori);
@@ -102,7 +88,8 @@ public class PlayerManager : ActorBase
     /// <summary>キャラクターが行動を開始するときに呼ばれる処理</summary>
     public override void ActionStart()
     {
-        Debug.Log(gameObject.name + " 行動を開始します");
+        // テスト:攻撃用のエフェクトを生成する、後々にキャラクターのアニメーションに切り替える
+        Instantiate(_attackEffect, transform.position, Quaternion.identity);
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>

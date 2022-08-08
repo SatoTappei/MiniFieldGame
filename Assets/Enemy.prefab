@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03825ec2e0482ed4db8cc8e3c4a7ef17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canMoveTile: 00000000
+  _attackEffect: {fileID: 3840237927318129871, guid: 080ad2cae089311498d2e720b7ae2781, type: 3}
 --- !u!1 &2465527001333428872
 GameObject:
   m_ObjectHideFlags: 0

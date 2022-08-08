@@ -943,6 +943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canMoveTile: 
+  _attackEffect: {fileID: 3840237927318129871, guid: 113e9d61c782bc94a878c383829b38b4, type: 3}
 --- !u!33 &7777268049432043020
 MeshFilter:
   m_ObjectHideFlags: 0

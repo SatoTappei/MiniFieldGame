@@ -28,10 +28,16 @@ public abstract class ActorBase : MonoBehaviour
     protected const float MoveTileTime = 60.0f;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile;
+    /// <summary>テスト:攻撃用時に出るエフェクト、必要ないなら消す</summary>
+    [SerializeField] protected GameObject _attackEffect;
     /// <summary>現在のキャラクターの向き</summary>
-    Direction _currentDir = Direction.Up;
+    //Direction _currentDir = Direction.Up;
+    /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
+    protected Direction _inputDir;
     /// <summary>現在のXZ平面上での位置</summary>
     protected PosXZ _currentPosXZ;
+    /// <summary>移動する際の移動先の座標</summary>
+    protected PosXZ _tartgetPosXZ;
     /// <summary>行動中かどうか</summary>
     protected bool _inAction;
 
@@ -43,6 +49,17 @@ public abstract class ActorBase : MonoBehaviour
     void Update()
     {
         
+    }
+
+    /// <summary>入力に対応したキャラクターの向きを返す</summary>
+    protected Direction GetKeyToDir(float vert, float hori)
+    {
+        if (vert == 1) return Direction.Up;
+        else if (vert == -1) return Direction.Down;
+        else if (hori == 1) return Direction.Right;
+        else if (hori == -1) return Direction.Left;
+
+        return Direction.Neutral;
     }
 
     /// <summary>指定した座標に補完しつつ移動させる</summary>

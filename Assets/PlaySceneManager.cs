@@ -109,11 +109,11 @@ public class PlaySceneManager : MonoBehaviour
         // プレイヤーが移動する
         _player.MoveStart();
         // 敵が移動する
-        _enemies.ForEach(e => e.MoveStart());
+        _enemies.Where(e => e.DoActionThisTurn).ToList().ForEach(e => e.ActionStart());
         // TODO:敵が移動終わるまで次の処理に進まないようにする
         yield return null;
         // 敵が行動する
-        _enemies.ForEach(e => e.ActionStart());
+        _enemies.Where(e => !e.DoActionThisTurn).ToList().ForEach(e => e.MoveStart());
         // TODO:敵が行動終わるまで次の処理に進まないようにする
         yield return null;
         _currentTurnState = TurnState.TurnEnd;
@@ -127,11 +127,11 @@ public class PlaySceneManager : MonoBehaviour
         // 敵全員が行動を決定する
         _enemies.ForEach(e => e.RequestAI());
         // 敵が行動する
-        _enemies.ForEach(e => e.ActionStart());
+        _enemies.Where(e => e.DoActionThisTurn).ToList().ForEach(e => e.ActionStart());
         // TODO:敵が行動終わるまで次の処理に進まないようにする
         yield return null;
         // 敵を移動させる
-        _enemies.ForEach(e => e.MoveStart());
+        _enemies.Where(e => !e.DoActionThisTurn).ToList().ForEach(e => e.MoveStart());
         // TODO:敵が移動終わるまで次の処理に進まないようにする
         yield return null;
         _currentTurnState = TurnState.TurnEnd;
