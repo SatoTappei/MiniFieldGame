@@ -208,7 +208,6 @@ GameObject:
   m_Component:
   - component: {fileID: 250135244}
   - component: {fileID: 250135246}
-  - component: {fileID: 250135245}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -230,26 +229,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &250135245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 250135243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd515c1d917570841b11ce8e2869c20f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tileDatas:
-  - _prefab: {fileID: 1837077820683073736, guid: 94054c180b53b7e4888fc9a2a1deb3d3, type: 3}
-    _char: 48
-  - _prefab: {fileID: 596771103176882118, guid: abe34e478612f774da9a2ace120c66a5, type: 3}
-    _char: 87
-  - _prefab: {fileID: 2794169106923875099, guid: 5df28154514eef44cb9a932b0928d2b1, type: 3}
-    _char: 69
-  _tileParent: {fileID: 882564775}
 --- !u!114 &250135246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +250,17 @@ MonoBehaviour:
     W000W
 
     WWWWW'
+  _tileDatas:
+  - _prefab: {fileID: 1837077820683073736, guid: 94054c180b53b7e4888fc9a2a1deb3d3, type: 3}
+    _char: 79
+    _type: 0
+  - _prefab: {fileID: 596771103176882118, guid: abe34e478612f774da9a2ace120c66a5, type: 3}
+    _char: 87
+    _type: 0
+  - _prefab: {fileID: 2794169106923875099, guid: 5df28154514eef44cb9a932b0928d2b1, type: 3}
+    _char: 69
+    _type: 0
+  _tileParent: {fileID: 882564775}
 --- !u!1 &541184339
 GameObject:
   m_ObjectHideFlags: 0
