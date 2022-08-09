@@ -47,21 +47,29 @@ public class PlayerManager : ActorBase
         // いずれかのキーが押されたら
         if (Input.anyKeyDown)
         {
-            // TODO:行動もキーで行うときにバグる？
-            // 移動キーの入力の判定を行って移動方向を決定する
-            float vert = Input.GetAxisRaw("Vertical");
-            float hori = Input.GetAxisRaw("Horizontal");
-            _inputDir = GetKeyToDir(vert, hori);
-            // 移動先の座標を取得
-            _tartgetPosXZ = GetTargetTile(_inputDir);
-
             PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
-            // 移動キーならプレイヤーが移動する処理の流れを行う
-            if (_inputDir != Direction.Neutral)
-                psm.SetTurnState(TurnState.PlayerMoveStart);
-            // 攻撃キーならプレイヤーが攻撃する処理の流れを行う
-            else if (Input.GetButtonDown("Submit"))
+
+            // 攻撃キーなら攻撃の処理をする
+            if (Input.GetButtonDown("Submit"))
+            {
                 psm.SetTurnState(TurnState.PlayerActionStart);
+            }
+            // 移動キーなら移動の処理をする
+            else if (Input.GetButtonDown("Vertical") || Input.GetButtonDown("Horizontal"))
+            {
+                float vert = Input.GetAxisRaw("Vertical");
+                float hori = Input.GetAxisRaw("Horizontal");
+                // 移動しようとしているタイルが移動できるかどうかを調べる
+                bool canMove = FindObjectOfType<MapManager>().CheckCanMoveTile((int)(_currentPosXZ.x + hori), (int)(_currentPosXZ.z + vert));
+                Debug.Log("移動可能か " + canMove);
+                _inputDir = GetKeyToDir(vert, hori);
+                // 移動先の座標を取得
+                _tartgetPosXZ = GetTargetTile(_inputDir);
+
+                // 移動が可能なら次のStateに移行する
+                if (canMove)
+                    psm.SetTurnState(TurnState.PlayerMoveStart);
+            }
         }
     }
 

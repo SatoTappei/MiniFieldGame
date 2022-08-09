@@ -243,11 +243,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapStr: 'WWWWW
 
-    WE00W
+    WEOOW
 
-    WWW0W
+    WWWOW
 
-    W000W
+    WOOOW
 
     WWWWW'
   _tileDatas:
@@ -256,7 +256,7 @@ MonoBehaviour:
     _type: 0
   - _prefab: {fileID: 596771103176882118, guid: abe34e478612f774da9a2ace120c66a5, type: 3}
     _char: 87
-    _type: 0
+    _type: 1
   - _prefab: {fileID: 2794169106923875099, guid: 5df28154514eef44cb9a932b0928d2b1, type: 3}
     _char: 69
     _type: 0

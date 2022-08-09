@@ -19,9 +19,15 @@ public class MapManager : MonoBehaviour
     [System.Serializable]
     public struct Tile
     {
-        public GameObject _prefab;
-        public char _char;
-        public TileType _type;
+        [SerializeField] GameObject _prefab;
+        [SerializeField] char _char;
+        [SerializeField] TileType _type;
+        bool _onActor;
+
+        public GameObject Prefab { get => _prefab; }
+        public char Char { get => _char; }
+        public TileType Type { get => _type; }
+        public bool OnActor { get => _onActor; set => _onActor = value; }
     }
 
     /// <summary>生成するマップのデータ</summary>
@@ -69,7 +75,7 @@ public class MapManager : MonoBehaviour
 
     void Awake()
     {
-        _tileDatas.ToList().ForEach(l => _tileDic.Add(l._char, l));
+        _tileDatas.ToList().ForEach(l => _tileDic.Add(l.Char, l));
     }
 
     void Start()
@@ -109,7 +115,7 @@ public class MapManager : MonoBehaviour
                 // 対応する文字があれば生成して、そのタイルを生成済みのマップデータに登録する
                 if (_tileDic.TryGetValue(lines[i][j], out Tile tile))
                 {
-                    var obj = Instantiate(tile._prefab, new Vector3(i, 0, j), Quaternion.identity);
+                    var obj = Instantiate(tile.Prefab, new Vector3(i, 0, j), Quaternion.identity);
                     _currentMap._mapArray[i, j] = tile;
                     obj.transform.SetParent(_tileParent);
                 }
@@ -127,7 +133,7 @@ public class MapManager : MonoBehaviour
 
         for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
             for (int j = 0; j < _currentMap._mapArray.GetLength(1); j++)
-                if (_currentMap._mapArray[i, j]._type == canMove)
+                if (_currentMap._mapArray[i, j].Type == canMove)
                     canMoveTiles.Add((i, j));
 
         // プレイヤーの位置をランダムなタイルの上に設定
@@ -135,5 +141,19 @@ public class MapManager : MonoBehaviour
         int r = Random.Range(0, canMoveTiles.Count);
         player.transform.position = new Vector3(canMoveTiles[r].Item1, 0, canMoveTiles[r].Item2);
         player.GetComponent<PlayerManager>().InitPosXZ();
+    }
+
+    /// <summary>指定したタイルが移動可能か調べる</summary>
+    public bool CheckCanMoveTile(int x, int z)
+    {
+        // 他のキャラクターがいる、壁がある、だとアウト
+        // 他のキャラクターがいる場合はMapクラスのonActor変数をtrueにする
+
+        // 指定したタイルが壁なら移動不可能
+        if (_currentMap.GetMapTile(x, z).Type == TileType.Wall)
+            return false;
+        // TODO:キャラクターがいる場合にもfalseを返すようにする
+        else
+            return true;
     }
 }
