@@ -33,10 +33,12 @@ public class EnemyManager : ActorBase
     {
         // TODO:敵のAIを作る(現在はランダムで行動を決定する)
         int r = Random.Range(1, 3);
-        _doActionThisTurn = r == 1 ? true : false;
+        _doActionThisTurn = r == 1;
 
-        // 移動する場合はPlaySceneManagerに移動するキャラクターとして追加する
-        if (!_doActionThisTurn)
+        // 移動と行動のどっちをするのかをPlaySceneManagerに教える
+        if (_doActionThisTurn)
+            FindObjectOfType<PlaySceneManager>().AddActionActor();
+        else
             FindObjectOfType<PlaySceneManager>().AddMoveActor();
     }
 
@@ -49,7 +51,7 @@ public class EnemyManager : ActorBase
     /// <summary>キー入力待ち中に呼ばれる処理</summary>
     public override void StandBy()
     {
-        Debug.Log(gameObject.name + " キーの入力待ちです");
+        //Debug.Log(gameObject.name + " キーの入力待ちです");
     }
 
     /// <summary>キャラクターが移動を開始するときに呼ばれる処理</summary>
@@ -88,6 +90,9 @@ public class EnemyManager : ActorBase
     {
         Debug.Log(gameObject.name + " 行動を開始します");
         Instantiate(_attackEffect, transform.position, Quaternion.identity);
+
+        // このターンの自分の行動が終わったことを通知する
+        FindObjectOfType<PlaySceneManager>().SendEndAction();
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>

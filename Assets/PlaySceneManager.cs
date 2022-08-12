@@ -43,9 +43,15 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>たくさんの敵さんを制御する</summary>
     List<EnemyManager> _enemies = new List<EnemyManager>();
     /// <summary>このターン移動するキャラクターが全員移動したらtrueになる</summary>
-    bool _endActorsMove;
+    bool _endActorMoveAll;
     /// <summary>このターン移動するキャラクターの数</summary>
     int _moveActorCount;
+    /// <summary>キャラクターが行動中はfalse、終わったらtrueになって次のキャラの行動に移る</summary>
+    bool _endActorAction;
+    /// <summary>このターン行動するキャラクターが全員移動したらtrueになる</summary>
+    bool _endActorActionAll;
+    /// <summary>このターン行動するキャラクターの数</summary>
+    int _actionActorCount;
 
     /// <summary>
     /// スクリプトの外からStateを進めることがある
@@ -58,11 +64,21 @@ public class PlaySceneManager : MonoBehaviour
     public void AddEnemy(EnemyManager enemy) => _enemies.Add(enemy);
     /// <summary>このターン移動するキャラクターとして追加する</summary>
     public void AddMoveActor() => _moveActorCount++;
+    /// <summary>このターン行動するキャラクターとして追加する</summary>
+    public void AddActionActor() => _actionActorCount++;
+    /// <summary>キャラクターのスクリプトからこのターンの行動が終わったことを通知する</summary>
+    public void SendEndAction() => _endActorAction = true;
+
     /// <summary>
     /// キャラクターが移動を終えるたびに呼ばれ、
     /// 全員が移動を終えたらendActorsMoveをtrueにする
     /// </summary>
-    public void CheckRemMoveActor() => _endActorsMove = --_moveActorCount == 0 ? true : false;
+    public void CheckRemMoveActor()
+    {
+        _moveActorCount--;
+        _endActorMoveAll = _moveActorCount == 0;
+        Debug.Log(_moveActorCount);
+    }
 
     void Awake()
     {
@@ -82,8 +98,10 @@ public class PlaySceneManager : MonoBehaviour
             case TurnState.Init:
                 _player.TurnInit();
                 _enemies.ForEach(e => e.TurnInit());
-                _endActorsMove = false;
+                _endActorMoveAll = false;
                 _moveActorCount = 0;
+                _actionActorCount = 0;
+                _endActorAction = false;
                 _currentTurnState = TurnState.StandBy;
                 break;
             // プレイヤーの入力を待つ
@@ -114,7 +132,7 @@ public class PlaySceneManager : MonoBehaviour
         }
     }
 
-    // プレイヤーが移動をするターンの処理
+    /// <summary>プレイヤーが移動をするターンの処理</summary>
     IEnumerator ProcPlayerMove()
     {
         // 敵全員が行動を決定する
@@ -123,30 +141,44 @@ public class PlaySceneManager : MonoBehaviour
         _player.MoveStart();
         // 敵が移動する
         _enemies.Where(e => !e.DoActionThisTurn).ToList().ForEach(e => e.MoveStart());
-        // TODO:敵が移動終わるまで次の処理に進まないようにする
-        yield return new WaitUntil(() => _endActorsMove);
-        // 敵が行動する
-        _enemies.Where(e => e.DoActionThisTurn).ToList().ForEach(e => e.ActionStart());
-        // TODO:敵が行動終わるまで次の処理に進まないようにする
-        yield return null;
+        // 移動するキャラクターが全員終わるまで次の処理に進まないようにする
+        yield return new WaitUntil(() => _endActorMoveAll);
+        // 敵が順番に行動する
+        foreach (EnemyManager e in _enemies.Where(e => e.DoActionThisTurn))
+        {
+            _endActorAction = false;
+            e.ActionStart();
+            yield return new WaitUntil(() => _endActorAction);
+        }
+
         _currentTurnState = TurnState.TurnEnd;
     }
 
-    // プレイヤーが行動をするターンの処理
+    /// <summary>プレイヤーが行動をするターンの処理</summary>
     IEnumerator ProcPlayerAction()
     {
         // プレイヤーが行動する
         _player.ActionStart();
+        // プレイヤーが行動終わるまで次の処理に進まないようにする
+        yield return new WaitUntil(() => _endActorAction);
         // 敵全員が行動を決定する
         _enemies.ForEach(e => e.RequestAI());
-        // 敵が行動する
-        _enemies.Where(e => e.DoActionThisTurn).ToList().ForEach(e => e.ActionStart());
-        // TODO:敵が行動終わるまで次の処理に進まないようにする
-        yield return null;
-        // 敵を移動させる
-        _enemies.Where(e => !e.DoActionThisTurn).ToList().ForEach(e => e.MoveStart());
-        // TODO:敵が移動終わるまで次の処理に進まないようにする
-        yield return null;
+        // 敵が順番に行動する
+        foreach (EnemyManager e in _enemies.Where(e => e.DoActionThisTurn))
+        {
+            _endActorAction = false;
+            e.ActionStart();
+            yield return new WaitUntil(() => _endActorAction);
+        }
+        // 移動を選択した敵がいたら
+        if (_moveActorCount > 0)
+        {
+            // 敵を移動させる
+            _enemies.Where(e => !e.DoActionThisTurn).ToList().ForEach(e => e.MoveStart());
+            // 敵が全員移動を終えるまで次の処理に進まないようにする
+            yield return new WaitUntil(() => _endActorMoveAll);
+        }
+
         _currentTurnState = TurnState.TurnEnd;
     }
 }

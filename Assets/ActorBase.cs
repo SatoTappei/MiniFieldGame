@@ -95,7 +95,6 @@ public abstract class ActorBase : MonoBehaviour
         else if (dir == Direction.Left) target.x--;
         
         // 移動先が壁なら現在の位置を返す、その際はターンを進めないようにする
-
         return target;
     }
 

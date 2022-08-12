@@ -42,17 +42,18 @@ public class PlayerManager : ActorBase
     /// <summary>キー入力待ち中に毎フレーム呼ばれる処理</summary>
     public override void StandBy()
     {
-        Debug.Log(gameObject.name + " キーの入力待ちです");
-
         float vert = Input.GetAxisRaw("Vertical");
         float hori = Input.GetAxisRaw("Horizontal");
 
-        // 攻撃キーなら攻撃の処理をする
+        // 行動
         if (Input.GetButtonDown("Submit"))
         {
+            // 行動するキャラクターだということをPlaySceneManagerに伝えて次のStateに移行する
+            PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
+            psm.AddActionActor();
             FindObjectOfType<PlaySceneManager>().SetTurnState(TurnState.PlayerActionStart);
         }
-        // 移動キーなら移動の処理をする、縦と横が同時に押されていたら判定しない(バグが出そう)
+        // 移動 縦と横が同時に押されていたら無視(バグが出そう)
         else if (Mathf.Abs(vert + hori) == 1)
         {
             // 移動しようとしているタイルが移動できるかどうかを調べる
@@ -61,9 +62,10 @@ public class PlayerManager : ActorBase
             // 移動先の座標を取得
             _tartgetPosXZ = GetTargetTile(_inputDir);
 
-            // 移動が可能なら次のStateに移行する
+            // 移動が可能なら
             if (canMove)
             {
+                // 移動するキャラクターだということをPlaySceneManagerに伝えて次のStateに移行する
                 PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
                 psm.AddMoveActor();
                 psm.SetTurnState(TurnState.PlayerMoveStart);
@@ -74,6 +76,7 @@ public class PlayerManager : ActorBase
     /// <summary>キャラクターが移動を開始するときに呼ばれる処理</summary>
     public override void MoveStart()
     {
+        Debug.Log(gameObject.name + " 移動開始します");
         // 目標の座標に向け移動させる
         transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
         StartCoroutine(Move(_tartgetPosXZ));
@@ -96,6 +99,9 @@ public class PlayerManager : ActorBase
     {
         // テスト:攻撃用のエフェクトを生成する、後々にキャラクターのアニメーションに切り替える
         Instantiate(_attackEffect, transform.position, Quaternion.identity);
+        
+        // このターンの自分の行動が終わったことを通知する
+        FindObjectOfType<PlaySceneManager>().SendEndAction();
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>
