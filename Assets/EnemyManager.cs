@@ -34,6 +34,10 @@ public class EnemyManager : ActorBase
         // TODO:敵のAIを作る(現在はランダムで行動を決定する)
         int r = Random.Range(1, 3);
         _doActionThisTurn = r == 1 ? true : false;
+
+        // 移動する場合はPlaySceneManagerに移動するキャラクターとして追加する
+        if (!_doActionThisTurn)
+            FindObjectOfType<PlaySceneManager>().AddMoveActor();
     }
 
     /// <summary>ターンの最初に呼ばれる処理</summary>

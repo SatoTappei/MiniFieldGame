@@ -44,31 +44,29 @@ public class PlayerManager : ActorBase
     {
         Debug.Log(gameObject.name + " キーの入力待ちです");
 
-        // いずれかのキーが押されたら
-        if (Input.anyKeyDown)
+        float vert = Input.GetAxisRaw("Vertical");
+        float hori = Input.GetAxisRaw("Horizontal");
+
+        // 攻撃キーなら攻撃の処理をする
+        if (Input.GetButtonDown("Submit"))
         {
-            PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
+            FindObjectOfType<PlaySceneManager>().SetTurnState(TurnState.PlayerActionStart);
+        }
+        // 移動キーなら移動の処理をする、縦と横が同時に押されていたら判定しない(バグが出そう)
+        else if (Mathf.Abs(vert + hori) == 1)
+        {
+            // 移動しようとしているタイルが移動できるかどうかを調べる
+            bool canMove = FindObjectOfType<MapManager>().CheckCanMoveTile((int)(_currentPosXZ.x + hori), (int)(_currentPosXZ.z + vert));
+            _inputDir = GetKeyToDir(vert, hori);
+            // 移動先の座標を取得
+            _tartgetPosXZ = GetTargetTile(_inputDir);
 
-            // 攻撃キーなら攻撃の処理をする
-            if (Input.GetButtonDown("Submit"))
+            // 移動が可能なら次のStateに移行する
+            if (canMove)
             {
-                psm.SetTurnState(TurnState.PlayerActionStart);
-            }
-            // 移動キーなら移動の処理をする
-            else if (Input.GetButtonDown("Vertical") || Input.GetButtonDown("Horizontal"))
-            {
-                float vert = Input.GetAxisRaw("Vertical");
-                float hori = Input.GetAxisRaw("Horizontal");
-                // 移動しようとしているタイルが移動できるかどうかを調べる
-                bool canMove = FindObjectOfType<MapManager>().CheckCanMoveTile((int)(_currentPosXZ.x + hori), (int)(_currentPosXZ.z + vert));
-                Debug.Log("移動可能か " + canMove);
-                _inputDir = GetKeyToDir(vert, hori);
-                // 移動先の座標を取得
-                _tartgetPosXZ = GetTargetTile(_inputDir);
-
-                // 移動が可能なら次のStateに移行する
-                if (canMove)
-                    psm.SetTurnState(TurnState.PlayerMoveStart);
+                PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
+                psm.AddMoveActor();
+                psm.SetTurnState(TurnState.PlayerMoveStart);
             }
         }
     }

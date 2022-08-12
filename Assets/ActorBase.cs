@@ -79,6 +79,9 @@ public abstract class ActorBase : MonoBehaviour
 
         // 移動が完了したら現在のタイル上の位置を移動先の座標に変更する
         _currentPosXZ = target;
+        // 移動が完了したらPlaySceneManagerのCheckRemMoveActorメソッドを呼んで
+        // 自分が最後に移動完了したキャラクターかを確認してもらう
+        FindObjectOfType<PlaySceneManager>().CheckRemMoveActor();
     }
 
     /// <summary>現在の座標と方向から移動先の座標を取得</summary>
