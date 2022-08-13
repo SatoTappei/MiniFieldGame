@@ -1,6 +1,9 @@
 ﻿★優先タスク
-	待機中の敵が徐々に前に進んでいってしまう。
-	攻撃のアニメーション終わりにAnimationEventを追加して攻撃が終わったことを通知するようにする <- 〇〇Rootオブジェクトにスクリプトを追加して対処する
+	
+
+★用語
+	フロア…マップ全体のこと
+	タイル…1マスのこと
 
 ★備考
 	敵は4種類つくりたい(出来れば)
@@ -12,3 +15,14 @@
 ★使用アセット
 	YughuesFreeGroundMaterials
 	YughuesFreeMetalMaterials
+
+	WWWWWWWWWW
+	WOOOOOOOWW
+	WOOOOWWOOW
+	WOOOOWWWOW
+	WWOWWWWWOW
+	WWOWWWWWOW
+	WOOOOOWWOW
+	WOOOOOOOOW
+	WOOOOOWWEW
+	WWWWWWWWWW

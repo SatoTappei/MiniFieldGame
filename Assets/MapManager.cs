@@ -22,12 +22,13 @@ public class MapManager : MonoBehaviour
         [SerializeField] GameObject _prefab;
         [SerializeField] char _char;
         [SerializeField] TileType _type;
-        bool _onActor;
+        ActorBase _onActor;
 
         public GameObject Prefab { get => _prefab; }
         public char Char { get => _char; }
         public TileType Type { get => _type; }
-        public bool OnActor { get => _onActor; set => _onActor = value; }
+        /// <summary>このタイルにいるキャラクターを登録しておく</summary>
+        public ActorBase OnActor { get => _onActor; set => _onActor = value; }
     }
 
     /// <summary>生成するマップのデータ</summary>
@@ -46,28 +47,39 @@ public class MapManager : MonoBehaviour
         /// そのマスにすでにキャラクターがいるかなど、後々タイルのデータを取得できるようにする
         /// </summary>
         public Tile GetMapTile(int x, int z) => _mapArray[x, z];
+        /// <summary>指定した座標に文字をセットする、現状マップの生成時にしか使っていない</summary>
+        //public void SetMapTile(int x, int z, Tile s) => _mapArray[x, z] = s;
         /// <summary>
-        /// 指定した座標に文字をセットする、現状マップの生成時にしか使っていない
+        /// 指定した座標にそのタイルにいるキャラクターの情報をセットする
+        /// その座標に何かいたら攻撃できたり、移動できないようにするため
         /// </summary>
-        public void SetMapTile(int x, int z, Tile s) => _mapArray[x, z] = s;
+        public void SetMapTileActor(int x, int z, ActorBase ab) => _mapArray[x, z].OnActor = ab;
+        /// <summary>
+        /// 指定した座標のタイルにいるキャラクターの情報を取得する
+        /// その座標に何かいたら攻撃できたり、移動できないようにするため
+        /// </summary>
+        public ActorBase GetMapTileActor(int x, int z) => _mapArray[x, z].OnActor;
     }
 
     /// <summary>生成するマップの幅</summary>
-    const int MapWidth = 7;
+    //const int MapWidth = 7;
     /// <summary>生成するマップの高さ</summary>
-    const int MapHight = 7;
+    //const int MapHight = 7;
 
     /// <summary生成するマップの文字列</summary>
-    [TextArea(MapWidth, MapHight), SerializeField] string _mapStr;
+    [TextArea(10, 10), SerializeField] string _mapStr;
     /// <summary>生成するタイルのデータ</summary>
     [SerializeField] Tile[] _tileDatas;
     /// <summary>生成したタイルを登録する親オブジェクト</summary>
     [SerializeField] Transform _tileParent;
+    /// <summary>フロアに生成する生成する敵</summary>
+    [SerializeField] GameObject[] _generateEnemies;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
     Dictionary<char, Tile> _tileDic = new Dictionary<char, Tile>();
     /// <summary>生成したマップのデータ、マップやタイルを調べる際にはこれを参照する</summary>
     Map _currentMap;
-    //List<GameObject> _generatedTiles = new List<GameObject>();
+
+    public Map CurrentMap { get => _currentMap; }
 
     // マップ
     // 二次元配列にする
@@ -81,7 +93,15 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         GenerateMap(_mapStr);
-        SetPlayer(canMove: TileType.Floor);
+        SetActorRandom(GameObject.FindWithTag("Player"), TileType.Floor);
+
+        //TODO: マップ生成時に敵を生成するテスト、後々にきちんとした関数に直す
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    int r = Random.Range(0, _generateEnemies.Length);
+        //    var obj = Instantiate(_generateEnemies[r], Vector3.zero, Quaternion.identity);
+        //    SetActorRandom(obj, TileType.Floor);
+        //}
 
         // 敵ターン開始時
         //      敵を生成するかどうかチェック
@@ -120,15 +140,15 @@ public class MapManager : MonoBehaviour
                     obj.transform.SetParent(_tileParent);
                 }
                 else
-                    Debug.LogWarning("生成できませんでした。文字が登録されてないです。");
+                    Debug.LogWarning($"生成できませんでした。文字が登録されてないです。<{lines[i][j]}>");
             }
         }
     }
 
-    /// <summary>生成したマップにプレイヤーを配置する</summary>
-    public void SetPlayer(TileType canMove)
+    /// <summary>キャラクターをマップ上のランダムなタイルに配置する</summary>
+    public void SetActorRandom(GameObject actor, TileType canMove)
     {
-        // プレイヤーが移動可能なタイルのリストを作成
+        // キャラクターが移動可能なタイルのリストを作成
         List<(int, int)> canMoveTiles = new List<(int, int)>();
 
         for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
@@ -136,23 +156,24 @@ public class MapManager : MonoBehaviour
                 if (_currentMap._mapArray[i, j].Type == canMove)
                     canMoveTiles.Add((i, j));
 
-        // プレイヤーの位置をランダムなタイルの上に設定
-        GameObject player = GameObject.FindWithTag("Player");
+        // キャラクターの位置をランダムなタイルの上に設定
         int r = Random.Range(0, canMoveTiles.Count);
-        player.transform.position = new Vector3(canMoveTiles[r].Item1, 0, canMoveTiles[r].Item2);
-        player.GetComponent<PlayerManager>().InitPosXZ();
+        actor.transform.position = new Vector3(canMoveTiles[r].Item1, 0, canMoveTiles[r].Item2);
+        actor.GetComponent<ActorBase>().InitPosXZ();
     }
 
     /// <summary>指定したタイルが移動可能か調べる</summary>
     public bool CheckCanMoveTile(int x, int z)
     {
         // 他のキャラクターがいる、壁がある、だとアウト
-        // 他のキャラクターがいる場合はMapクラスのonActor変数をtrueにする
+        // 他のキャラクターがいる = _onActor変数がnull以外
 
         // 指定したタイルが壁なら移動不可能
         if (_currentMap.GetMapTile(x, z).Type == TileType.Wall)
             return false;
-        // TODO:キャラクターがいる場合にもfalseを返すようにする
+        // 指定したタイルにキャラクターが居たら移動不可能
+        else if (CurrentMap.GetMapTileActor(x, z) != null)
+            return false;
         else
             return true;
     }

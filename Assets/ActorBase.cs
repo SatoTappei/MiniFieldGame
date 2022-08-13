@@ -28,7 +28,7 @@ public abstract class ActorBase : MonoBehaviour
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
     protected const float MoveTileTime = 15.0f;
     /// <summary>このキャラクターが侵入できるタイル</summary>
-    [SerializeField] TileType[] _canMoveTile;
+    [SerializeField] TileType[] _canMoveTile; 
     /// <summary>現在のキャラクターの向き</summary>
     //Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
@@ -48,6 +48,16 @@ public abstract class ActorBase : MonoBehaviour
     void Update()
     {
         
+    }
+
+    /// <summary>
+    /// MapGeneratorでマップ生成時、プレイヤーの配置場所が決まったら
+    /// ワールド座標をタイル上の座標に変換してセットする
+    /// </summary>
+    public void InitPosXZ()
+    {
+        _currentPosXZ.x = (int)transform.position.x;
+        _currentPosXZ.z = (int)transform.position.z;
     }
 
     /// <summary>入力に対応したキャラクターの向きを返す</summary>
@@ -78,6 +88,8 @@ public abstract class ActorBase : MonoBehaviour
 
         // 移動が完了したら現在のタイル上の位置を移動先の座標に変更する
         _currentPosXZ = target;
+        // 移動が完了したらその座標に自身をセットして攻撃や移動の判定に使えるようにする
+        FindObjectOfType<MapManager>().CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, this);
         // 移動が完了したらPlaySceneManagerのCheckRemMoveActorメソッドを呼んで
         // 自分が最後に移動完了したキャラクターかを確認してもらう
         FindObjectOfType<PlaySceneManager>().CheckRemMoveActor();
@@ -120,4 +132,7 @@ public abstract class ActorBase : MonoBehaviour
 
     /// <summary>キャラクターが行動を終えるときに呼ばれる処理</summary>
     public abstract void ActionEnd();
+
+    /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
+    public abstract void Damaged();
 }

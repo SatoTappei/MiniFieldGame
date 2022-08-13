@@ -241,15 +241,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7791d321db4d9b94a8271c2df962a420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapStr: 'WWWWW
+  _mapStr: 'WWWWWWWWWW
 
-    WEOOW
+    WOOOOOOOWW
 
-    WWWOW
+    WOOOOWWOOW
 
-    WOOOW
+    WOOOOWWWOW
 
-    WWWWW'
+    WWOWWWWWOW
+
+    WWOWWWWWOW
+
+    WOOOOOWWOW
+
+    WOOOOOOOOW
+
+    WOOOOOWWEW
+
+    WWWWWWWWWW'
   _tileDatas:
   - _prefab: {fileID: 1837077820683073736, guid: 94054c180b53b7e4888fc9a2a1deb3d3, type: 3}
     _char: 79
@@ -261,6 +271,8 @@ MonoBehaviour:
     _char: 69
     _type: 0
   _tileParent: {fileID: 882564775}
+  _generateEnemies:
+  - {fileID: 0}
 --- !u!1 &541184339
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,63 +470,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 749380626}
   m_CullTransparentMesh: 1
---- !u!1001 &795129848
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_RootOrder
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_Name
-      value: Enemy_Princess (2)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
 --- !u!1 &796525995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,63 +1027,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211055488}
   m_CullTransparentMesh: 1
---- !u!1001 &1268578661
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_Name
-      value: Enemy_Princess (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
 --- !u!1 &1286105490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1881,63 +1779,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &843061456301674434
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688380, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
-      propertyPath: m_Name
-      value: Enemy_Princess
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
 --- !u!1 &1043155648866273758
 GameObject:
   m_ObjectHideFlags: 0

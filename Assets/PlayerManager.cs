@@ -23,16 +23,6 @@ public class PlayerManager : ActorBase
         
     }
 
-    /// <summary>
-    /// MapGeneratorでマップ生成時、プレイヤーの配置場所が決まったら
-    /// ワールド座標をタイル上の座標に変換してセットする
-    /// </summary>
-    public void InitPosXZ()
-    {
-        _currentPosXZ.x = (int)transform.position.x;
-        _currentPosXZ.z = (int)transform.position.z;
-    }
-
     /// <summary>ターンの最初に呼ばれる処理</summary>
     public override void TurnInit()
     {
@@ -98,6 +88,7 @@ public class PlayerManager : ActorBase
     public override void ActionStart()
     {
         _anim.Play("Slash");
+        //FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor();
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>
@@ -110,5 +101,11 @@ public class PlayerManager : ActorBase
     public override void ActionEnd()
     {
         Debug.Log(gameObject.name + " 行動を終えました");
+    }
+
+    /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
+    public override void Damaged()
+    {
+        _anim.Play("Fall");
     }
 }

@@ -84,6 +84,8 @@ public class EnemyManager : ActorBase
     public override void ActionStart()
     {
         _anim.Play("Slash");
+        // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
+
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>
@@ -96,5 +98,11 @@ public class EnemyManager : ActorBase
     public override void ActionEnd()
     {
         Debug.Log(gameObject.name + " 行動を終えました");
+    }
+
+    /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
+    public override void Damaged()
+    {
+        _anim.Play("Fall");
     }
 }
