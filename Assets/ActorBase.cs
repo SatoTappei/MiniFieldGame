@@ -30,7 +30,7 @@ public abstract class ActorBase : MonoBehaviour
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile; 
     /// <summary>現在のキャラクターの向き</summary>
-    //Direction _currentDir = Direction.Up;
+    Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
     protected Direction _inputDir;
     /// <summary>現在のXZ平面上での位置</summary>
@@ -81,9 +81,6 @@ public abstract class ActorBase : MonoBehaviour
         Vector3 currentPos = new Vector3(_currentPosXZ.x, 0, _currentPosXZ.z);
         Vector3 targetPos = new Vector3(target.x, 0, target.z);
 
-        // 移動する前に現在の座標から自身を削除しておく
-        mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
-
         int count = 0;
         while (transform.position != targetPos)
         {
@@ -95,8 +92,6 @@ public abstract class ActorBase : MonoBehaviour
 
         // 移動が完了したら現在のタイル上の位置を移動先の座標に変更する
         _currentPosXZ = target;
-        // 移動が完了したらその座標に自身をセットして攻撃や移動の判定に使えるようにする
-        mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, this);
         // 移動が完了したら自分が最後に移動完了したキャラクターかを確認してもらう
         FindObjectOfType<PlaySceneManager>().CheckRemMoveActor();
     }

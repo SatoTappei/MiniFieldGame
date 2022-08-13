@@ -56,21 +56,38 @@ public class EnemyManager : ActorBase
         // プレイヤーが移動する場合はStandByの時点で座標が決まっているため
         // 現状は移動を開始するときに移動する座標を決めている。
         // バグがある場合は、移動する座標を決める処理を行う場所を変える
+        // 追記:現状ランダムで移動と攻撃を決めているので移動になった際に通路の行き止まりにいる＆後ろにプレイヤーがいる場合どうしようもない
+        // 対処:周り8マスにプレイヤーがいる場合は攻撃するようにするのでこのターンはその場にとどまる
+
+        MapManager mm = FindObjectOfType<MapManager>();
+
+        // TODO:現状はランダムで4方向に移動するのでアルゴリズムを使った方法に直す
+        List<(int, int)> dirs = new List<(int, int)>();
+        dirs.Add((1, 0));
+        dirs.Add((0, 1));
+        dirs.Add((-1, 0));
+        dirs.Add((0, -1));
 
         bool canMove = false;
-        while (!canMove)
+        // どこにも移動できない場合はそのターンはその場にとどまる
+        while (!canMove && dirs.Count > 0)
         {
-            // TODO:現状はランダムで4方向に移動する
-            (int, int)[] dirs = { (1, 0), (0, 1), (-1, 0), (0, -1) };
-            int r = Random.Range(0, 4);
+            int r = Random.Range(0, dirs.Count);
             _inputDir = GetKeyToDir(dirs[r].Item1, dirs[r].Item2);
-            // 移動しようとしているタイルが移動できるかどうかを調べる <= xとzが入れ替わっているので注意
-            canMove = FindObjectOfType<MapManager>().CheckCanMoveTile(_currentPosXZ.x + dirs[r].Item2, _currentPosXZ.z + dirs[r].Item1);
+            // 移動しようとしているタイルが移動できるかどうかを調べる <= 変数dirsのxとzが入れ替わっているので注意
+            canMove = mm.CheckCanMoveTile(_currentPosXZ.x + dirs[r].Item2, _currentPosXZ.z + dirs[r].Item1);
+            dirs.RemoveAt(r);
         }
+        // TODO:ランダムで決定ここまで
 
         // 移動先の座標を取得
         _tartgetPosXZ = GetTargetTile(_inputDir);
-
+        // 現在のタイル上の座標から自身の情報を削除しておく
+        mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+        // 移動先の座標に自身の情報を登録しておく
+        mm.CurrentMap.SetMapTileActor(_tartgetPosXZ.x, _tartgetPosXZ.z, this);
+        // プレイヤーはその場で向きだけを変えることがあるので入力したときに向きを変えるが
+        // 敵は移動する直前に向きを変える
         transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
         StartCoroutine(Move(_tartgetPosXZ));
     }

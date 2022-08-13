@@ -46,15 +46,25 @@ public class PlayerManager : ActorBase
         // 移動 縦と横が同時に押されていたら無視(バグが出そう)
         else if (Mathf.Abs(vert + hori) == 1)
         {
+            MapManager mm = FindObjectOfType<MapManager>();
             // 移動しようとしているタイルが移動できるかどうかを調べる
-            bool canMove = FindObjectOfType<MapManager>().CheckCanMoveTile((int)(_currentPosXZ.x + hori), (int)(_currentPosXZ.z + vert));
+            bool canMove = mm.CheckCanMoveTile((int)(_currentPosXZ.x + hori), (int)(_currentPosXZ.z + vert));
             _inputDir = GetKeyToDir(vert, hori);
             // 移動先の座標を取得
             _tartgetPosXZ = GetTargetTile(_inputDir);
+            // 移動の可能不可能に限らず入力された方向にキャラクターの向きだけを変える
+            transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
 
             // 移動が可能なら
             if (canMove)
             {
+                // この時点で移動する先の座標は決まっているので、予約しておかないと
+                // 敵のAIのターンでプレイヤーが移動する先の座標まで選択肢に入ってしまう
+
+                // 現在のタイル上の座標から自身の情報を削除しておく
+                mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+                // 移動先の座標に自身の情報を登録しておく
+                mm.CurrentMap.SetMapTileActor(_tartgetPosXZ.x, _tartgetPosXZ.z, this);
                 // 移動するキャラクターだということをPlaySceneManagerに伝えて次のStateに移行する
                 PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
                 psm.AddMoveActor();
@@ -68,7 +78,6 @@ public class PlayerManager : ActorBase
     {
         Debug.Log(gameObject.name + " 移動開始します");
         // 目標の座標に向け移動させる
-        transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
         StartCoroutine(Move(_tartgetPosXZ));
     }
 
