@@ -941,8 +941,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c51f7bc289a424dadc3297593229a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _anim: {fileID: 1267937347650918571}
   _canMoveTile: 00000000
-  _attackEffect: {fileID: 3840237927318129871, guid: 113e9d61c782bc94a878c383829b38b4, type: 3}
 --- !u!4 &1151769356
 Transform:
   m_ObjectHideFlags: 0
@@ -3197,6 +3197,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9156554223095887313}
   - component: {fileID: 1267937347650918571}
+  - component: {fileID: 5280967909662607299}
   m_Layer: 0
   m_Name: Hero_Root
   m_TagString: Untagged
@@ -3204,6 +3205,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5280967909662607299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5280967909662607298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df381a15c8c23d4a81cbc8392b0aaa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5411744567399729048
 GameObject:
   m_ObjectHideFlags: 0

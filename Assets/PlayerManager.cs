@@ -97,11 +97,7 @@ public class PlayerManager : ActorBase
     /// <summary>キャラクターが行動を開始するときに呼ばれる処理</summary>
     public override void ActionStart()
     {
-        // テスト:攻撃用のエフェクトを生成する、後々にキャラクターのアニメーションに切り替える
-        Instantiate(_attackEffect, transform.position, Quaternion.identity);
-        
-        // このターンの自分の行動が終わったことを通知する
-        FindObjectOfType<PlaySceneManager>().SendEndAction();
+        _anim.Play("Slash");
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>

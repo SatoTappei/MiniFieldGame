@@ -24,12 +24,11 @@ public abstract class ActorBase : MonoBehaviour
         Left = 270,
     };
 
+    [SerializeField] protected Animator _anim;
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
     protected const float MoveTileTime = 15.0f;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile;
-    /// <summary>テスト:攻撃用時に出るエフェクト、必要ないなら消す</summary>
-    [SerializeField] protected GameObject _attackEffect;
     /// <summary>現在のキャラクターの向き</summary>
     //Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
@@ -43,7 +42,7 @@ public abstract class ActorBase : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()

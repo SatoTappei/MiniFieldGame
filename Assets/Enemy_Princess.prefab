@@ -671,8 +671,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03825ec2e0482ed4db8cc8e3c4a7ef17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _anim: {fileID: 843061458001716465}
   _canMoveTile: 00000000
-  _attackEffect: {fileID: 3840237927318129871, guid: 080ad2cae089311498d2e720b7ae2781, type: 3}
 --- !u!1 &843061456864145010
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,6 +1575,7 @@ GameObject:
   m_Component:
   - component: {fileID: 843061458001716470}
   - component: {fileID: 843061458001716465}
+  - component: {fileID: 4895887563036657976}
   m_Layer: 0
   m_Name: Princess_Root
   m_TagString: Untagged
@@ -1617,6 +1618,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4895887563036657976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843061458001716467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df381a15c8c23d4a81cbc8392b0aaa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4895887563036657976}
+        m_TargetAssemblyTypeName: ActorPrefabRoot, Assembly-CSharp
+        m_MethodName: Hoge
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &843061458012284073
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,11 +18,6 @@ public class EnemyManager : ActorBase
         FindObjectOfType<PlaySceneManager>().AddEnemy(this);
     }
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
 
@@ -88,11 +83,7 @@ public class EnemyManager : ActorBase
     /// <summary>キャラクターが行動を開始するときに呼ばれる処理</summary>
     public override void ActionStart()
     {
-        Debug.Log(gameObject.name + " 行動を開始します");
-        Instantiate(_attackEffect, transform.position, Quaternion.identity);
-
-        // このターンの自分の行動が終わったことを通知する
-        FindObjectOfType<PlaySceneManager>().SendEndAction();
+        _anim.Play("Slash");
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>
