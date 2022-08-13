@@ -272,7 +272,7 @@ MonoBehaviour:
     _type: 0
   _tileParent: {fileID: 882564775}
   _generateEnemies:
-  - {fileID: 0}
+  - {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
 --- !u!1 &541184339
 GameObject:
   m_ObjectHideFlags: 0

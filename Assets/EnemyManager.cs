@@ -56,11 +56,18 @@ public class EnemyManager : ActorBase
         // プレイヤーが移動する場合はStandByの時点で座標が決まっているため
         // 現状は移動を開始するときに移動する座標を決めている。
         // バグがある場合は、移動する座標を決める処理を行う場所を変える
-        
-        // TODO:現状はランダムで4方向に移動する
-        (int, int)[] dirs = { (1, 0), (0, 1), (-1, 0), (0, -1) };
-        int r = Random.Range(0, 4);
-        _inputDir = GetKeyToDir(dirs[r].Item1, dirs[r].Item2);
+
+        bool canMove = false;
+        while (!canMove)
+        {
+            // TODO:現状はランダムで4方向に移動する
+            (int, int)[] dirs = { (1, 0), (0, 1), (-1, 0), (0, -1) };
+            int r = Random.Range(0, 4);
+            _inputDir = GetKeyToDir(dirs[r].Item1, dirs[r].Item2);
+            // 移動しようとしているタイルが移動できるかどうかを調べる <= xとzが入れ替わっているので注意
+            canMove = FindObjectOfType<MapManager>().CheckCanMoveTile(_currentPosXZ.x + dirs[r].Item2, _currentPosXZ.z + dirs[r].Item1);
+        }
+
         // 移動先の座標を取得
         _tartgetPosXZ = GetTargetTile(_inputDir);
 

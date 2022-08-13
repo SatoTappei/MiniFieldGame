@@ -96,12 +96,12 @@ public class MapManager : MonoBehaviour
         SetActorRandom(GameObject.FindWithTag("Player"), TileType.Floor);
 
         //TODO: マップ生成時に敵を生成するテスト、後々にきちんとした関数に直す
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    int r = Random.Range(0, _generateEnemies.Length);
-        //    var obj = Instantiate(_generateEnemies[r], Vector3.zero, Quaternion.identity);
-        //    SetActorRandom(obj, TileType.Floor);
-        //}
+        for (int i = 0; i < 3; i++)
+        {
+            int r = Random.Range(0, _generateEnemies.Length);
+            var obj = Instantiate(_generateEnemies[r], Vector3.zero, Quaternion.identity);
+            SetActorRandom(obj, TileType.Floor);
+        }
 
         // 敵ターン開始時
         //      敵を生成するかどうかチェック
@@ -167,7 +167,7 @@ public class MapManager : MonoBehaviour
     {
         // 他のキャラクターがいる、壁がある、だとアウト
         // 他のキャラクターがいる = _onActor変数がnull以外
-
+        //Debug.Log(x.ToString() + " " + z.ToString());
         // 指定したタイルが壁なら移動不可能
         if (_currentMap.GetMapTile(x, z).Type == TileType.Wall)
             return false;
