@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using System.Linq;
 
 /// <summary>ターン中の状態を表す</summary>
@@ -36,12 +35,15 @@ public enum TurnState
 /// </summary>
 public class PlaySceneManager : MonoBehaviour
 {
+    [SerializeField] PlayerUIManager _playerUIManager;
     /// <summary>現在のターンがどの状態かを保持しておく</summary>
     TurnState _currentTurnState;
     /// <summary>プレイヤーを制御する</summary>
     PlayerManager _player;
     /// <summary>たくさんの敵さんを制御する</summary>
     List<EnemyManager> _enemies = new List<EnemyManager>();
+    /// <summary>ゲーム開始時からの経過ターン</summary>
+    int _progressTurn;
     /// <summary>このターン移動するキャラクターが全員移動したらtrueになる</summary>
     bool _endActorMoveAll;
     /// <summary>このターン移動するキャラクターの数</summary>
@@ -102,6 +104,7 @@ public class PlaySceneManager : MonoBehaviour
                 _moveActorCount = 0;
                 _actionActorCount = 0;
                 _endActorAction = false;
+                _playerUIManager.SetProgressTurn(++_progressTurn);
                 _currentTurnState = TurnState.StandBy;
                 break;
             // プレイヤーの入力を待つ
