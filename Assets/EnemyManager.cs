@@ -156,5 +156,7 @@ public class EnemyManager : ActorBase
         // タイル上の情報を削除する
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
         _anim.Play("Dead");
+        // 被ダメージのエフェクトを生成する
+        Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
     }
 }
