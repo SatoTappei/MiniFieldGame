@@ -20,7 +20,7 @@ public class PlayerManager : ActorBase
 
     void Update()
     {
-        
+
     }
 
     /// <summary>ƒ^[ƒ“‚ÌÅ‰‚ÉŒÄ‚Î‚ê‚éˆ—</summary>
