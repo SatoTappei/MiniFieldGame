@@ -64,6 +64,8 @@ public class PlaySceneManager : MonoBehaviour
     public void SetPlayer(PlayerManager player) => _player = player;
     /// <summary>このスクリプトのStateで管理するために敵側から自身をセットする</summary>
     public void AddEnemy(EnemyManager enemy) => _enemies.Add(enemy);
+    /// <summary>このスクリプトのStateで管理するために敵側から自身が死んだことを伝える</summary>
+    public void RemoveEnemy(EnemyManager em) => _enemies.Remove(em);
     /// <summary>このターン移動するキャラクターとして追加する</summary>
     public void AddMoveActor() => _moveActorCount++;
     /// <summary>このターン行動するキャラクターとして追加する</summary>

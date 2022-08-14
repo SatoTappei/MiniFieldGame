@@ -109,6 +109,12 @@ public class EnemyManager : ActorBase
     {
         _anim.Play("Slash");
         // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
+        // キャラクターの向きを保持しておく
+        // キャラクターの前のマスの情報を取得
+        // 前のマスがnullなら行動終了
+        // 攻撃アニメーション再生
+        // 敵を消す
+        // 行動終了
 
     }
 
@@ -127,6 +133,10 @@ public class EnemyManager : ActorBase
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
     public override void Damaged()
     {
-        _anim.Play("Fall");
+        // 敵は全員1撃で死ぬので死亡のアニメーションを再生する
+        FindObjectOfType<PlaySceneManager>().RemoveEnemy(this);
+        // タイル上の情報を削除する
+        FindObjectOfType<MapManager>().CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+        _anim.Play("Dead");
     }
 }

@@ -97,7 +97,18 @@ public class PlayerManager : ActorBase
     public override void ActionStart()
     {
         _anim.Play("Slash");
-        //FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor();
+        // 攻撃するマスの情報を取得
+        PosXZ target = GetTargetTile(_inputDir);
+        ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
+        // 攻撃するマスに敵がいればダメージの処理
+        ab?.Damaged();
+        
+        // キャラクターの向きを保持しておく
+        // キャラクターの前のマスの情報を取得
+        // 前のマスがnullなら行動終了
+        // 攻撃アニメーション再生
+        // 敵を消す
+        // 行動終了
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>

@@ -77,7 +77,7 @@ public abstract class ActorBase : MonoBehaviour
     /// <summary>w’è‚µ‚½À•W‚É•âŠ®‚µ‚Â‚ÂˆÚ“®‚³‚¹‚é</summary>
     protected IEnumerator Move(PosXZ target)
     {
-        MapManager mm = FindObjectOfType<MapManager>();
+        //MapManager mm = FindObjectOfType<MapManager>();
         Vector3 currentPos = new Vector3(_currentPosXZ.x, 0, _currentPosXZ.z);
         Vector3 targetPos = new Vector3(target.x, 0, target.z);
 
