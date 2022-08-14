@@ -27,7 +27,7 @@ public class EnemyManager : ActorBase
     public void RequestAI()
     {
         // TODO:敵のAIを作る(現在はランダムで行動を決定する)
-        int r = Random.Range(1, 3);
+        int r = Random.Range(2, 3);
         _doActionThisTurn = r == 1;
 
         // 移動と行動のどっちをするのかをPlaySceneManagerに教える
@@ -79,17 +79,25 @@ public class EnemyManager : ActorBase
             dirs.RemoveAt(r);
         }
         // TODO:ランダムで決定ここまで
-
-        // 移動先の座標を取得
-        _tartgetPosXZ = GetTargetTile(_inputDir);
-        // 現在のタイル上の座標から自身の情報を削除しておく
-        mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
-        // 移動先の座標に自身の情報を登録しておく
-        mm.CurrentMap.SetMapTileActor(_tartgetPosXZ.x, _tartgetPosXZ.z, this);
-        // プレイヤーはその場で向きだけを変えることがあるので入力したときに向きを変えるが
-        // 敵は移動する直前に向きを変える
-        transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
-        StartCoroutine(Move(_tartgetPosXZ));
+        
+        if (canMove)
+        {
+            // 移動先の座標を取得
+            _targetPosXZ = GetTargetTile(_inputDir);
+            // 現在のタイル上の座標から自身の情報を削除しておく
+            mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+            // 移動先の座標に自身の情報を登録しておく
+            mm.CurrentMap.SetMapTileActor(_targetPosXZ.x, _targetPosXZ.z, this);
+            // プレイヤーはその場で向きだけを変えることがあるので入力したときに向きを変えるが
+            // 敵は移動する直前に向きを変える
+            transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
+            StartCoroutine(Move(_targetPosXZ));
+        }
+        else
+        {
+            // その場に移動する = とどまる
+            StartCoroutine(Move(_currentPosXZ));
+        }
     }
 
     /// <summary>キャラクターが移動中に呼ばれる処理</summary>
@@ -108,6 +116,16 @@ public class EnemyManager : ActorBase
     public override void ActionStart()
     {
         _anim.Play("Slash");
+
+        // 現在は攻撃する際にプレイヤーがいるかどうか判定しているので空振りが起こる
+        // TODO:空振りさせないために"周囲八マスにプレイヤーがいたらそっちを向いて攻撃する"ようにする
+
+        // 攻撃するマスの情報を取得
+        PosXZ target = GetTargetTile(_inputDir);
+        ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
+        // 攻撃するマスにプレイヤーがいればダメージの処理
+        ab?.Damaged();
+
         // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
         // キャラクターの向きを保持しておく
         // キャラクターの前のマスの情報を取得

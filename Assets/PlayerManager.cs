@@ -51,7 +51,7 @@ public class PlayerManager : ActorBase
             bool canMove = mm.CheckCanMoveTile((int)(_currentPosXZ.x + hori), (int)(_currentPosXZ.z + vert));
             _inputDir = GetKeyToDir(vert, hori);
             // 移動先の座標を取得
-            _tartgetPosXZ = GetTargetTile(_inputDir);
+            _targetPosXZ = GetTargetTile(_inputDir);
             // 移動の可能不可能に限らず入力された方向にキャラクターの向きだけを変える
             transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
 
@@ -64,7 +64,7 @@ public class PlayerManager : ActorBase
                 // 現在のタイル上の座標から自身の情報を削除しておく
                 mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
                 // 移動先の座標に自身の情報を登録しておく
-                mm.CurrentMap.SetMapTileActor(_tartgetPosXZ.x, _tartgetPosXZ.z, this);
+                mm.CurrentMap.SetMapTileActor(_targetPosXZ.x, _targetPosXZ.z, this);
                 // 移動するキャラクターだということをPlaySceneManagerに伝えて次のStateに移行する
                 PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
                 psm.AddMoveActor();
@@ -78,7 +78,7 @@ public class PlayerManager : ActorBase
     {
         Debug.Log(gameObject.name + " 移動開始します");
         // 目標の座標に向け移動させる
-        StartCoroutine(Move(_tartgetPosXZ));
+        StartCoroutine(Move(_targetPosXZ));
     }
 
     /// <summary>キャラクターが移動中に呼ばれる処理</summary>
@@ -126,6 +126,6 @@ public class PlayerManager : ActorBase
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
     public override void Damaged()
     {
-        _anim.Play("Fall");
+        _anim.Play("Damage");
     }
 }

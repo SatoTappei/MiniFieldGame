@@ -14,8 +14,17 @@ public abstract class ActorBase : MonoBehaviour
         public int z;
     }
 
+    /// <summary>キャラクターの種類</summary>
+    protected enum ActorType
+    {
+        Player,
+        Enemy,
+        // Item,
+        // Obstacle,
+    }
+
     /// <summary>キャラクターの方向</summary>
-    public enum Direction
+    protected enum Direction
     {
         Neutral = 360, // 何も入力されていない状態
         Up = 0,
@@ -27,16 +36,18 @@ public abstract class ActorBase : MonoBehaviour
     [SerializeField] protected Animator _anim;
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
     protected const float MoveTileTime = 15.0f;
+    /// <summary>このキャラクターの種類</summary>
+    [SerializeField] ActorType _actorType;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile; 
     /// <summary>現在のキャラクターの向き</summary>
-    Direction _currentDir = Direction.Up;
+    //Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
     protected Direction _inputDir;
     /// <summary>現在のXZ平面上での位置</summary>
     protected PosXZ _currentPosXZ;
     /// <summary>移動する際の移動先の座標</summary>
-    protected PosXZ _tartgetPosXZ;
+    protected PosXZ _targetPosXZ;
     /// <summary>行動中かどうか</summary>
     protected bool _inAction;
 

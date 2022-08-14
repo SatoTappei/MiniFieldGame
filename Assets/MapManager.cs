@@ -96,7 +96,7 @@ public class MapManager : MonoBehaviour
         SetActorRandom(GameObject.FindWithTag("Player"), TileType.Floor);
 
         //TODO: マップ生成時に敵を生成するテスト、後々にきちんとした関数に直す
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 13; i++)
         {
             int r = Random.Range(0, _generateEnemies.Length);
             var obj = Instantiate(_generateEnemies[r], Vector3.zero, Quaternion.identity);
