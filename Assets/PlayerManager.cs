@@ -102,7 +102,7 @@ public class PlayerManager : ActorBase
         ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスに敵がいればダメージの処理
         ab?.Damaged();
-        
+
         // キャラクターの向きを保持しておく
         // キャラクターの前のマスの情報を取得
         // 前のマスがnullなら行動終了

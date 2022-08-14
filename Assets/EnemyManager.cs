@@ -27,7 +27,7 @@ public class EnemyManager : ActorBase
     public void RequestAI()
     {
         // TODO:敵のAIを作る(現在はランダムで行動を決定する)
-        int r = Random.Range(2, 3);
+        int r = Random.Range(1, 3);
         _doActionThisTurn = r == 1;
 
         // 移動と行動のどっちをするのかをPlaySceneManagerに教える
@@ -124,7 +124,8 @@ public class EnemyManager : ActorBase
         PosXZ target = GetTargetTile(_inputDir);
         ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
-        ab?.Damaged();
+        if (ab != null && ab.GetActorType() == ActorType.Player)
+            ab.Damaged();
 
         // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
         // キャラクターの向きを保持しておく

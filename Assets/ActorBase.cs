@@ -15,7 +15,7 @@ public abstract class ActorBase : MonoBehaviour
     }
 
     /// <summary>キャラクターの種類</summary>
-    protected enum ActorType
+    public enum ActorType
     {
         Player,
         Enemy,
@@ -37,7 +37,7 @@ public abstract class ActorBase : MonoBehaviour
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
     protected const float MoveTileTime = 15.0f;
     /// <summary>このキャラクターの種類</summary>
-    [SerializeField] ActorType _actorType;
+    [SerializeField] private ActorType _actorType;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile;
     /// <summary>被ダメージ時のエフェクト</summary>
@@ -52,6 +52,9 @@ public abstract class ActorBase : MonoBehaviour
     protected PosXZ _targetPosXZ;
     /// <summary>行動中かどうか</summary>
     protected bool _inAction;
+
+    /// <summary>このキャラクターの種類を返す</summary>
+    public ActorType GetActorType() => _actorType;
 
     void Start()
     {
