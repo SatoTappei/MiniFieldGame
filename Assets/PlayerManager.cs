@@ -133,7 +133,6 @@ public class PlayerManager : ActorBase
     public override void Damaged(Direction attackedDir)
     {
         _anim.Play("Damage");
-
         // 被ダメージのエフェクトを生成する、高さだけキャラクターの胸の位置に設定する
         Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
         // UIに反映させる
