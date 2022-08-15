@@ -125,7 +125,7 @@ public class EnemyManager : ActorBase
         ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
         if (ab != null && ab.GetActorType() == ActorType.Player)
-            ab.Damaged();
+            ab.Damaged(_inputDir);
 
         // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
         // キャラクターの向きを保持しておく
@@ -149,16 +149,24 @@ public class EnemyManager : ActorBase
         Debug.Log(gameObject.name + " 行動を終えました");
     }
 
-    /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
-    public override void Damaged()
+    /// <summary>
+    /// このキャラクターがダメージを受けたときに呼ばれる処理
+    /// </summary>
+    /// <param name="attackedDir">攻撃された方向</param>
+    public override void Damaged(Direction attackedDir)
     {
         // 敵は全員1撃で死ぬので死亡のアニメーションを再生する
         FindObjectOfType<PlaySceneManager>().RemoveEnemy(this);
         // タイル上の情報を削除する
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+        // 死亡のアニメーションを再生(スケールを0にして見えなくする)
         _anim.Play("Dead");
         // 被ダメージのエフェクトを生成する
         Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
         Instantiate(_decalEffect, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(90, 0, 0));
+        // ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
+        var Obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
+        Vector3 vec = DirectionToVec3(attackedDir);
+        Obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
     }
 }

@@ -24,7 +24,7 @@ public abstract class ActorBase : MonoBehaviour
     }
 
     /// <summary>キャラクターの方向</summary>
-    protected enum Direction
+    public enum Direction
     {
         Neutral = 360, // 何も入力されていない状態
         Up = 0,
@@ -37,13 +37,15 @@ public abstract class ActorBase : MonoBehaviour
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
     protected const float MoveTileTime = 15.0f;
     /// <summary>このキャラクターの種類</summary>
-    [SerializeField] private ActorType _actorType;
+    [SerializeField] ActorType _actorType;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile;
     /// <summary>被ダメージ時のエフェクト</summary>
     [SerializeField] protected GameObject _damageEffect;
     /// <summary>被ダメージ時のDecalエフェクト</summary>
     [SerializeField] protected GameObject _decalEffect;
+    /// <summary>キャラクターが死んだときに出るラグドール</summary>
+    [SerializeField] protected GameObject _ragDoll;
     /// <summary>現在のキャラクターの向き</summary>
     //Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
@@ -128,6 +130,18 @@ public abstract class ActorBase : MonoBehaviour
         return target;
     }
 
+    /// <summary>方向に対応したVector3型を返す</summary>
+    protected Vector3 DirectionToVec3(Direction dir)
+    {
+        if (dir == Direction.Up) return Vector3.forward;
+        else if (dir == Direction.Down) return Vector3.back;
+        else if (dir == Direction.Right) return Vector3.right;
+        else if (dir == Direction.Left) return Vector3.left;
+
+        // どれにも該当しないならx/z方向ではなくて上向きのベクトルを返す
+        return Vector3.up;
+    }
+
     /// <summary>ターンの最初に呼ばれる処理</summary>
     public abstract void TurnInit();
 
@@ -153,5 +167,5 @@ public abstract class ActorBase : MonoBehaviour
     public abstract void ActionEnd();
 
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
-    public abstract void Damaged();
+    public abstract void Damaged(Direction attackedDir);
 }

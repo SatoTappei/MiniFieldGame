@@ -7,6 +7,12 @@ using UnityEngine;
 /// </summary>
 public class PlayerManager : ActorBase
 {
+    /// <summary>
+    /// プレイヤーの体力、
+    /// 3以上にするにはUIのアイコンも増やさないといけないのでインスペクターには表示させない
+    /// </summary>
+    int _lifePoint = 3;
+
     void OnEnable()
     {
         // PlaySceneManagerのStateで制御するために自身を登録しておく
@@ -101,7 +107,7 @@ public class PlayerManager : ActorBase
         PosXZ target = GetTargetTile(_inputDir);
         ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスに敵がいればダメージの処理
-        ab?.Damaged();
+        ab?.Damaged(_inputDir);
 
         // キャラクターの向きを保持しておく
         // キャラクターの前のマスの情報を取得
@@ -124,10 +130,25 @@ public class PlayerManager : ActorBase
     }
 
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
-    public override void Damaged()
+    public override void Damaged(Direction attackedDir)
     {
         _anim.Play("Damage");
+
         // 被ダメージのエフェクトを生成する、高さだけキャラクターの胸の位置に設定する
         Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
+        // UIに反映させる
+        _lifePoint--;
+        FindObjectOfType<PlayerUIManager>().DecreaseLifePoint(_lifePoint);
+
+        // 体力が0になったら
+        if (_lifePoint <= 0) 
+        {
+            // プレイヤーが画面外にぶっ飛んでく
+            // プレイヤーをカメラの外に持っていく
+            // ラグドールを出してぶっとばす
+            var obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
+            obj.GetComponent<RagDollController>().Dir = Vector3.up;
+        }
+
     }
 }
