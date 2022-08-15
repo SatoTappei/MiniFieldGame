@@ -42,6 +42,8 @@ public abstract class ActorBase : MonoBehaviour
     [SerializeField] TileType[] _canMoveTile;
     /// <summary>被ダメージ時のエフェクト</summary>
     [SerializeField] protected GameObject _damageEffect;
+    /// <summary>被ダメージ時のDecalエフェクト</summary>
+    [SerializeField] protected GameObject _decalEffect;
     /// <summary>現在のキャラクターの向き</summary>
     //Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>

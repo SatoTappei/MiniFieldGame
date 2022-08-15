@@ -159,5 +159,6 @@ public class EnemyManager : ActorBase
         _anim.Play("Dead");
         // 被ダメージのエフェクトを生成する
         Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
+        Instantiate(_decalEffect, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(90, 0, 0));
     }
 }
