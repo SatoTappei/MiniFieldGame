@@ -11,6 +11,8 @@ public class PlayerUIManager : MonoBehaviour
 {
     /// <summary>経過ターンを表示するテキスト</summary>
     [SerializeField] Text _dispTurnText;
+    /// <summary>スコアを表示するテキスト</summary>
+    [SerializeField] Text _scoreText;
     /// <summary>ライフポイントを表すアイコンの親</summary>
     [SerializeField] Transform _lifePointItem;
 
@@ -35,9 +37,22 @@ public class PlayerUIManager : MonoBehaviour
     public void SetProgressTurn(int turn)
     {
         _dispTurnText.text = turn.ToString("000");
+        PlayTextAnim(_dispTurnText.transform);
+    }
+
+    /// <summary>スコアを表示する</summary>
+    public void SetScore(int score)
+    {
+        _scoreText.text = score.ToString("000000");
+        PlayTextAnim(_scoreText.transform);
+    }
+
+    /// <summary>テキストをポップさせるアニメーションを行う</summary>
+    void PlayTextAnim(Transform trans)
+    {
         Sequence sequence = DOTween.Sequence();
-        sequence.Join(_dispTurnText.transform.DOScale(_dispTurnText.transform.localScale * 1.2f, 0.15f));
-        sequence.Append(_dispTurnText.transform.DOScale(_dispTurnText.transform.localScale, 0.15f));
+        sequence.Join(trans.DOScale(trans.localScale * 1.2f, 0.15f));
+        sequence.Append(trans.DOScale(trans.localScale, 0.15f));
         sequence.Play();
     }
 

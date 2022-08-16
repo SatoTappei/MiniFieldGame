@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 敵を制御する
 /// </summary>
-public class EnemyManager : ActorBase
+public class EnemyManager : CharacterBase
 {
     /// <summary>このターンに攻撃をする場合はtrue、移動の場合はfalseになる</summary>
     bool _doActionThisTurn;
@@ -122,7 +122,7 @@ public class EnemyManager : ActorBase
 
         // 攻撃するマスの情報を取得
         PosXZ target = GetTargetTile(_inputDir);
-        ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
+        CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
         if (ab != null && ab.GetActorType() == ActorType.Player)
             ab.Damaged(_inputDir);

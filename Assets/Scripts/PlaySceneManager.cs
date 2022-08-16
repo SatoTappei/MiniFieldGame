@@ -44,6 +44,8 @@ public class PlaySceneManager : MonoBehaviour
     List<EnemyManager> _enemies = new List<EnemyManager>();
     /// <summary>ゲーム開始時からの経過ターン</summary>
     int _progressTurn;
+    /// <summary>現在のスコア</summary>
+    int _currentScore;
     /// <summary>このターン移動するキャラクターが全員移動したらtrueになる</summary>
     bool _endActorMoveAll;
     /// <summary>このターン移動するキャラクターの数</summary>
@@ -72,6 +74,8 @@ public class PlaySceneManager : MonoBehaviour
     public void AddActionActor() => _actionActorCount++;
     /// <summary>キャラクターのスクリプトからこのターンの行動が終わったことを通知する</summary>
     public void SendEndAction() => _endActorAction = true;
+    /// <summary>スコアを追加する</summary>
+    public void AddScore(int add) => _playerUIManager.SetScore(_currentScore += add);
 
     /// <summary>
     /// キャラクターが移動を終えるたびに呼ばれ、

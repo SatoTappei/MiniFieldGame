@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// プレイヤーを制御する
 /// </summary>
-public class PlayerManager : ActorBase
+public class PlayerManager : CharacterBase
 {
     /// <summary>
     /// プレイヤーの体力、
@@ -105,7 +105,7 @@ public class PlayerManager : ActorBase
         _anim.Play("Slash");
         // 攻撃するマスの情報を取得
         PosXZ target = GetTargetTile(_inputDir);
-        ActorBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
+        CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスに敵がいればダメージの処理
         ab?.Damaged(_inputDir);
 
