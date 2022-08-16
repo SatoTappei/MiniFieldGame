@@ -9,7 +9,7 @@ public abstract class CharacterBase : ActorBase
 {
     
     /// <summary>キャラクターの種類</summary>
-    public enum ActorType
+    public enum CharacterType
     {
         Player,
         Enemy,
@@ -30,7 +30,7 @@ public abstract class CharacterBase : ActorBase
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
     protected const float MoveTileTime = 15.0f;
     /// <summary>このキャラクターの種類</summary>
-    [SerializeField] ActorType _actorType;
+    [SerializeField] CharacterType _characterType;
     /// <summary>このキャラクターが侵入できるタイル</summary>
     [SerializeField] TileType[] _canMoveTile;
     /// <summary>被ダメージ時のエフェクト</summary>
@@ -49,7 +49,7 @@ public abstract class CharacterBase : ActorBase
     protected bool _inAction;
 
     /// <summary>このキャラクターの種類を返す</summary>
-    public ActorType GetActorType() => _actorType;
+    public CharacterType GetCharacterType() => _characterType;
 
     void Start()
     {
@@ -67,10 +67,11 @@ public abstract class CharacterBase : ActorBase
     /// </summary>
     public override void InitPosXZ()
     {
-        base.InitPosXZ();
+        _currentPosXZ.x = (int)transform.position.x;
+        _currentPosXZ.z = (int)transform.position.z;
 
         // 生成された座標に自身をセットして攻撃や移動の判定に使えるようにする
-        FindObjectOfType<MapManager>().CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, this);
+        FindObjectOfType<MapManager>().CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, this);
     }
 
     /// <summary>入力に対応したキャラクターの向きを返す</summary>

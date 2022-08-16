@@ -68,9 +68,9 @@ public class PlayerManager : CharacterBase
                 // 敵のAIのターンでプレイヤーが移動する先の座標まで選択肢に入ってしまう
 
                 // 現在のタイル上の座標から自身の情報を削除しておく
-                mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+                mm.CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
                 // 移動先の座標に自身の情報を登録しておく
-                mm.CurrentMap.SetMapTileActor(_targetPosXZ.x, _targetPosXZ.z, this);
+                mm.CurrentMap.SetMapTileCharacter(_targetPosXZ.x, _targetPosXZ.z, this);
                 // 移動するキャラクターだということをPlaySceneManagerに伝えて次のStateに移行する
                 PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
                 psm.AddMoveActor();
@@ -85,6 +85,9 @@ public class PlayerManager : CharacterBase
         Debug.Log(gameObject.name + " 移動開始します");
         // 目標の座標に向け移動させる
         StartCoroutine(Move(_targetPosXZ));
+        // 移動先の座標にアイテムがあるか確認して、ある場合は獲得時の処理を実行
+        ItemManager im = FindObjectOfType<MapManager>().CurrentMap.GetMapTileItem(_targetPosXZ.x, _targetPosXZ.z);
+        im?.GetThisItemProc();
     }
 
     /// <summary>キャラクターが移動中に呼ばれる処理</summary>

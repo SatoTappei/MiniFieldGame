@@ -22,13 +22,16 @@ public class MapManager : MonoBehaviour
         [SerializeField] GameObject _prefab;
         [SerializeField] char _char;
         [SerializeField] TileType _type;
-        CharacterBase _onActor;
+        CharacterBase _onCharacter;
+        ItemManager _onItem;
 
         public GameObject Prefab { get => _prefab; }
         public char Char { get => _char; }
         public TileType Type { get => _type; }
         /// <summary>このタイルにいるキャラクターを登録しておく</summary>
-        public CharacterBase OnActor { get => _onActor; set => _onActor = value; }
+        public CharacterBase OnCharacter { get => _onCharacter; set => _onCharacter = value; }
+        /// <summary>子のタイルに落ちているアイテムを登録しておく</summary>
+        public ItemManager OnItem { get => _onItem; set => _onItem = value; }
     }
 
     /// <summary>生成するマップのデータ</summary>
@@ -42,29 +45,17 @@ public class MapManager : MonoBehaviour
             _mapArray = new Tile[x,z];
         }
 
-        /// <summary>
-        /// 指定した座標の文字を取得する
-        /// そのマスにすでにキャラクターがいるかなど、後々タイルのデータを取得できるようにする
-        /// </summary>
+        /// <summary>指定した座標のタイルの情報を取得する</summary>
         public Tile GetMapTile(int x, int z) => _mapArray[x, z];
-        /// <summary>指定した座標に文字をセットする、現状マップの生成時にしか使っていない</summary>
-        //public void SetMapTile(int x, int z, Tile s) => _mapArray[x, z] = s;
-        /// <summary>
-        /// 指定した座標にそのタイルにいるキャラクターの情報をセットする
-        /// その座標に何かいたら攻撃できたり、移動できないようにするため
-        /// </summary>
-        public void SetMapTileActor(int x, int z, CharacterBase ab) => _mapArray[x, z].OnActor = ab;
-        /// <summary>
-        /// 指定した座標のタイルにいるキャラクターの情報を取得する
-        /// その座標に何かいたら攻撃できたり、移動できないようにするため
-        /// </summary>
-        public CharacterBase GetMapTileActor(int x, int z) => _mapArray[x, z].OnActor;
+        /// <summary>指定した座標にそのタイルにいるキャラクターの情報をセットする</summary>
+        public void SetMapTileCharacter(int x, int z, CharacterBase ab) => _mapArray[x, z].OnCharacter = ab;
+        /// <summary>指定した座標のタイルにいるキャラクターの情報を取得する</summary>
+        public CharacterBase GetMapTileActor(int x, int z) => _mapArray[x, z].OnCharacter;
+        /// <summary>指定した座標にそのタイルにあるアイテムの情報をセットする</summary>
+        public void SetMapTileItem(int x, int z, ItemManager im) => _mapArray[x, z].OnItem = im;
+        /// <summary>指定した座標のタイルにあるアイテムの情報を取得する</summary>
+        public ItemManager GetMapTileItem(int x, int z) => _mapArray[x, z].OnItem;
     }
-
-    /// <summary>生成するマップの幅</summary>
-    //const int MapWidth = 7;
-    /// <summary>生成するマップの高さ</summary>
-    //const int MapHight = 7;
 
     /// <summary生成するマップの文字列</summary>
     [TextArea(10, 10), SerializeField] string _mapStr;
@@ -96,14 +87,14 @@ public class MapManager : MonoBehaviour
     {
         GenerateMap(_mapStr);
         GenerateCoinRandom(15);
-        SetActorRandom(GameObject.FindWithTag("Player"), TileType.Floor);
+        SetCharacterRandom(GameObject.FindWithTag("Player"), TileType.Floor);
 
         //TODO: マップ生成時に敵を生成するテスト、後々にきちんとした関数に直す
         for (int i = 0; i < 15; i++)
         {
             int r = Random.Range(0, _generateEnemies.Length);
             var obj = Instantiate(_generateEnemies[r], Vector3.zero, Quaternion.identity);
-            SetActorRandom(obj, TileType.Floor);
+            SetCharacterRandom(obj, TileType.Floor);
         }
 
         // 敵ターン開始時
@@ -149,7 +140,7 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary>キャラクターをマップ上のランダムなタイルに配置する</summary>
-    void SetActorRandom(GameObject actor, TileType canMove)
+    void SetCharacterRandom(GameObject actor, TileType canMove)
     {
         // キャラクターが移動可能なタイルのリストを作成
         List<(int, int)> canMoveTiles = new List<(int, int)>();
@@ -193,7 +184,8 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < Mathf.Min(amount, floorTiles.Count); i++)
         {
             int r = Random.Range(0, floorTiles.Count);
-            Instantiate(_coin, new Vector3(floorTiles[r].Item1, 0.5f, floorTiles[r].Item2), Quaternion.identity);
+            var obj = Instantiate(_coin, new Vector3(floorTiles[r].Item1, 0.5f, floorTiles[r].Item2), Quaternion.identity);
+            obj.GetComponent<ItemManager>().InitPosXZ();
             floorTiles.RemoveAt(r);
         }
     }

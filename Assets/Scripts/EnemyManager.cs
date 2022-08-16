@@ -85,9 +85,9 @@ public class EnemyManager : CharacterBase
             // 移動先の座標を取得
             _targetPosXZ = GetTargetTile(_inputDir);
             // 現在のタイル上の座標から自身の情報を削除しておく
-            mm.CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+            mm.CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
             // 移動先の座標に自身の情報を登録しておく
-            mm.CurrentMap.SetMapTileActor(_targetPosXZ.x, _targetPosXZ.z, this);
+            mm.CurrentMap.SetMapTileCharacter(_targetPosXZ.x, _targetPosXZ.z, this);
             // プレイヤーはその場で向きだけを変えることがあるので入力したときに向きを変えるが
             // 敵は移動する直前に向きを変える
             transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
@@ -124,7 +124,7 @@ public class EnemyManager : CharacterBase
         PosXZ target = GetTargetTile(_inputDir);
         CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
-        if (ab != null && ab.GetActorType() == ActorType.Player)
+        if (ab != null && ab.GetCharacterType() == CharacterType.Player)
             ab.Damaged(_inputDir);
 
         // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
@@ -158,7 +158,7 @@ public class EnemyManager : CharacterBase
         // 敵は全員1撃で死ぬので死亡のアニメーションを再生する
         FindObjectOfType<PlaySceneManager>().RemoveEnemy(this);
         // タイル上の情報を削除する
-        FindObjectOfType<MapManager>().CurrentMap.SetMapTileActor(_currentPosXZ.x, _currentPosXZ.z, null);
+        FindObjectOfType<MapManager>().CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
         // 死亡のアニメーションを再生(スケールを0にして見えなくする)
         _anim.Play("Dead");
         // 被ダメージのエフェクトを生成する
