@@ -123,6 +123,61 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &91221296
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 91221298}
+  - component: {fileID: 91221297}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &91221297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91221296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bcbd1fd348c0854c9256856a152a09c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _soundDatas:
+  - key: "SE_\u65AC\u6483"
+    clip: {fileID: 8300000, guid: dbe05e1c2d538b24983e390165bd9afc, type: 3}
+    volume: 1
+  - key: "SE_\u30DF\u30B9"
+    clip: {fileID: 8300000, guid: e4fb727a43ed0e140b17200afe3cd4f4, type: 3}
+    volume: 1
+  - key: "SE_\u30B3\u30A4\u30F3"
+    clip: {fileID: 8300000, guid: 665db56e58fd50d4fb2d9ff31b210c4c, type: 3}
+    volume: 1
+  _distance: 0.05
+--- !u!4 &91221298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91221296}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &241830285
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,7 +931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 1267937347650918571}
-  _actorType: 0
+  _characterType: 0
   _canMoveTile: 00000000
   _damageEffect: {fileID: 5618022227958457794, guid: 136371d0315a35f4cb24a26b49e40f49, type: 3}
   _decalEffect: {fileID: 6910050840410955261, guid: ab81af4fd1b3b214a82d5d125202d0a0, type: 3}

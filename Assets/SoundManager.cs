@@ -17,8 +17,10 @@ public class SoundManager : MonoBehaviour
     {
         public string key;
         public AudioClip clip;
-        public float lastTime;
+        float lastTime;
         public float volume;
+
+        public float LastTime { get => lastTime; set => lastTime = value; }
     }
 
     /// <summary>再生するサウンドのデータをインスペクターから設定する</summary>
@@ -64,13 +66,13 @@ public class SoundManager : MonoBehaviour
     {
         if (_dic.TryGetValue(key, out SoundData data))
         {
-            if (Time.realtimeSinceStartup - data.lastTime < _distance) return;
-            data.lastTime = Time.realtimeSinceStartup;
+            if (Time.realtimeSinceStartup - data.LastTime < _distance) return;
+            data.LastTime = Time.realtimeSinceStartup;
 
             if (key.IndexOf("BGM_") >= 0)
-                PlaySE(data);
-            else
                 PlayBGM(data);
+            else
+                PlaySE(data);
         }
         else
         {

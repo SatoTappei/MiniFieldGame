@@ -125,7 +125,14 @@ public class EnemyManager : CharacterBase
         CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
         if (ab != null && ab.GetCharacterType() == CharacterType.Player)
+        {
             ab.Damaged(_inputDir);
+            SoundManager._instance.Play("SE_斬撃");
+        }
+        else
+        {
+            SoundManager._instance.Play("SE_ミス");
+        }
 
         // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
         // キャラクターの向きを保持しておく

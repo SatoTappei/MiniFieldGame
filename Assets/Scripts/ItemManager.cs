@@ -47,6 +47,7 @@ public class ItemManager : ActorBase
         // TODO:現在はアイテムがコインだけなのでスコアを追加する処理を書いている
         FindObjectOfType<PlaySceneManager>().AddScore(100);
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileItem(_currentPosXZ.x, _currentPosXZ.z, null);
+        SoundManager._instance.Play("SE_コイン");
         Destroy(gameObject);
     }
 }

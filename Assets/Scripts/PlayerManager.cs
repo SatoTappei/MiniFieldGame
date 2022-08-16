@@ -111,6 +111,7 @@ public class PlayerManager : CharacterBase
         CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスに敵がいればダメージの処理
         ab?.Damaged(_inputDir);
+        SoundManager._instance.Play(ab ? "SE_斬撃" : "SE_ミス");
 
         // キャラクターの向きを保持しておく
         // キャラクターの前のマスの情報を取得

@@ -15,11 +15,11 @@ public class CoinDOTWeenAnimation : MonoBehaviour
         while (true)
         {
             transform.DORotate(new Vector3(0, 720, 0), 1.0f, RotateMode.FastBeyond360)
-                .SetEase(Ease.InOutQuad);
+                .SetEase(Ease.InOutQuad).SetLink(gameObject);
             Sequence sequence = DOTween.Sequence();
             sequence.Join(transform.DOMoveY(defaultPosY + 0.5f, 0.5f).SetEase(Ease.OutQuad));
             sequence.Append(transform.DOMoveY(defaultPosY, 0.5f).SetEase(Ease.InQuad));
-            sequence.Play();
+            sequence.Play().SetLink(gameObject);
 
             yield return new WaitForSeconds(2.0f);
         }
