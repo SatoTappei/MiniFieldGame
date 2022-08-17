@@ -145,21 +145,33 @@ public class PlayerManager : CharacterBase
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
     public override void Damaged(Direction attackedDir)
     {
+        // 攻撃された際に既に体力が0なら何もしない
+        if (_lifePoint <= 0)
+        {
+            FindObjectOfType<PlaySceneManager>().SendEndAction();
+            return;
+        }
+
         _anim.Play("Damage");
         // 被ダメージのエフェクトを生成する、高さだけキャラクターの胸の位置に設定する
         Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
-        // UIに反映させる
+        // 体力を減らしてUIに反映させる、HPが0より小さくなってしまうが、呼び出したメソッド側で弾くので今のところは問題ない
         _lifePoint--;
         FindObjectOfType<PlayerUIManager>().DecreaseLifePoint(_lifePoint);
 
         // 体力が0になったら
-        if (_lifePoint <= 0) 
+        if (_lifePoint == 0) 
         {
-            // プレイヤーが画面外にぶっ飛んでく
-            // プレイヤーをカメラの外に持っていく
-            // ラグドールを出してぶっとばす
+            // プレイヤーが死んだことを通知する
+            PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
+            psm.PlayerIsDead();
+            psm.AddDeadCharacter(gameObject);
+            // 死亡のアニメーションを再生
+            _anim.Play("Dead");
+            // ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
             var obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
-            obj.GetComponent<RagDollController>().Dir = Vector3.up;
+            Vector3 vec = DirectionToVec3(attackedDir);
+            obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
         }
 
     }

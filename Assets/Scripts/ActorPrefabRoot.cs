@@ -23,12 +23,4 @@ public class ActorPrefabRoot : MonoBehaviour
     /// 現在は攻撃のアニメーションにのみ登録されている
     /// </summary>
     public void SendAnimationFinish() => FindObjectOfType<PlaySceneManager>().SendEndAction();
-
-    /// <summary>攻撃されて死ぬ時の演出、Deadアニメーションの最後に呼ばれる</summary>
-    public void EffectActorIsDead()
-    {
-        SendAnimationFinish();
-        // このスクリプトがついているオブジェクトはキャラのモデルなので親ごと消す
-        Destroy(transform.parent.gameObject);
-    }
 }

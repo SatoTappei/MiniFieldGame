@@ -122,26 +122,19 @@ public class EnemyManager : CharacterBase
 
         // 攻撃するマスの情報を取得
         PosXZ target = GetTargetTile(_inputDir);
-        CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
+        CharacterBase cb = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
-        if (ab != null && ab.GetCharacterType() == CharacterType.Player)
+        if (cb != null && cb.GetCharacterType() == CharacterType.Player)
         {
-            ab.Damaged(_inputDir);
+            cb.Damaged(_inputDir);
             SoundManager._instance.Play("SE_斬撃");
         }
         else
         {
             SoundManager._instance.Play("SE_ミス");
+            // プレイヤーのダメージを受けるテスト、終わったら消す
+            //FindObjectOfType<PlayerManager>()?.Damaged(_inputDir);
         }
-
-        // もし正面に敵がいたらダメージ、後々に攻撃範囲は広げるかもしれないので留意しておく
-        // キャラクターの向きを保持しておく
-        // キャラクターの前のマスの情報を取得
-        // 前のマスがnullなら行動終了
-        // 攻撃アニメーション再生
-        // 敵を消す
-        // 行動終了
-
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>
@@ -168,8 +161,10 @@ public class EnemyManager : CharacterBase
     /// <param name="attackedDir">攻撃された方向</param>
     public override void Damaged(Direction attackedDir)
     {
-        // 敵は全員1撃で死ぬので死亡のアニメーションを再生する
-        FindObjectOfType<PlaySceneManager>().RemoveEnemy(this);
+        // 自身が死んだことをPlaySceneManagerに伝える
+        PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
+        psm.RemoveEnemy(this);
+        psm.AddDeadCharacter(gameObject);
         // タイル上の情報を削除する
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
         // 死亡のアニメーションを再生(スケールを0にして見えなくする)

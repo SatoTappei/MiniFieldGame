@@ -44,6 +44,11 @@ public class PlaySceneManager : MonoBehaviour
     PlayerManager _player;
     /// <summary>たくさんの敵さんを制御する</summary>
     List<EnemyManager> _enemies = new List<EnemyManager>();
+    /// <summary>
+    /// このターン死んだキャラクターのリスト、
+    /// 逐一消していたら不具合が出そうなのでターンの最後にまとめて消す
+    /// </summary>
+    List<GameObject> _deadCharacters = new List<GameObject>();
     /// <summary>ゲーム開始時からの経過ターン</summary>
     int _progressTurn;
     /// <summary>現在のスコア</summary>
@@ -58,6 +63,8 @@ public class PlaySceneManager : MonoBehaviour
     bool _endActorActionAll;
     /// <summary>このターン行動するキャラクターの数</summary>
     int _actionActorCount;
+    /// <summary>プレイヤーが死んでしまったか</summary>
+    bool _isPlayerDead;
     /// <summary>プレイヤーがゴールの上に立っているか</summary>
     bool _onGoalTile;
 
@@ -80,8 +87,12 @@ public class PlaySceneManager : MonoBehaviour
     public void SendEndAction() => _endActorAction = true;
     /// <summary>スコアを追加する</summary>
     public void AddScore(int add) => _playerUIManager.SetScore(_currentScore += add);
-    /// <summary>プレイヤーがゴールの上に立ったフラグを立てる</summary>
-    public void StandOnGoalTile() => _onGoalTile = true;
+    /// <summary>プレイヤーが死亡した</summary>
+    public void PlayerIsDead() => _isPlayerDead = true;
+    /// <summary>プレイヤーが死んでいなかった場合、プレイヤーがゴールの上に立ったフラグを立てる</summary>
+    public void StandOnGoalTile() => _onGoalTile = !_isPlayerDead ? true : false;
+    /// <summary>死体を死んだキャラクターのリストに登録する</summary>
+    public void AddDeadCharacter(GameObject corpse) => _deadCharacters.Add(corpse);
 
     /// <summary>
     /// キャラクターが移動を終えるたびに呼ばれ、
@@ -101,16 +112,6 @@ public class PlaySceneManager : MonoBehaviour
 
     IEnumerator Start()
     {
-        // ゲームクリアの演出
-        // プレイヤーが階段の上に乗っている
-        // 敵全員が行動終了
-        // 敵の行動で死んでいなければステージクリアの演出を呼び出す
-
-        // ゲームオーバーの演出
-        // プレイヤーが死ぬ
-        // ゲームオーバーの演出を呼び出す
-        // 敵は行動を続けるけど操作不可能なので影響はなし？
-
         // ゲームスタートの演出
         // GameManagerからステージの情報(マップ情報、敵の数、コインの数、ターン制限)を取得
         // effectUIManagerに渡して使ってもらう
@@ -161,8 +162,15 @@ public class PlaySceneManager : MonoBehaviour
                 break;
             // ターンの終了時の処理
             case TurnState.TurnEnd:
+                // プレイヤーが死んでいたら
+                if (_isPlayerDead)
+                {
+                    // ゲームオーバーの演出を呼び出し、Stateを演出中に切り替える
+                    StartCoroutine(_effectUIManager.GameOverEffect());
+                    _currentTurnState = TurnState.StandBy;
+                }
                 // プレイヤーがゴールの上に乗っていたら
-                if (_onGoalTile)
+                else if (_onGoalTile)
                 {
                     // ステージクリアの演出を呼び出し、Stateを演出中に切り替える
                     StartCoroutine(_effectUIManager.StageClearEffect());
@@ -172,6 +180,9 @@ public class PlaySceneManager : MonoBehaviour
                 {
                     _currentTurnState = TurnState.Init;
                 }
+                // 死んだキャラクターを全部削除する、ここ以外ではDestroyしないこと
+                _deadCharacters.ForEach(g => Destroy(g));
+                _deadCharacters.Clear();
                 break;
         }
     }

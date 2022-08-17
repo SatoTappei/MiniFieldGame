@@ -16,9 +16,6 @@ public class PlayerUIManager : MonoBehaviour
     /// <summary>ライフポイントを表すアイコンの親</summary>
     [SerializeField] Transform _lifePointItem;
 
-    // DotWeenの挙動を確認するためだけの変数、確認が終わったら消す
-    int _testLifePoint = 3;
-
     void Start()
     {
         
@@ -26,11 +23,7 @@ public class PlayerUIManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            _testLifePoint--;
-            DecreaseLifePoint(_testLifePoint);
-        }
+
     }
 
     /// <summary>経過したターンを表示する</summary>
@@ -59,6 +52,9 @@ public class PlayerUIManager : MonoBehaviour
     /// <summary>ライフを減少させる</summary>
     public void DecreaseLifePoint(int life)
     {
+        // ライフが0以下の場合は処理しない
+        if (life < 0) return;
+
         Transform child = _lifePointItem.GetChild(life);
         Sequence sequence = DOTween.Sequence();
         sequence.Join(child.DOMoveY(child.position.y - 100.0f, 1.0f).SetEase(Ease.OutBounce));
