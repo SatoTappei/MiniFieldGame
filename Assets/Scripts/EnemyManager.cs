@@ -156,6 +156,12 @@ public class EnemyManager : CharacterBase
         Debug.Log(gameObject.name + " 行動を終えました");
     }
 
+    /// <summary>ターン終了時に呼ばれる処理</summary>
+    public override void TurnEnd()
+    {
+
+    }
+
     /// <summary>
     /// このキャラクターがダメージを受けたときに呼ばれる処理
     /// </summary>

@@ -45,7 +45,7 @@ public class EffectUIManager : MonoBehaviour
     }
 
     /// <summary>ステージクリア時の演出</summary>
-    public IEnumerator GameOverEffect()
+    public IEnumerator StageClearEffect()
     {
         _stageClearEffect.SetActive(true);
         // TODO:ちゃんと演出を作る
@@ -62,7 +62,7 @@ public class EffectUIManager : MonoBehaviour
     }
 
     /// <summary>ゲームオーバー時の演出</summary>
-    public IEnumerator StageClearEffect()
+    public IEnumerator GameOverEffect()
     {
         _gameOverEffect.SetActive(true);
         yield return null;

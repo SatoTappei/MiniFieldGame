@@ -3742,9 +3742,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27f7fcacce4cfc428a435d1694c04ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameStartEffect: {fileID: 0}
-  _stageClearEffect: {fileID: 0}
-  _gameOverEffect: {fileID: 0}
+  _gameStartEffect: {fileID: 1934754320}
+  _stageClearEffect: {fileID: 1534069469}
+  _gameOverEffect: {fileID: 22973017}
 --- !u!1 &1850379159
 GameObject:
   m_ObjectHideFlags: 0

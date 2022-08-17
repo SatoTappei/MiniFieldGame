@@ -157,6 +157,9 @@ public abstract class CharacterBase : ActorBase
     /// <summary>キャラクターが行動を終えるときに呼ばれる処理</summary>
     public abstract void ActionEnd();
 
+    /// <summary>ターン終了時に呼ばれる処理</summary>
+    public abstract void TurnEnd();
+
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
     public abstract void Damaged(Direction attackedDir);
 }

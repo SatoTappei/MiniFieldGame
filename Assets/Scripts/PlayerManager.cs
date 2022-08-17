@@ -100,6 +100,9 @@ public class PlayerManager : CharacterBase
     public override void MoveEnd()
     {
         Debug.Log(gameObject.name + " 移動を終えました");
+        // プレイヤーがゴールの上に立っていたらフラグを立てる
+        if (FindObjectOfType<MapManager>().CurrentMap.GetMapTile(_currentPosXZ.x, _currentPosXZ.z).Char == 'E')
+            FindObjectOfType<PlaySceneManager>().StandOnGoalTile();
     }
 
     /// <summary>キャラクターが行動を開始するときに呼ばれる処理</summary>
@@ -131,6 +134,12 @@ public class PlayerManager : CharacterBase
     public override void ActionEnd()
     {
         Debug.Log(gameObject.name + " 行動を終えました");
+    }
+
+    /// <summary>ターン終了時に呼ばれる処理</summary>
+    public override void TurnEnd()
+    {
+
     }
 
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
