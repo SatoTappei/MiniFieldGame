@@ -19,8 +19,9 @@ using System.Linq;
 /// <summary>ターン中の状態を表す</summary>
 public enum TurnState
 {
+    StandBy,            // 演出中なので待機
     Init,               // ターンの最初に初期化
-    StandBy,            // プレイヤーの入力待ち
+    Input,              // プレイヤーの入力待ち
     PlayerMoveStart,    // プレイヤーが移動を選択した
     PlayerMove,     
     //PlayerMoveEnd,
@@ -36,6 +37,7 @@ public enum TurnState
 public class PlaySceneManager : MonoBehaviour
 {
     [SerializeField] PlayerUIManager _playerUIManager;
+    [SerializeField] EffectUIManager _effectUIManager;
     /// <summary>現在のターンがどの状態かを保持しておく</summary>
     TurnState _currentTurnState;
     /// <summary>プレイヤーを制御する</summary>
@@ -90,18 +92,27 @@ public class PlaySceneManager : MonoBehaviour
 
     void Awake()
     {
-        _currentTurnState = TurnState.Init;
+        _currentTurnState = TurnState.StandBy;
     }
 
-    void Start()
+    IEnumerator Start()
     {
-
+        // ゲームスタートの演出
+        // GameManagerからステージの情報(マップ情報、敵の数、コインの数、ターン制限)を取得
+        // effectUIManagerに渡して使ってもらう
+        yield return StartCoroutine(_effectUIManager.GameStartEffect());
+        // 演出が終わったら諸々を初期化する
+        _currentTurnState = TurnState.Init;
     }
 
     void Update()
     {
         switch (_currentTurnState)
         {
+            // 演出中
+            case TurnState.StandBy:
+                Debug.Log("演出中です");
+                break;
             // ターンの最初に初期化する
             case TurnState.Init:
                 _player.TurnInit();
@@ -111,10 +122,10 @@ public class PlaySceneManager : MonoBehaviour
                 _actionActorCount = 0;
                 _endActorAction = false;
                 _playerUIManager.SetProgressTurn(++_progressTurn);
-                _currentTurnState = TurnState.StandBy;
+                _currentTurnState = TurnState.Input;
                 break;
             // プレイヤーの入力を待つ
-            case TurnState.StandBy:
+            case TurnState.Input:
                 _player.StandBy();
                 _enemies.ForEach(e => e.StandBy());
                 break;

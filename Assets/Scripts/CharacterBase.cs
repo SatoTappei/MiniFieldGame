@@ -47,7 +47,7 @@ public abstract class CharacterBase : ActorBase
     protected PosXZ _targetPosXZ;
     /// <summary>行動中かどうか</summary>
     protected bool _inAction;
-
+    
     /// <summary>このキャラクターの種類を返す</summary>
     public CharacterType GetCharacterType() => _characterType;
 
