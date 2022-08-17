@@ -38,6 +38,7 @@ public class PlaySceneManager : MonoBehaviour
 {
     [SerializeField] PlayerUIManager _playerUIManager;
     [SerializeField] EffectUIManager _effectUIManager;
+    [SerializeField] MapManager _mapManager;
     /// <summary>現在のターンがどの状態かを保持しておく</summary>
     TurnState _currentTurnState;
     /// <summary>プレイヤーを制御する</summary>
@@ -112,6 +113,10 @@ public class PlaySceneManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        // 現在のステージのデータを動的に読み込む
+        StageDataSO so = Resources.Load($"Stage_{GameManager._instance.CurrentStageNum}", typeof(StageDataSO)) as StageDataSO;
+        // マップを生成する
+        _mapManager.Init(so);
         // ゲームスタートの演出
         // GameManagerからステージの情報(マップ情報、敵の数、コインの数、ターン制限)を取得
         // effectUIManagerに渡して使ってもらう

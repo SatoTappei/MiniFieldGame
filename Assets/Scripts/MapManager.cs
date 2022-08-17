@@ -64,9 +64,9 @@ public class MapManager : MonoBehaviour
     /// <summary>生成したタイルを登録する親オブジェクト</summary>
     [SerializeField] Transform _tileParent;
     /// <summary>フロアに生成する生成する敵</summary>
-    [SerializeField] GameObject[] _generateEnemies;
+    GameObject[] _enemies;
     /// <summary>フロアに生成するコイン</summary>
-    [SerializeField] GameObject _coin;
+    GameObject _coin;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
     Dictionary<char, Tile> _tileDic = new Dictionary<char, Tile>();
     /// <summary>生成したマップのデータ、マップやタイルを調べる際にはこれを参照する</summary>
@@ -85,33 +85,29 @@ public class MapManager : MonoBehaviour
 
     void Start()
     {
-        GenerateMap(_mapStr);
-        GenerateCoinRandom(15);
-        SetCharacterRandom(GameObject.FindWithTag("Player"), TileType.Floor);
-
-        //TODO: マップ生成時に敵を生成するテスト、後々にきちんとした関数に直す
-        for (int i = 0; i < 15; i++)
-        {
-            int r = Random.Range(0, _generateEnemies.Length);
-            var obj = Instantiate(_generateEnemies[r], Vector3.zero, Quaternion.identity);
-            SetCharacterRandom(obj, TileType.Floor);
-        }
-
-        // 敵ターン開始時
-        //      敵を生成するかどうかチェック
-        //      敵を生成する
-        // 敵ターン終了時
-        //      敵全員が行動したかどうかチェック
-        //      敵が全員行動したらターン終了
-
-        // プレイヤーは壁や移動不可のマスには配置できない <= キャラクター毎に侵入不可能の地形をenumで設定してやる
-        // 同じ場所には敵を配置できないので、マス毎に上に敵もしくはプレイヤーがいるかどうか見る必要がある
 
     }
 
     void Update()
     {
         
+    }
+
+    /// <summary>ステージの初期化、開始時にPlayerSceneManagerから呼ばれる</summary>
+    public void Init(StageDataSO so)
+    {
+        _enemies = so.Enemies;
+        _coin = so.Coin;
+
+        // 文字列からマップを生成する
+        GenerateMap(_mapStr);
+        // コインを生成して配置する
+        GenerateCoinRandom(so.MaxCoin);
+        // プレイヤーをランダムな位置に配置する
+        SetCharacterRandom(GameObject.FindWithTag("Player"), TileType.Floor);
+        // 敵を生成して配置する
+        for (int i = 0; i < so.MaxEnemy; i++) 
+            GenerateEnemyRandom();
     }
 
     /// <summary>文字列からマップを生成する</summary>
@@ -167,6 +163,14 @@ public class MapManager : MonoBehaviour
             return false;
         else
             return true;
+    }
+
+    /// <summary>ランダムな位置に敵を生成する</summary>
+    void GenerateEnemyRandom()
+    {
+        int r = Random.Range(0, _enemies.Length);
+        var obj = Instantiate(_enemies[r], Vector3.zero, Quaternion.identity);
+        SetCharacterRandom(obj, TileType.Floor);
     }
 
     /// <summary>ランダムな位置に指定された数だけコインを生成する</summary>
