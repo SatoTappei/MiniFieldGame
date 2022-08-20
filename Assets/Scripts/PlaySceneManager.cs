@@ -108,8 +108,8 @@ public class PlaySceneManager : MonoBehaviour
         _mapManager.Init(so);
         // スコア関係の値を初期化
         _currentScore = GameManager._instance.TotalScore;
+        _playerUIManager.SetScore(_currentScore);
         _remainingTurn = so.TurnLimit;
-
 
         // フェードが終わるまで待つ
         yield return new WaitWhile(() => GameManager._instance.IsFading);

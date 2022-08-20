@@ -1709,7 +1709,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 99
+  m_SortingOrder: 45
   m_TargetDisplay: 0
 --- !u!224 &942375046
 RectTransform:
@@ -4033,7 +4033,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 99
+  m_SortingOrder: 45
   m_TargetDisplay: 0
 --- !u!224 &1735107155
 RectTransform:
