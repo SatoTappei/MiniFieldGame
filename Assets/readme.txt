@@ -1,6 +1,4 @@
 ﻿★優先タスク
-	ゲーム開始時の演出+ゲームオーバー時の演出
-	ゲーム開始時の演出にはフロアの敵の数とコインの数、制限時間を表示する
 
 ★用語
 	フロア…マップ全体のこと
@@ -18,6 +16,9 @@
 	マチブセ 少し前を目指して、先回りをする
 	キマグレ 点対称の位置を目指す
 	オトボケ ランダムに行動する
+
+	ゲームが重い時の対処
+	URPAssetのShadow内のSoftShadowsのチェックを外す、DirectionalLightのShadowsのShadowTypeをHardShadowsにする
 
 ★使用アセット
 	YughuesFreeGroundMaterials

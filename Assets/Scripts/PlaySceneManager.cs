@@ -135,7 +135,7 @@ public class PlaySceneManager : MonoBehaviour
                 _moveActorCount = 0;
                 _actionActorCount = 0;
                 _endActorAction = false;
-                _playerUIManager.SetProgressTurn(_remainingTurn--);
+                _playerUIManager.SetProgressTurn(_remainingTurn);
                 _currentTurnState = TurnState.Input;
                 break;
             // プレイヤーの入力を待つ
@@ -161,8 +161,8 @@ public class PlaySceneManager : MonoBehaviour
                 break;
             // ターンの終了時の処理
             case TurnState.TurnEnd:
-                // プレイヤーが死んでいたら
-                if (_isPlayerDead)
+                // プレイヤーが死んだ、もしくは時間切れなら
+                if (_isPlayerDead || _remainingTurn == 0)
                 {
                     // ゲームオーバーの演出を呼び出し、Stateを演出中に切り替える
                     StartCoroutine(_effectUIManager.GameOverEffect());
@@ -189,6 +189,8 @@ public class PlaySceneManager : MonoBehaviour
                 // 死んだキャラクターを全部削除する、ここ以外ではDestroyしないこと
                 _deadCharacters.ForEach(g => Destroy(g));
                 _deadCharacters.Clear();
+                // 残りターンを減らす
+                _remainingTurn--;
                 break;
         }
     }
@@ -268,7 +270,7 @@ public class PlaySceneManager : MonoBehaviour
     }
 
     /// <summary>ゲームをリトライする</summary>
-    public void MoveGamePlay()
+    public void RetryGamePlay()
     {
         GameManager._instance.FadeOut("GamePlay");
         // フェードさせる
