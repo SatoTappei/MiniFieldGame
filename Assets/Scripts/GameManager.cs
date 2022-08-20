@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// ゲームマネージャー
@@ -15,8 +18,13 @@ public class GameManager : MonoBehaviour
     int _currentStageNum = 1;
     /// <summary>合計スコア</summary>
     int _totalScore;
+    /// <summary>フェードに使う画像</summary>
+    [SerializeField] Image _fadeImage;
+    /// <summary>フェード中かどうか、ゲームが始まる際には必ずフェードから始めるので初期値がtrue</summary>
+    bool _isFading = true;
 
     public int CurrentStageNum { get => _currentStageNum; }
+    public bool IsFading { get => _isFading; }
 
     void Awake()
     {
@@ -29,6 +37,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        // シーンが読み込まれるたびにフェードインのメソッドを呼ぶ
+        SceneManager.activeSceneChanged += FadeIn;
     }
 
     void Start()
@@ -39,5 +50,29 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    /// <summary>フェードインする</summary>
+    public void FadeIn(Scene _, Scene __)
+    {
+        Debug.Log("フェードイン");
+        Sequence sequence = DOTween.Sequence();
+        // TODO:フェードの演出を変える
+        sequence.Join(DOTween.ToAlpha(() => _fadeImage.color, color => _fadeImage.color = color, 0f, 1f));
+        // TODO:フェードの演出ここまで
+        sequence.AppendCallback(() => { _fadeImage.gameObject.SetActive(false);_isFading = false; });
+    }
+
+    /// <summary>フェードアウト後、シーンを推移する</summary>
+    public void FadeOut(string sceneName)
+    {
+        Debug.Log("フェードアウト");
+        _isFading = true;
+        _fadeImage.gameObject.SetActive(true);
+        Sequence sequence = DOTween.Sequence();
+        // TODO:フェードの演出を変える
+        sequence.Join(DOTween.ToAlpha(() => _fadeImage.color, color => _fadeImage.color = color, 1f, 1f));
+        // TODO:フェードの演出ここまで
+        sequence.AppendCallback(() => SceneManager.LoadScene(sceneName));
     }
 }

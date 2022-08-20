@@ -1,20 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Linq;
-
-/// <summary>ターン中の状態を表す</summary>
-//public enum TurnState
-//{
-//    Init,
-//    Standby,    // プレイヤーの入力待ち
-//    MoveStart,
-//    Move,
-//    MoveEnd,
-//    ActionStart,
-//    Action,
-//    ActionEnd,
-//}
 
 /// <summary>ターン中の状態を表す</summary>
 public enum TurnState
@@ -68,6 +56,8 @@ public class PlaySceneManager : MonoBehaviour
     bool _isPlayerDead;
     /// <summary>プレイヤーがゴールの上に立っているか</summary>
     bool _onGoalTile;
+    /// <summary>現在のステージのデータを保持しているSO</summary>
+    StageDataSO so;
 
     /// <summary>
     /// スクリプトの外からStateを進めることがある
@@ -114,13 +104,13 @@ public class PlaySceneManager : MonoBehaviour
     IEnumerator Start()
     {
         // 現在のステージのデータを動的に読み込む
-        StageDataSO so = Resources.Load($"Stage_{GameManager._instance.CurrentStageNum}", typeof(StageDataSO)) as StageDataSO;
+        so = Resources.Load($"Stage_{GameManager._instance.CurrentStageNum}", typeof(StageDataSO)) as StageDataSO;
         // マップを生成する
         _mapManager.Init(so);
+        // フェードが終わるまで待つ
+        yield return new WaitWhile(() => GameManager._instance.IsFading);
         // ゲームスタートの演出
-        // GameManagerからステージの情報(マップ情報、敵の数、コインの数、ターン制限)を取得
-        // effectUIManagerに渡して使ってもらう
-        yield return StartCoroutine(_effectUIManager.GameStartEffect());
+        yield return StartCoroutine(_effectUIManager.GameStartEffect(GameManager._instance.CurrentStageNum, so));
         // 演出が終わったら諸々を初期化する
         _currentTurnState = TurnState.Init;
     }
@@ -178,7 +168,7 @@ public class PlaySceneManager : MonoBehaviour
                 else if (_onGoalTile)
                 {
                     // ステージクリアの演出を呼び出し、Stateを演出中に切り替える
-                    StartCoroutine(_effectUIManager.StageClearEffect());
+                    StartCoroutine(_effectUIManager.StageClearEffect(GameManager._instance.CurrentStageNum, so));
                     _currentTurnState = TurnState.StandBy;
                 }
                 else
@@ -242,5 +232,18 @@ public class PlaySceneManager : MonoBehaviour
         }
 
         _currentTurnState = TurnState.TurnEnd;
+    }
+
+    /// <summary>ゲームをリトライする</summary>
+    public void TransitionRetry()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // フェードさせる
+    }
+
+    /// <summary>タイトルに戻る</summary>
+    public void TransitionTitle()
+    {
+        // タイトルにはいつでも戻れるようにする、ミスったらすぐやり直せるように
     }
 }
