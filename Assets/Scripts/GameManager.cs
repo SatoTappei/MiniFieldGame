@@ -25,11 +25,14 @@ public class GameManager : MonoBehaviour
 
     public int CurrentStageNum { get => _currentStageNum; }
     public bool IsFading { get => _isFading; }
+    public int TotalScore { get => _totalScore; }
 
     /// <summary>ステージをクリアしたのでステージ番号を1つ進める</summary>
     public void AdvanceStageNum() => _currentStageNum = Mathf.Min(++_currentStageNum, _maxStageNum);
     /// <summary>全ステージクリアしたかどうか</summary>
     public bool CheckAllClear() => _currentStageNum == _maxStageNum;
+    /// <summary>合計スコアに現在のスコアを加算する</summary>
+    public void AddTotalScore(int score) => _totalScore += score;
 
     void Awake()
     {

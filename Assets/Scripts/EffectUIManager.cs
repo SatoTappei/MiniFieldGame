@@ -50,17 +50,19 @@ public class EffectUIManager : MonoBehaviour
     }
 
     /// <summary>ステージクリア時の演出</summary>
-    public IEnumerator StageClearEffect(int stageNum, StageDataSO so)
+    public IEnumerator StageClearEffect(int stageNum, StageDataSO so, int coin, int enemy, int turn, int score)
     {
         _stageClearEffect.SetActive(true);
         // TODO:ちゃんと演出を作る
         _stageClearEffect.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<Text>().text = stageNum.ToString();
         yield return null;
-        _stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<Text>().text = 65535.ToString() + " / " + so.MaxCoin.ToString();
+        _stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<Text>().text = coin.ToString() + " / " + so.MaxCoin.ToString();
         yield return null;
-        _stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1).GetComponent<Text>().text = 256.ToString() + " / " + so.MaxEnemy.ToString();
+        _stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1).GetComponent<Text>().text = enemy.ToString() + " / " + so.MaxEnemy.ToString();
         yield return null;
-        _stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1).GetComponent<Text>().text = 128.ToString() + " / " + so.TurnLimit.ToString();
+        _stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1).GetComponent<Text>().text = turn.ToString() + " / " + so.TurnLimit.ToString();
+        yield return null;
+        _stageClearEffect.transform.GetChild(4).gameObject.transform.GetChild(1).GetComponent<Text>().text = score.ToString();
     }
 
     /// <summary>ゲームオーバー時の演出</summary>

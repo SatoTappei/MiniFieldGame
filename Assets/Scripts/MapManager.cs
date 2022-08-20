@@ -63,6 +63,10 @@ public class MapManager : MonoBehaviour
     [SerializeField] Tile[] _tileDatas;
     /// <summary>生成したタイルを登録する親オブジェクト</summary>
     [SerializeField] Transform _tileParent;
+    /// <summary>生成した敵を登録する親オブジェクト</summary>
+    [SerializeField] Transform _enemyParent;
+    /// <summary>生成したコインを登録する親オブジェクト</summary>
+    [SerializeField] Transform _coinParent;
     /// <summary>フロアに生成する生成する敵</summary>
     GameObject[] _enemies;
     /// <summary>フロアに生成するコイン</summary>
@@ -73,6 +77,10 @@ public class MapManager : MonoBehaviour
     Map _currentMap;
 
     public Map CurrentMap { get => _currentMap; }
+    /// <summary>ステージに残っている敵の数を返す</summary>
+    public int RemainingEnemy() => _enemyParent.childCount;
+    /// <summary>ステージに残っているコインの数を返す</summary>
+    public int RemainingCoin() => _coinParent.childCount;
 
     // マップ
     // 二次元配列にする
@@ -170,6 +178,7 @@ public class MapManager : MonoBehaviour
     {
         int r = Random.Range(0, _enemies.Length);
         var obj = Instantiate(_enemies[r], Vector3.zero, Quaternion.identity);
+        obj.transform.SetParent(_enemyParent);
         SetCharacterRandom(obj, TileType.Floor);
     }
 
@@ -190,6 +199,7 @@ public class MapManager : MonoBehaviour
             int r = Random.Range(0, floorTiles.Count);
             var obj = Instantiate(_coin, new Vector3(floorTiles[r].Item1, 0.5f, floorTiles[r].Item2), Quaternion.identity);
             obj.GetComponent<ItemManager>().InitPosXZ();
+            obj.transform.SetParent(_coinParent);
             floorTiles.RemoveAt(r);
         }
     }

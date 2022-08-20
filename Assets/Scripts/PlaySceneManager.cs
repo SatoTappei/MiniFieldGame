@@ -37,8 +37,8 @@ public class PlaySceneManager : MonoBehaviour
     /// 逐一消していたら不具合が出そうなのでターンの最後にまとめて消す
     /// </summary>
     List<GameObject> _deadCharacters = new List<GameObject>();
-    /// <summary>ゲーム開始時からの経過ターン</summary>
-    int _progressTurn;
+    /// <summary>残りターン</summary>
+    int _remainingTurn;
     /// <summary>現在のスコア</summary>
     int _currentScore;
     /// <summary>このターン移動するキャラクターが全員移動したらtrueになる</summary>
@@ -106,6 +106,11 @@ public class PlaySceneManager : MonoBehaviour
         so = Resources.Load($"Stage_{GameManager._instance.CurrentStageNum}", typeof(StageDataSO)) as StageDataSO;
         // マップを生成する
         _mapManager.Init(so);
+        // スコア関係の値を初期化
+        _currentScore = GameManager._instance.TotalScore;
+        _remainingTurn = so.TurnLimit;
+
+
         // フェードが終わるまで待つ
         yield return new WaitWhile(() => GameManager._instance.IsFading);
         // ゲームスタートの演出
@@ -130,7 +135,7 @@ public class PlaySceneManager : MonoBehaviour
                 _moveActorCount = 0;
                 _actionActorCount = 0;
                 _endActorAction = false;
-                _playerUIManager.SetProgressTurn(++_progressTurn);
+                _playerUIManager.SetProgressTurn(_remainingTurn--);
                 _currentTurnState = TurnState.Input;
                 break;
             // プレイヤーの入力を待つ
@@ -166,10 +171,15 @@ public class PlaySceneManager : MonoBehaviour
                 // プレイヤーがゴールの上に乗っていたら
                 else if (_onGoalTile)
                 {
+                    // スコアを計算する
+                    CalcScore();
                     // ステージクリアの演出を呼び出し、Stateを演出中に切り替える
-                    StartCoroutine(_effectUIManager.StageClearEffect(GameManager._instance.CurrentStageNum, so));
+                    StartCoroutine(_effectUIManager.StageClearEffect(GameManager._instance.CurrentStageNum, so,
+                        _mapManager.RemainingCoin(), _mapManager.RemainingEnemy(), _remainingTurn, _currentScore));
                     // ステージ番号を一つ進める
                     GameManager._instance.AdvanceStageNum();
+                    // 計算後のスコアを合計スコアに加算する
+                    GameManager._instance.AddTotalScore(_currentScore);
                     _currentTurnState = TurnState.StandBy;
                 }
                 else
@@ -233,6 +243,20 @@ public class PlaySceneManager : MonoBehaviour
         }
 
         _currentTurnState = TurnState.TurnEnd;
+    }
+
+    /// <summary>スコアを計算する</summary>
+    void CalcScore()
+    {
+        // 獲得したコインの割合
+        int coin = Mathf.FloorToInt(1.0f * _mapManager.RemainingCoin() / so.MaxCoin);
+        // 倒した敵の割合
+        int enemy = Mathf.FloorToInt(1.0f * _mapManager.RemainingEnemy() / so.MaxEnemy);
+        // 経過したターンの割合 
+        int turn = Mathf.FloorToInt(1.0f * (so.TurnLimit - _remainingTurn) / so.TurnLimit);
+
+        // TODO:スコアの計算式
+        _currentScore += coin * 100 + enemy * 100 + turn * 100;
     }
 
     /// <summary>次のステージに進む</summary>
