@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public static GameManager _instance;
 
     /// <summary>最大ステージ番号</summary>
-    int _maxStageNum;
+    [SerializeField] int _maxStageNum;
     /// <summary>現在のステージ番号、最初は1なので注意</summary>
     int _currentStageNum = 1;
     /// <summary>合計スコア</summary>
@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
 
     public int CurrentStageNum { get => _currentStageNum; }
     public bool IsFading { get => _isFading; }
+
+    /// <summary>ステージをクリアしたのでステージ番号を1つ進める</summary>
+    public void AdvanceStageNum() => _currentStageNum = Mathf.Min(++_currentStageNum, _maxStageNum);
+    /// <summary>全ステージクリアしたかどうか</summary>
+    public bool CheckAllClear() => _currentStageNum == _maxStageNum;
 
     void Awake()
     {

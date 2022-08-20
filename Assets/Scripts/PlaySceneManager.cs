@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Linq;
 
 /// <summary>ターン中の状態を表す</summary>
@@ -169,6 +168,8 @@ public class PlaySceneManager : MonoBehaviour
                 {
                     // ステージクリアの演出を呼び出し、Stateを演出中に切り替える
                     StartCoroutine(_effectUIManager.StageClearEffect(GameManager._instance.CurrentStageNum, so));
+                    // ステージ番号を一つ進める
+                    GameManager._instance.AdvanceStageNum();
                     _currentTurnState = TurnState.StandBy;
                 }
                 else
@@ -234,16 +235,25 @@ public class PlaySceneManager : MonoBehaviour
         _currentTurnState = TurnState.TurnEnd;
     }
 
-    /// <summary>ゲームをリトライする</summary>
-    public void TransitionRetry()
+    /// <summary>次のステージに進む</summary>
+    public void MoveNextStage()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // もし最後のステージならリザルトに飛ぶ
+        string scene = GameManager._instance.CheckAllClear() ? "Result" : "GamePlay";
+        GameManager._instance.FadeOut(scene);
+    }
+
+    /// <summary>ゲームをリトライする</summary>
+    public void MoveGamePlay()
+    {
+        GameManager._instance.FadeOut("GamePlay");
         // フェードさせる
     }
 
     /// <summary>タイトルに戻る</summary>
-    public void TransitionTitle()
+    public void MoveTitle()
     {
+        GameManager._instance.FadeOut("Title");
         // タイトルにはいつでも戻れるようにする、ミスったらすぐやり直せるように
     }
 }

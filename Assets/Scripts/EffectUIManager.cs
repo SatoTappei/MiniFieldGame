@@ -61,9 +61,6 @@ public class EffectUIManager : MonoBehaviour
         _stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1).GetComponent<Text>().text = 256.ToString() + " / " + so.MaxEnemy.ToString();
         yield return null;
         _stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1).GetComponent<Text>().text = 128.ToString() + " / " + so.TurnLimit.ToString();
-        yield return new WaitForSeconds(0.5f);
-        _stageClearEffect.SetActive(false);
-        yield return null;
     }
 
     /// <summary>ゲームオーバー時の演出</summary>
