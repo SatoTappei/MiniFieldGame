@@ -176,8 +176,6 @@ public class PlaySceneManager : MonoBehaviour
                     // ステージクリアの演出を呼び出し、Stateを演出中に切り替える
                     StartCoroutine(_effectUIManager.StageClearEffect(GameManager._instance.CurrentStageNum, so,
                         _mapManager.RemainingCoin(), _mapManager.RemainingEnemy(), _remainingTurn, _currentScore));
-                    // ステージ番号を一つ進める
-                    GameManager._instance.AdvanceStageNum();
                     // 計算後のスコアを合計スコアに加算する
                     GameManager._instance.AddTotalScore(_currentScore);
                     _currentTurnState = TurnState.StandBy;
@@ -266,6 +264,9 @@ public class PlaySceneManager : MonoBehaviour
     {
         // もし最後のステージならリザルトに飛ぶ
         string scene = GameManager._instance.CheckAllClear() ? "Result" : "GamePlay";
+        // ステージ番号を一つ進める
+        GameManager._instance.AdvanceStageNum();
+
         GameManager._instance.FadeOut(scene);
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 /// <summary>
 /// ゲーム開始、ステージクリア、ゲームオーバーの演出用のUIを制御する
@@ -53,16 +54,31 @@ public class EffectUIManager : MonoBehaviour
     public IEnumerator StageClearEffect(int stageNum, StageDataSO so, int coin, int enemy, int turn, int score)
     {
         _stageClearEffect.SetActive(true);
-        // TODO:ちゃんと演出を作る
+
         _stageClearEffect.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<Text>().text = stageNum.ToString();
-        yield return null;
-        _stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<Text>().text = coin.ToString() + " / " + so.MaxCoin.ToString();
-        yield return null;
-        _stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1).GetComponent<Text>().text = enemy.ToString() + " / " + so.MaxEnemy.ToString();
-        yield return null;
-        _stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1).GetComponent<Text>().text = turn.ToString() + " / " + so.TurnLimit.ToString();
-        yield return null;
-        _stageClearEffect.transform.GetChild(4).gameObject.transform.GetChild(1).GetComponent<Text>().text = score.ToString();
+        Disp(_stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1), coin.ToString() + " / " + so.MaxCoin.ToString());
+        yield return new WaitForSeconds(0.5f);
+        Disp(_stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1), enemy.ToString() + " / " + so.MaxEnemy.ToString());
+        yield return new WaitForSeconds(0.5f);
+        Disp(_stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1), turn.ToString() + " / " + so.TurnLimit.ToString());
+        yield return new WaitForSeconds(0.5f);
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Join(_stageClearEffect.transform.GetChild(4).gameObject.transform.GetChild(1).GetComponent<Text>().DOCounter(0, score, 1.5f));
+        sequence.Append(_stageClearEffect.transform.GetChild(4).gameObject.transform.GetChild(1).transform.DOScale(1.2f, 0.15f));
+        sequence.Append(_stageClearEffect.transform.GetChild(4).gameObject.transform.GetChild(1).transform.DOScale(1f, 0.15f));
+        sequence.AppendCallback(() => SoundManager._instance.Play("SE_リザルト2"));
+        sequence.SetLink(gameObject);
+
+        void Disp(Transform trans, string str)
+        {
+            trans.GetComponent<Text>().text = str;
+            Sequence sequence = DOTween.Sequence();
+            sequence.Join(trans.DOScale(1.2f, 0.15f));
+            sequence.Append(trans.DOScale(1.0f, 0.15f));
+            sequence.SetLink(gameObject);
+            SoundManager._instance.Play("SE_リザルト1");
+        }
     }
 
     /// <summary>ゲームオーバー時の演出</summary>

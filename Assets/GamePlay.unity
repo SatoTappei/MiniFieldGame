@@ -550,6 +550,12 @@ MonoBehaviour:
   - key: "SE_\u30B3\u30A4\u30F3"
     clip: {fileID: 8300000, guid: 665db56e58fd50d4fb2d9ff31b210c4c, type: 3}
     volume: 1
+  - key: "SE_\u30EA\u30B6\u30EB\u30C81"
+    clip: {fileID: 8300000, guid: cfb64dca83687ae4c9a898429af018c4, type: 3}
+    volume: 1
+  - key: "SE_\u30EA\u30B6\u30EB\u30C82"
+    clip: {fileID: 8300000, guid: 5ca8854ed911d4547b12d284c47f9068, type: 3}
+    volume: 1
   _distance: 0.05
 --- !u!4 &91221298
 Transform:
@@ -2365,7 +2371,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 999/999
+  m_Text: 
 --- !u!222 &1130979154
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3386,7 +3392,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 99/99
+  m_Text: 
 --- !u!222 &1443222156
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3466,7 +3472,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 99/99
+  m_Text: 
 --- !u!222 &1457015154
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4376,7 +4382,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 65535
+  m_Text: 
 --- !u!222 &1945235824
 CanvasRenderer:
   m_ObjectHideFlags: 0
