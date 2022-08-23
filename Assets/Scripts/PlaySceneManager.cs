@@ -92,7 +92,6 @@ public class PlaySceneManager : MonoBehaviour
     {
         _moveActorCount--;
         _endActorMoveAll = _moveActorCount == 0;
-        Debug.Log(_moveActorCount);
     }
 
     void Awake()
@@ -125,7 +124,6 @@ public class PlaySceneManager : MonoBehaviour
         {
             // 演出中
             case TurnState.StandBy:
-                Debug.Log("演出中です");
                 break;
             // ターンの最初に初期化する
             case TurnState.Init:
@@ -177,7 +175,7 @@ public class PlaySceneManager : MonoBehaviour
                     StartCoroutine(_effectUIManager.StageClearEffect(GameManager._instance.CurrentStageNum, so,
                         _mapManager.RemainingCoin(), _mapManager.RemainingEnemy(), _remainingTurn, _currentScore));
                     // 計算後のスコアを合計スコアに加算する
-                    GameManager._instance.AddTotalScore(_currentScore);
+                    GameManager._instance.UpdateTotalScore(_currentScore);
                     _currentTurnState = TurnState.StandBy;
                 }
                 else
@@ -266,7 +264,6 @@ public class PlaySceneManager : MonoBehaviour
         string scene = GameManager._instance.CheckAllClear() ? "Result" : "GamePlay";
         // ステージ番号を一つ進める
         GameManager._instance.AdvanceStageNum();
-
         GameManager._instance.FadeOut(scene);
     }
 

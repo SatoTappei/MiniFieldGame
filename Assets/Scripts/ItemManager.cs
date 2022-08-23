@@ -49,5 +49,6 @@ public class ItemManager : ActorBase
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileItem(_currentPosXZ.x, _currentPosXZ.z, null);
         SoundManager._instance.Play("SE_コイン");
         Destroy(gameObject);
+        Debug.Log("コインを獲得");
     }
 }

@@ -20,6 +20,9 @@ public class TitleManager : MonoBehaviour
     /// <summary>ゲームプレイのシーンへ推移する</summary>
     public void MoveGamePlay()
     {
+        // ゲーム開始時に合計スコアを0にする
+        GameManager._instance.UpdateTotalScore(0);
+
         GameManager._instance.FadeOut("GamePlay");
     }
 }

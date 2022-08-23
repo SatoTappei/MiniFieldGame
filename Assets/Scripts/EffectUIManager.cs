@@ -56,11 +56,11 @@ public class EffectUIManager : MonoBehaviour
         _stageClearEffect.SetActive(true);
 
         _stageClearEffect.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<Text>().text = stageNum.ToString();
-        Disp(_stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1), coin.ToString() + " / " + so.MaxCoin.ToString());
+        Disp(_stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1), (so.MaxCoin - coin).ToString() + " / " + so.MaxCoin.ToString());
         yield return new WaitForSeconds(0.5f);
-        Disp(_stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1), enemy.ToString() + " / " + so.MaxEnemy.ToString());
+        Disp(_stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1), (so.MaxEnemy - enemy).ToString() + " / " + so.MaxEnemy.ToString());
         yield return new WaitForSeconds(0.5f);
-        Disp(_stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1), turn.ToString() + " / " + so.TurnLimit.ToString());
+        Disp(_stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1), (so.TurnLimit - turn).ToString() + " / " + so.TurnLimit.ToString());
         yield return new WaitForSeconds(0.5f);
 
         Sequence sequence = DOTween.Sequence();

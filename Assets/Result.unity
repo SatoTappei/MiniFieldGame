@@ -469,7 +469,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 173843197}
         m_TargetAssemblyTypeName: ResultManager, Assembly-CSharp
-        m_MethodName: BackToTitle
+        m_MethodName: MoveTitle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

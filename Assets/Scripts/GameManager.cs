@@ -31,8 +31,11 @@ public class GameManager : MonoBehaviour
     public void AdvanceStageNum() => _currentStageNum = Mathf.Min(++_currentStageNum, _maxStageNum);
     /// <summary>全ステージクリアしたかどうか</summary>
     public bool CheckAllClear() => _currentStageNum == _maxStageNum;
-    /// <summary>合計スコアに現在のスコアを加算する</summary>
-    public void AddTotalScore(int score) => _totalScore += score;
+    /// <summary>
+    /// 合計スコアを更新する
+    /// 現在はステージクリア後に呼ばれて次のステージにスコアを引き継がせる
+    /// </summary>
+    public void UpdateTotalScore(int score) => _totalScore = score;
 
     void Awake()
     {
