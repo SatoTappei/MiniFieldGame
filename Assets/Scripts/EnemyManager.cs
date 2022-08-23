@@ -161,6 +161,7 @@ public class EnemyManager : CharacterBase
     /// <param name="attackedDir">UŒ‚‚³‚ê‚½•ûŒü</param>
     public override void Damaged(Direction attackedDir)
     {
+        FindObjectOfType<ActionLogManager>().DispLog(_defeatedMessage);
         // ©g‚ª€‚ñ‚¾‚±‚Æ‚ğPlaySceneManager‚É“`‚¦‚é
         PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
         psm.RemoveEnemy(this);

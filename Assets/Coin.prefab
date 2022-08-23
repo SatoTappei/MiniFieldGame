@@ -141,3 +141,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63538e70181136749a2539d440e79f0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defeatedMessage: "\u7565\u596A\u884C\u70BA\u624B\u5F53\u3001\u30B9\u30B3\u30A2+100"
+  _itemType: 0

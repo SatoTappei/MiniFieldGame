@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerManager : CharacterBase
 {
+    /// <summary>ダメージを受けた際に表示されるメッセージ</summary>
+    [SerializeField] string _damagedMessage;
     /// <summary>
     /// プレイヤーの体力、
     /// 3以上にするにはUIのアイコンも増やさないといけないのでインスペクターには表示させない
@@ -162,6 +164,7 @@ public class PlayerManager : CharacterBase
         // 体力が0になったら
         if (_lifePoint == 0) 
         {
+            FindObjectOfType<ActionLogManager>().DispLog(_defeatedMessage);
             // プレイヤーが死んだことを通知する
             PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
             psm.PlayerIsDead();
@@ -173,6 +176,9 @@ public class PlayerManager : CharacterBase
             Vector3 vec = DirectionToVec3(attackedDir);
             obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
         }
-
+        else
+        {
+            FindObjectOfType<ActionLogManager>().DispLog(_damagedMessage);
+        }
     }
 }

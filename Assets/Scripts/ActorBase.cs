@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public abstract class ActorBase : MonoBehaviour
 {
+    /// <summary>撃破された時に出るログのメッセージ</summary>
+    [SerializeField] protected string _defeatedMessage;
+
     /// <summary>XZ平面上での座標</summary>
     protected struct PosXZ
     {
@@ -19,7 +22,7 @@ public abstract class ActorBase : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
