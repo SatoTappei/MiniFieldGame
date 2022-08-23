@@ -19,7 +19,7 @@ public class EffectUIManager : MonoBehaviour
 
     void Awake()
     {
-        _gameStartEffect.SetActive(false);
+        _gameStartEffect.transform.localScale = Vector3.zero;
         _stageClearEffect.SetActive(false);
         _gameOverEffect.SetActive(false);
     }
@@ -37,17 +37,21 @@ public class EffectUIManager : MonoBehaviour
     /// <summary>ゲーム開始時の演出</summary>
     public IEnumerator GameStartEffect(int stageNum, StageDataSO so)
     {
-        _gameStartEffect.SetActive(true);
-        // TODO:ちゃんと演出を作る
         _gameStartEffect.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<Text>().text = stageNum.ToString();
-        yield return null;
         _gameStartEffect.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<Text>().text = so.MaxCoin.ToString();
-        yield return null;
         _gameStartEffect.transform.GetChild(2).gameObject.transform.GetChild(1).GetComponent<Text>().text = so.MaxEnemy.ToString();
-        yield return null;
         _gameStartEffect.transform.GetChild(3).gameObject.transform.GetChild(1).GetComponent<Text>().text = so.TurnLimit.ToString();
-        yield return new WaitForSeconds(0.5f);
-        _gameStartEffect.SetActive(false);
+
+        Sequence sequence1 = DOTween.Sequence();
+        sequence1.Join(_gameStartEffect.transform.DOScale(new Vector3(1, 0.01f, 1), 0.5f));
+        sequence1.Append(_gameStartEffect.transform.DOScale(Vector3.one, 0.15f));
+        sequence1.Append(_gameStartEffect.transform.DOShakeScale(0.15f, 0.25f));
+        yield return new WaitForSeconds(1.0f);
+        _gameStartEffect.transform.GetChild(4).gameObject.SetActive(true);
+        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+        Sequence sequence2 = DOTween.Sequence();
+        sequence2.Append(_gameStartEffect.transform.DOScale(new Vector3(1.25f, 1.25f, 1), 0.15f));
+        sequence2.Append(_gameStartEffect.transform.DOScale(Vector3.zero, 0.25f));
     }
 
     /// <summary>ステージクリア時の演出</summary>
