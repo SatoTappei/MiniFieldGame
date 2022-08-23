@@ -105,9 +105,10 @@ public class PlaySceneManager : MonoBehaviour
         so = Resources.Load($"Stage_{GameManager._instance.CurrentStageNum}", typeof(StageDataSO)) as StageDataSO;
         // マップを生成する
         _mapManager.Init(so);
-        // スコア関係の値を初期化
+        // ステージ毎にリセットされる値を初期化
         _currentScore = GameManager._instance.TotalScore;
         _playerUIManager.SetScore(_currentScore);
+        _playerUIManager.SetStageNum(GameManager._instance.CurrentStageNum);
         _remainingTurn = so.TurnLimit;
 
         // フェードが終わるまで待つ

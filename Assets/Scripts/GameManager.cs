@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     public bool IsFading { get => _isFading; }
     public int TotalScore { get => _totalScore; }
 
+    /// <summary>ステージ番号をリセットする</summary>
+    public void ResetStageNum() => _currentStageNum = 1;
     /// <summary>ステージをクリアしたのでステージ番号を1つ進める</summary>
     public void AdvanceStageNum() => _currentStageNum = Mathf.Min(++_currentStageNum, _maxStageNum);
     /// <summary>全ステージクリアしたかどうか</summary>

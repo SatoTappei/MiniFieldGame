@@ -9,6 +9,8 @@ using DG.Tweening;
 /// </summary>
 public class PlayerUIManager : MonoBehaviour
 {
+    /// <summary>ステージ番号を表示するテキスト</summary>
+    [SerializeField] Text _stageText;
     /// <summary>経過ターンを表示するテキスト</summary>
     [SerializeField] Text _dispTurnText;
     /// <summary>スコアを表示するテキスト</summary>
@@ -24,6 +26,13 @@ public class PlayerUIManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    /// <summary>ステージ番号を表示する</summary>
+    public void SetStageNum(int num)
+    {
+        _stageText.text = num.ToString();
+        PlayTextAnim(_stageText.transform);
     }
 
     /// <summary>経過したターンを表示する</summary>

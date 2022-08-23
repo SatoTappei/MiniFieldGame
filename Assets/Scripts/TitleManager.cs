@@ -22,7 +22,9 @@ public class TitleManager : MonoBehaviour
     {
         // ゲーム開始時に合計スコアを0にする
         GameManager._instance.UpdateTotalScore(0);
-
+        // ゲーム開始時に現在のステージ番号を初期値に戻す
+        GameManager._instance.ResetStageNum();
+        
         GameManager._instance.FadeOut("GamePlay");
     }
 }

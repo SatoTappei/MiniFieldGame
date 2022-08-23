@@ -37,17 +37,20 @@ public class EffectUIManager : MonoBehaviour
     /// <summary>ゲーム開始時の演出</summary>
     public IEnumerator GameStartEffect(int stageNum, StageDataSO so)
     {
+        // 各テキストにステージの情報を表示
         _gameStartEffect.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<Text>().text = stageNum.ToString();
         _gameStartEffect.transform.GetChild(1).gameObject.transform.GetChild(1).GetComponent<Text>().text = so.MaxCoin.ToString();
         _gameStartEffect.transform.GetChild(2).gameObject.transform.GetChild(1).GetComponent<Text>().text = so.MaxEnemy.ToString();
         _gameStartEffect.transform.GetChild(3).gameObject.transform.GetChild(1).GetComponent<Text>().text = so.TurnLimit.ToString();
-
+        // パネルをアニメーションさせて表示させる
         Sequence sequence1 = DOTween.Sequence();
         sequence1.Join(_gameStartEffect.transform.DOScale(new Vector3(1, 0.01f, 1), 0.5f));
         sequence1.Append(_gameStartEffect.transform.DOScale(Vector3.one, 0.15f));
         sequence1.Append(_gameStartEffect.transform.DOShakeScale(0.15f, 0.25f));
+        // アニメーションが始まって1秒後に"左クリックをしてね"のボタンを表示
         yield return new WaitForSeconds(1.0f);
         _gameStartEffect.transform.GetChild(4).gameObject.SetActive(true);
+        //クリックされたらパネルをアニメーションさせて閉じる
         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
         Sequence sequence2 = DOTween.Sequence();
         sequence2.Append(_gameStartEffect.transform.DOScale(new Vector3(1.25f, 1.25f, 1), 0.15f));
@@ -58,15 +61,16 @@ public class EffectUIManager : MonoBehaviour
     public IEnumerator StageClearEffect(int stageNum, StageDataSO so, int coin, int enemy, int turn, int score)
     {
         _stageClearEffect.SetActive(true);
-
+        // 現在のステージ番号を表示
         _stageClearEffect.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<Text>().text = stageNum.ToString();
-        Disp(_stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1), (so.MaxCoin - coin).ToString() + " / " + so.MaxCoin.ToString());
+        // 各リザルトをポップさせるアニメーション付きで表示させる
+        Pop(_stageClearEffect.transform.GetChild(1).gameObject.transform.GetChild(1), (so.MaxCoin - coin).ToString() + " / " + so.MaxCoin.ToString());
         yield return new WaitForSeconds(0.5f);
-        Disp(_stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1), (so.MaxEnemy - enemy).ToString() + " / " + so.MaxEnemy.ToString());
+        Pop(_stageClearEffect.transform.GetChild(2).gameObject.transform.GetChild(1), (so.MaxEnemy - enemy).ToString() + " / " + so.MaxEnemy.ToString());
         yield return new WaitForSeconds(0.5f);
-        Disp(_stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1), (so.TurnLimit - turn).ToString() + " / " + so.TurnLimit.ToString());
+        Pop(_stageClearEffect.transform.GetChild(3).gameObject.transform.GetChild(1), (so.TurnLimit - turn).ToString() + " / " + so.TurnLimit.ToString());
         yield return new WaitForSeconds(0.5f);
-
+        // スコアは0から現在の値まで加算されるアニメーションで表示する
         Sequence sequence = DOTween.Sequence();
         sequence.Join(_stageClearEffect.transform.GetChild(4).gameObject.transform.GetChild(1).GetComponent<Text>().DOCounter(0, score, 1.5f));
         sequence.Append(_stageClearEffect.transform.GetChild(4).gameObject.transform.GetChild(1).transform.DOScale(1.2f, 0.15f));
@@ -74,7 +78,8 @@ public class EffectUIManager : MonoBehaviour
         sequence.AppendCallback(() => SoundManager._instance.Play("SE_リザルト2"));
         sequence.SetLink(gameObject);
 
-        void Disp(Transform trans, string str)
+        // ポップさせるアニメーション
+        void Pop(Transform trans, string str)
         {
             trans.GetComponent<Text>().text = str;
             Sequence sequence = DOTween.Sequence();
