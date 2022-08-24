@@ -732,6 +732,7 @@ GameObject:
   m_Component:
   - component: {fileID: 250135244}
   - component: {fileID: 250135246}
+  - component: {fileID: 250135247}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -766,25 +767,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7791d321db4d9b94a8271c2df962a420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapStr: 'WWWWWWWWWW
-
-    WOOOOOOOWW
-
-    WOOOOWWOOW
-
-    WOOOOWWWOW
-
-    WWOWWWWWOW
-
-    WWOWWWWWOW
-
-    WOOOOOWWOW
-
-    WOOOOOOOOW
-
-    WOOOOOWWEW
-
-    WWWWWWWWWW'
   _tileDatas:
   - _prefab: {fileID: 1837077820683073736, guid: 94054c180b53b7e4888fc9a2a1deb3d3, type: 3}
     _char: 79
@@ -798,6 +780,18 @@ MonoBehaviour:
   _tileParent: {fileID: 882564775}
   _enemyParent: {fileID: 73685321}
   _coinParent: {fileID: 1308180141}
+--- !u!114 &250135247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250135243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca66edee9e5df254793c90f257983105, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &281578644
 GameObject:
   m_ObjectHideFlags: 0

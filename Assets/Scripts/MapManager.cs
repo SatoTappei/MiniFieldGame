@@ -58,7 +58,7 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary生成するマップの文字列</summary>
-    [TextArea(10, 10), SerializeField] string _mapStr;
+    //[TextArea(10, 10), SerializeField] string _mapStr;
     /// <summary>生成するタイルのデータ</summary>
     [SerializeField] Tile[] _tileDatas;
     /// <summary>生成したタイルを登録する親オブジェクト</summary>
@@ -107,8 +107,10 @@ public class MapManager : MonoBehaviour
         _enemies = so.Enemies;
         _coin = so.Coin;
 
+        // マップのもとになる文字列を生成する
+        string mapStr = GetComponent<RandomMapGenerator>().GenerateRandomMap(16, 16);
         // 文字列からマップを生成する
-        GenerateMap(_mapStr);
+        GenerateMap(mapStr);
         // コインを生成して配置する
         GenerateCoinRandom(so.MaxCoin);
         // プレイヤーをランダムな位置に配置する
