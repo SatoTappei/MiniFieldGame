@@ -63,6 +63,7 @@ public class S2_SaveDataManager : MonoBehaviour
         actorSaveData.grid.x = move._grid.x;
         actorSaveData.grid.z = move._grid.z;
         actorSaveData.direction = move._direction;
+        actorSaveData.parameter = actor.GetComponent<S2_ActorParamsController>().GetParameter();
         return actorSaveData;
     }
 
@@ -72,6 +73,7 @@ public class S2_SaveDataManager : MonoBehaviour
         S2_ActorMovement move = actor.GetComponent<S2_ActorMovement>();
         move.SetPosition(data.grid.x, data.grid.z);
         move.SetDirection(data.direction);
+        actor.GetComponent<S2_ActorParamsController>().SetParameter(data.parameter);
     }
 
     /// <summary>プレイヤーデータを作成、返す</summary>
@@ -102,11 +104,12 @@ public class S2_SaveDataManager : MonoBehaviour
     /// <summary>敵データを反映する</summary>
     void LoadEnemyDatas(S2_SaveData saveData)
     {
-        GameObject enemyObj = (GameObject)Resources.Load("Prefabs/Enemy1");
         foreach (var data in saveData.enemyDatas)
         {
+            GameObject enemyObj = (GameObject)Resources.Load("Prefabs/Enemy" + data.parameter.id);
             GameObject enemy = Instantiate(enemyObj, enemies.transform);
             LoadActorData(data, enemy.transform);
+            enemy.GetComponent<S2_EnemyOperation>().target = player.GetComponent<S2_ActorMovement>();
         }
     }
 

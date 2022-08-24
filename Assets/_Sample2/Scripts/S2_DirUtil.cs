@@ -92,7 +92,8 @@ public static class DirUtil
     {
         // 障害物があれば現在のグリッド座標、なければ移動先のグリッド座標を取得する
         Pos2D newP = GetNewGrid(position, d);
-        if (field.IsCollide(newP.x, newP.z)) return position;
+        if (field.IsCollide(newP.x, newP.z) || field.GetExistActor(newP.x,newP.z) != null) 
+            return position;
         return newP;
     }
 

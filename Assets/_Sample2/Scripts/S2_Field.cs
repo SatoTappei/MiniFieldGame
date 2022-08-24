@@ -120,4 +120,17 @@ public class S2_Field : MonoBehaviour
         }
         return mapdata;
     }
+
+    /// <summary>特定の座標にキャラクターがいたらそのゲームオブジェクトを返す、いなければnullを返す</summary>
+    public GameObject GetExistActor(int xgrid, int zgrid)
+    {
+        if (xgrid == playerMovement._newGrid.x && zgrid == playerMovement._newGrid.z)
+            return playerMovement.gameObject;
+        foreach (var enemyMovement in enemies.GetComponentsInChildren<S2_ActorMovement>())
+        {
+            if (xgrid == enemyMovement._newGrid.x && zgrid == enemyMovement._newGrid.z)
+                return enemyMovement.gameObject;
+        }
+        return null;
+    }
 }

@@ -15,6 +15,7 @@ public class ActorSaveData
 {
     public Pos2D grid;
     public EDir direction;
+    public S2_Params parameter;
 }
 
 [System.Serializable]

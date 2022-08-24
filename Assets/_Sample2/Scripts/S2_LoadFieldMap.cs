@@ -77,6 +77,7 @@ public class S2_LoadFieldMap : MonoBehaviour
                                 GameObject enemyObj = (GameObject)Resources.Load("Prefabs/" + name);
                                 GameObject enemy = Instantiate(enemyObj, enemies.transform); // <= ここなんかバグっている、enemiesの参照がない
                                 enemy.GetComponent<S2_ActorMovement>().SetPosition(ToMirrorX(x / pw, w), z / ph);
+                                enemy.GetComponent<S2_EnemyOperation>().target = player;
                             }
                         }
                         break;

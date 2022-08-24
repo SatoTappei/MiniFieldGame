@@ -1,7 +1,4 @@
 ﻿★優先タスク
-	コインを入手、敵を撃破などのテキストの表示
-		横からスライドインする
-		新しくスライドインしてきたら前のものは下にズレる
 	マップの自動生成
 	フロアに障害物を配置する(移動しない敵)
 	敵の移動アルゴリズム
@@ -26,6 +23,9 @@
 
 	ゲームが重い時の対処
 	URPAssetのShadow内のSoftShadowsのチェックを外す、DirectionalLightのShadowsのShadowTypeをHardShadowsにする
+
+	AStarアルゴリズム
+	Nodeクラスの実装
 
 ★使用アセット
 	YughuesFreeGroundMaterials

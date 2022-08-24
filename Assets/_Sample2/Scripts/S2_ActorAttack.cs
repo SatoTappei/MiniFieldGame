@@ -29,4 +29,12 @@ public class S2_ActorAttack : MonoBehaviour
         }
         return EAct.Act;
     }
+
+    /// <summary>指定した相手がnullでなければダメージを与える</summary>
+    public void DamageOpponent(GameObject actor)
+    {
+        if (actor == null) return;
+        int str = GetComponent<S2_ActorParamsController>().parameter.str;
+        actor.GetComponent<S2_ActorParamsController>().Damaged(str);
+    }
 }

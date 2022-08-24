@@ -50,6 +50,11 @@ public class S2_ActorAction : MonoBehaviour
     void Act()
     {
         action = actorAttack.Attacking();
+        if (action == EAct.ActEnd)
+        {
+            Pos2D grid = DirUtil.GetNewGrid(actorMovement._grid, actorMovement._direction);
+            actorAttack.DamageOpponent(GetComponentInParent<S2_Field>().GetExistActor(grid.x, grid.z));
+        }
     }
 
     /// <summary>アクションが終わった</summary>
