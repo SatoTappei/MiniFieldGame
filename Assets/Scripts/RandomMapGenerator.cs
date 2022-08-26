@@ -7,133 +7,143 @@ using UnityEngine;
 /// </summary>
 public class RandomMapGenerator : MonoBehaviour
 {
-    void Start()
+    /// <summary>部屋と通路を現すクラス</summary>
+    public class Area
     {
+        /// <summary>始点となる座標</summary>
+        public Position Start { get; set; }
+        /// <summary>終点になる座標</summary>
+        public Position Goal { get; set; }
 
+        /// <summary>エリアの幅を返す</summary>
+        public int GetWidth() => Mathf.Abs(Goal.X - Start.X + 1);
+        /// <summary>エリアの高さを返す</summary>
+        public int GetHeight() => Mathf.Abs(Goal.Y - Start.Y + 1);
+
+        public Area(int sX, int sY, int gX, int gY)
+        {
+            Start.X = sX;
+            Start.Y = sY;
+            Goal.X = gX;
+            Goal.Y = gY;
+        }
+
+        // 基準となる座標を表すためのクラス
+        public class Position
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+
+            public Position(int sX, int sY)
+            {
+                X = sX;
+                Y = sY;
+            }
+        }
     }
 
-    void Update()
-    {
-        
-    }
+    /// <summary>部屋の幅と高さの最小値</summary>
+    const int OneSideMin = 6;
+    /// <summary>マップの幅</summary>
+    int _mapWidth;
+    /// <summary>マップの高さ</summary>
+    int _mapHeight;
+    /// <summary>部屋の最大数</summary>
+    int _roomNumMax;
+    /// <summary>マップを分割してできた部屋のリスト</summary>
+    List<Area> _rooms = new List<Area>();
+    /// <summary>マップを分割してできた通路のリスト</summary>
+    List<Area> _passes = new List<Area>();
+    /// <summary>部屋から延びる通路のリスト</summary>
+    List<Area> _roomPasses = new List<Area>();
+    /// <summary>マップを分割した後の区域のリスト</summary>
+    List<Area> _areas = new List<Area>();
 
-    /// <summary>ランダムでマップを生成して文字列にして返す</summary>
+    /// <summary>TODO:要検証、ランダムな値を返す</summary>
+    int GetRandomValue(int min, int max) => min + Mathf.FloorToInt(Random.value * (max - min + 1));
+
+    /// <summary>幅と高さに応じたマップを生成し、文字列にして返す</summary>
     public string GenerateRandomMap(int width, int height)
     {
-        // 指定された幅と高さでマップの二次元配列を作成する
-        string[,] map = new string[width, height];
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                map[i, j] = "W";
+        // 部屋の最大数を設定(16*16のマップで最大6部屋を基準に設定)
+        _roomNumMax = width * height / 42;
 
-        // TODO:マップを区域分割する処理
-        map = SplitFloor(map);
+        string[,] map = new string[height, width];
+        GenerateRoomAndPass(map);
 
-        // 二次元配列をstring型にして返す
+        return ArrayToString(map);
+    }
+
+    /// <summary>二次元配列を文字列にして返す</summary>
+    string ArrayToString(string[,] array)
+    {
         string str = "";
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < array.GetLength(0); i++)
         {
-            for (int j = 0; j < width; j++)
-                str += map[i, j];
-            if (i != height - 1)
+            for (int j = 0; j < array.GetLength(1); j++)
+                str += array[i, j];
+            if (i < array.GetLength(0) - 1)
                 str += '\n';
         }
         return str;
     }
 
-    /// <summary>区域</summary>
-    struct Rect
+    /// <summary>部屋と通路を生成する</summary>
+    void GenerateRoomAndPass(string[,] map)
     {
-        public int x; // 左上のX座標
-        public int y; // 左上のY座標
-        public int width; // 幅
-        public int height; // 高さ
+        // マップ全体を区域リストに追加する
+        _areas.Add(new Area(0, 0, _mapWidth - 1, _mapHeight - 1));
+        // 垂直に分割するか
+        bool isVert = true;
+        // 部屋数の最大数分、分割を試行する
+        for (int i = 0; i < _roomNumMax; i++)
+        {
+            DevideMap(isVert);
+            isVert = !isVert;
+        }
     }
 
-    // マップを区域に分割して文字列で返す
-    public string[,] SplitFloor(string[,] map)
+    /// <summary>マップを区域に分割する</summary>
+    /// <param name="isVertical">垂直に分割するか</param>
+    void DevideMap(bool isVert)
     {
-        // 縦、もしくは横に1~3等分する
-        // 何等分するか
-        //int splitNum = Random.Range(1, 4);
-        // 縦か横か
-        //bool isVert = Random.Range(0, 2) == 0 ? true : false;
-        // 端が壁、部屋の定義は2*2以上
-
-        // 分割した区域を格納するリスト
-        List<Rect> rects = new List<Rect>();
-        // マップ全体を1つの区域とする
-        Rect rect;
-        rect.x = 0;
-        rect.y = 0;
-        rect.width = map.GetLength(1);
-        rect.height = map.GetLength(0);
-
-        // 垂直方向に分割するかどうか
-        bool isVert = true;
-
-        while (rect.width * rect.height > 16)
+        // 分割した区域を一時的に格納しておくリスト
+        List<Area> devideds = new List<Area>();
+        // 区域リストの中身を分割していく
+        foreach (var area in _areas)
         {
-            Debug.Log($"左上の座標{rect.x}:{rect.y} 幅{rect.width} 高さ{rect.height}");
-            // 決められたラインで2分割する
-            int splitLine = Random.Range(4, (isVert ? rect.width : rect.height) - 4);
-            // 2分割した矩形を格納しておく
-            Rect rect1;
-            Rect rect2;
-
-            // 縦に分割する場合
-            if (isVert)
+            // 垂直に分割する(部屋が上下に分かれる)場合は区域の高さが分割しても2区域に分けられれば分割する
+            if (isVert && area.GetHeight() >= OneSideMin * 2 + 1)
             {
-                // 分割した2つをそれぞれRectに格納する
-                rect1.x = rect.x;
-                rect1.y = rect.y;
-                rect1.width = Mathf.Abs(rect.x - splitLine);
-                rect1.height = rect.height;
-                rect2.x = splitLine + 1;
-                rect2.y = rect.y;
-                rect2.width = Mathf.Abs(splitLine - rect.width - 1);
-                rect2.height = rect.height;
-                Debug.Log("縦分割");
+                // 高さから1辺の最小の長さの2倍を引いた値が余裕
+                int space = area.GetHeight() - OneSideMin * 2;
+                // 分割する位置をランダムで決める
+                int devidePos = area.Start.Y + OneSideMin + GetRandomValue(1, space) - 1;
+                // 分割した境界線を通路として保存しておく
+                _passes.Add(new Area(area.Start.X, devidePos, area.Goal.X, devidePos));
+                // 分割して出来た側の区域を一時的に格納しておく
+                devideds.Add(new Area(area.Start.X, devidePos + 1, area.Goal.X, area.Goal.Y));
+                // 分割した側の区域の高さを境界線の1マス上まで縮める
+                area.Goal.Y = devidePos - 1;
             }
-            // 横に分割する場合
-            else
+            // 水平に分割する(部屋が左右に分かれる)場合は区域の幅が分割しても2区域に分けられれば分割する
+            else if(!isVert && area.GetWidth() >= OneSideMin * 2 + 1)
             {
-                rect1.x = rect.x;
-                rect1.y = rect.y;
-                rect1.width = rect.width;
-                rect1.height = Mathf.Abs(rect.y - splitLine);
-                rect2.x = rect.x;
-                rect2.y = splitLine + 1;
-                rect2.width = rect.width;
-                rect2.height = Mathf.Abs(splitLine - rect.height - 1);
-                Debug.Log("横分割");
+                // 幅から1辺の最小の長さの2倍を引いた値が余裕
+                int space = area.GetWidth() - OneSideMin * 2;
+                // 分割する位置をランダムで決める
+                int devidePos = area.Start.X + OneSideMin + GetRandomValue(1, space) - 1;
+                // 分割した境界線を通路として保存しておく
+                _passes.Add(new Area(devidePos, area.Start.Y, devidePos, area.Goal.Y));
+                // 分割して出来た側の区域を一時的に格納しておく
+                devideds.Add(new Area(devidePos + 1, area.Start.Y, area.Goal.X, area.Goal.Y));
+                // 分割した側の区域の高さを境界線の1マス左まで縮める
+                area.Goal.X = devidePos - 1;
             }
-
-            // 小さいほうをリストに格納
-            int area1 = rect1.width * rect1.height;
-            int area2 = rect2.width * rect2.height;
-            rects.Add(area1 < area2 ? rect1 : rect2);
-            // 大きいほうを次は分割する
-            rect = area1 < area2 ? rect2 : rect1;
-
-            // 縦と横の分割を切り替える
-            isVert = !isVert;
-
-            // 分割した区画を表示するテスト、いらなくなったら消す
-            if (area1 < area2)
-            {
-                for (int i = rect1.y; i < rect1.height; i++)
-                    for (int j = rect1.x; j < rect1.width; j++)
-                        map[i, j] = "O";
-            }
-            else
-            {
-                for (int i = rect2.y; i < rect2.height; i++)
-                    for (int j = rect2.x; j < rect2.x + (rect2.width - 1); j++)
-                        map[i, j] = "O";
-            }
-            // テストここまで
         }
-        return map;
+
+        // 区域のリストに分割してできた区域を追加する
+        // ここで追加しないとforeachの中身が変わってしまうので注意
+        _areas.AddRange(devideds);
     }
 }
