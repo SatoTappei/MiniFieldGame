@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// 区域分割法を用いてマップを生成する
@@ -41,7 +42,7 @@ public class RandomMapGenerator : MonoBehaviour
     }
 
     /// <summary>部屋の幅と高さの最小値</summary>
-    const int OneSideMin = 6;
+    const int OneSideMin = 5;
     /// <summary>マップの幅</summary>
     int _mapWidth;
     /// <summary>マップの高さ</summary>
@@ -52,13 +53,17 @@ public class RandomMapGenerator : MonoBehaviour
     List<Area> _rooms = new List<Area>();
     /// <summary>マップを分割してできた通路のリスト</summary>
     List<Area> _passes = new List<Area>();
-    /// <summary>部屋から延びる通路のリスト</summary>
-    List<Area> _roomPasses = new List<Area>();
     /// <summary>マップを分割した後の区域のリスト</summary>
     List<Area> _areas = new List<Area>();
 
-    /// <summary>TODO:要検証、ランダムな値を返す</summary>
-    int GetRandomValue(int min, int max) => min + Mathf.FloorToInt(Random.value * (max - min + 1));
+    void Update()
+    {
+        // マップをリロードするテスト
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        }
+    }
 
     /// <summary>幅と高さに応じたマップを生成し、文字列にして返す</summary>
     public string GenerateRandomMap(int width, int height)
@@ -74,22 +79,11 @@ public class RandomMapGenerator : MonoBehaviour
                 map[i, j] = "W";
 
         Devide();
-        GenerateRoomInArea();
-
-        foreach (Area pass in _passes)
-            for (int x = pass.Start.X; x <= pass.Goal.X; x++)
-                for (int y = pass.Start.Y; y <= pass.Goal.Y; y++)
-                    map[x, y] = "O";
-        foreach (Area roomPass in _roomPasses)
-            for (int x = roomPass.Start.X; x <= roomPass.Goal.X; x++)
-                for (int y = roomPass.Start.Y; y <= roomPass.Goal.Y; y++)
-                    map[x, y] = "O";
-        foreach (Area room in _rooms)
-            for (int x = room.Start.X; x <= room.Goal.X; x++)
-                for (int y = room.Start.Y; y <= room.Goal.Y; y++)
-                    map[x, y] = "O";
-
-        CutPass(ref map);
+        GenerateRoomAndPass();
+        ReplaceTileChar(map, _passes, "O");
+        ReplaceTileChar(map, _rooms, "O");
+        ReplaceTileChar(map, GenerateGoal(), "E");
+        CutPass(map);
         return ArrayToString(map);
     }
 
@@ -107,6 +101,15 @@ public class RandomMapGenerator : MonoBehaviour
         return str;
     }
 
+    /// <summary>リストの中身に対応する箇所を任意の文字に置き換える</summary>
+    void ReplaceTileChar(string[,] map, List<Area> list, string tile)
+    {
+        foreach (Area area in list)
+            for (int x = area.Start.X; x <= area.Goal.X; x++)
+                for (int y = area.Start.Y; y <= area.Goal.Y; y++)
+                    map[x, y] = tile;
+    }
+
     /// <summary>マップを分割する</summary>
     void Devide()
     {
@@ -114,11 +117,15 @@ public class RandomMapGenerator : MonoBehaviour
         _areas.Add(new Area(0, 0, _mapWidth - 1, _mapHeight - 1));
         // 垂直に分割するか
         bool isVert = true;
-        // 部屋数の最大数分、分割を試行する
+        // 部屋数の最大数分、分割を試行する。
         for (int i = 0; i < _roomNumMax; i++)
         {
-            DevideArea(isVert);
-            isVert = !isVert;
+            // 最初の1回は必ず分割されるがそれ以降は66％の確率で区域を分割する
+            if (i == 0 || Random.value <= 0.66f)
+            {
+                DevideArea(isVert);
+                isVert = !isVert;
+            }
         }
     }
 
@@ -131,37 +138,30 @@ public class RandomMapGenerator : MonoBehaviour
         // 区域リストの中身を分割していく
         foreach (var area in _areas)
         {
-            // 区域の数が2つ以上の場合は40％の確率で分割しない
-            if (_areas.Count > 1 && Random.value > 0.4f)
-                continue;
-            Debug.Log(area.GetWidth() + " " + area.GetHeight());
+            // 辺の長さから1辺の最小の長さの2倍を引いた長さが余幅
+            int space = (isVert ? area.GetHeight() : area.GetWidth()) - OneSideMin * 2;
+            // 区域の端から1辺の最小の長さにランダムで余幅を足した箇所で分割する
+            int devide = (isVert ? area.Start.Y : area.Start.X) + OneSideMin + Random.Range(0, space);
+
             // 垂直に分割する(部屋が上下に分かれる)場合は区域の高さが分割しても2区域に分けられれば分割する
             if (isVert && area.GetHeight() >= OneSideMin * 2 + 1)
             {
-                // 高さから1辺の最小の長さの2倍を引いた値が余裕
-                int space = area.GetHeight() - OneSideMin * 2;
-                // 分割する位置をランダムで決める
-                int devidePos = area.Start.Y + OneSideMin + GetRandomValue(1, space) - 1;
                 // 分割した境界線を通路として保存しておく
-                _passes.Add(new Area(area.Start.X, devidePos, area.Goal.X, devidePos));
+                _passes.Add(new Area(area.Start.X, devide, area.Goal.X, devide));
                 // 分割して出来た側の区域を一時的に格納しておく
-                devideds.Add(new Area(area.Start.X, devidePos + 1, area.Goal.X, area.Goal.Y));
+                devideds.Add(new Area(area.Start.X, devide + 1, area.Goal.X, area.Goal.Y));
                 // 分割した側の区域の高さを境界線の1マス上まで縮める
-                area.Goal.Y = devidePos - 1;
+                area.Goal.Y = devide - 1;
             }
             // 水平に分割する(部屋が左右に分かれる)場合は区域の幅が分割しても2区域に分けられれば分割する
             else if(!isVert && area.GetWidth() >= OneSideMin * 2 + 1)
             {
-                // 幅から1辺の最小の長さの2倍を引いた値が余裕
-                int space = area.GetWidth() - OneSideMin * 2;
-                // 分割する位置をランダムで決める
-                int devidePos = area.Start.X + OneSideMin + GetRandomValue(1, space) - 1;
                 // 分割した境界線を通路として保存しておく
-                _passes.Add(new Area(devidePos, area.Start.Y, devidePos, area.Goal.Y));
+                _passes.Add(new Area(devide, area.Start.Y, devide, area.Goal.Y));
                 // 分割して出来た側の区域を一時的に格納しておく
-                devideds.Add(new Area(devidePos + 1, area.Start.Y, area.Goal.X, area.Goal.Y));
+                devideds.Add(new Area(devide + 1, area.Start.Y, area.Goal.X, area.Goal.Y));
                 // 分割した側の区域の高さを境界線の1マス左まで縮める
-                area.Goal.X = devidePos - 1;
+                area.Goal.X = devide - 1;
             }
         }
 
@@ -170,189 +170,133 @@ public class RandomMapGenerator : MonoBehaviour
         _areas.AddRange(devideds);
     }
 
-    /// <summary>区域に部屋を生成する</summary>
-    void GenerateRoomInArea()
+    /// <summary>区域に部屋と通路を生成する</summary>
+    void GenerateRoomAndPass()
     {
-        // いる？:部屋のない区画が偏らないようにリストをシャッフルする
-        _areas.Sort((a, b) => GetRandomValue(0, 1) - 1);
+        //リストをシャッフルする
+        _areas = _areas.OrderBy(a => System.Guid.NewGuid()).ToList();
 
         foreach (var area in _areas)
         {
             // 部屋の数が最大数の半分以上の場合、30％の確率で部屋を生成しない
             if (_rooms.Count > _roomNumMax / 2 && Random.value > 0.3f)
                 continue;
-            // 部屋を生成するためのスペースを計算
-            int spaceX = area.GetWidth() - OneSideMin + 1;
-            int spaceY = area.GetHeight() - OneSideMin + 1;
-            // 部屋を生成する座標に幅を持たせる
-            int randomX = GetRandomValue(1, spaceX);
-            int randomY = GetRandomValue(1, spaceY);
-            // 座標を算出
-            int startX = area.Start.X + randomX;
-            int startY = area.Start.Y + randomY;
-            int goalX = area.Goal.X - GetRandomValue(0, spaceX - randomX) - 1;
-            int goalY = area.Goal.Y - GetRandomValue(0, spaceY - randomY) - 1;
+            // 部屋を生成可能なスペースを計算
+            // 区域の幅 - 部屋として成り立つ最小の幅
+            int widthSpace = area.GetWidth() - OneSideMin;
+            int heightSpace = area.GetHeight() - OneSideMin;
+            // 部屋を生成する基点となる座標を算出
+            // 区域の端(壁があるべき箇所)から1マス ～ 生成可能なスペース からランダム
+            int startX = area.Start.X + Random.Range(1,widthSpace);
+            int startY = area.Start.Y + Random.Range(1, heightSpace);
+            // 部屋を生成する終点となる座標を算出
+            // 区域の端(壁がある箇所)から-1マス - 余幅 からランダム  
+            int goalX = area.Goal.X - 1 - Random.Range(0, Random.Range(1,widthSpace));
+            int goalY = area.Goal.Y - 1 - Random.Range(0, Random.Range(1,heightSpace));
             // 部屋のリストへ追加
             Area room = new Area(startX, startY, goalX, goalY);
             _rooms.Add(room);
-            // 通路を作る
-            GeneratePassFromRoom(area, room);
-        }
-    }
+            // 通路を作るために4方向のリストを生成してシャッフルする
+            List<string> dirs = new List<string>() { "Right", "Left", "Up", "Down" };
+            dirs = dirs.OrderBy(d => System.Guid.NewGuid()).ToList();
+            // 通路が1本以上存在するか。通路を1本生成したらtrueになる
+            bool isExist = false;
 
-    /// <summary>部屋から通路を作る</summary>
-    void GeneratePassFromRoom(Area area, Area room)
-    {
-        // 各端っこから1マスでも離れていれば通路を伸ばす候補として追加
-        List<string> dirs = new List<string>();
-        if (area.Start.X > 0) 
-            dirs.Add("Left");
-        if (area.Goal.X < _mapWidth - 1)
-            dirs.Add("Right");
-        if (area.Start.Y > 0)
-            dirs.Add("Up");
-        if (area.Goal.Y < _mapHeight - 1)
-            dirs.Add("Down");
-        // いる？:通路の有無が偏らないよう、リストをシャッフルする
-        dirs.Sort((a, b) => GetRandomValue(0, 1) - 1);
-        // その部屋から始めに伸びる一本かどうか
-        bool isFirst = true;
-
-        foreach (var dir in dirs)
-        {
-            // 最初の1本でなければ80％の確率で通路が作られない
-            if (!isFirst && Random.value < 0.8f)
-                continue;
-            isFirst = false;
-
-            // 区域の端から部屋まで伸びる通路を作る
-            int random;
-            switch (dir)
+            foreach (var d in dirs)
             {
-                case "Left":
-                    random = room.Start.Y + GetRandomValue(1, room.GetHeight()) - 1;
-                    _roomPasses.Add(new Area(area.Start.X, random, room.Start.X - 1, random));
-                    break;
-                case "Right":
-                    random = room.Start.Y + GetRandomValue(1, room.GetHeight()) - 1;
-                    _roomPasses.Add(new Area(room.Goal.X + 1, random, area.Goal.X, random));
-                    break;
-                case "Up":
-                    random = room.Start.X + GetRandomValue(1, room.GetWidth()) - 1;
-                    _roomPasses.Add(new Area(random, area.Start.Y, random, room.Start.Y - 1));
-                    break;
-                case "Down":
-                    random = room.Start.X + GetRandomValue(1, room.GetWidth()) - 1;
-                    _roomPasses.Add(new Area(random, room.Goal.Y + 1, random, area.Goal.Y));
-                    break;
+                // 最初の1本以外の通路は66％の確率で生成しない
+                if (isExist && Random.value < 0.66f) continue;
+
+                int r;
+                switch (d)
+                {
+                    // 部屋の右側から右側の壁に向かって通路を作る
+                    case "Right" when area.Goal.X < _mapWidth - 1:
+                        r = room.Start.Y + Random.Range(0, room.GetHeight());
+                        _passes.Add(new Area(room.Goal.X + 1, r, area.Goal.X, r));
+                        isExist = true;
+                        break;
+                    // 左側の壁から部屋の左側にに向かって通路を作る
+                    case "Left" when area.Start.X > 0:
+                        r = room.Start.Y + Random.Range(0, room.GetHeight());
+                        _passes.Add(new Area(area.Start.X, r, room.Start.X - 1, r));
+                        isExist = true;
+                        break;
+                    // 上側の壁から部屋の上側に向かって通路を作る
+                    case "Up" when area.Start.Y > 0:
+                        r = room.Start.X + Random.Range(0, room.GetWidth());
+                        _passes.Add(new Area(r, area.Start.Y, r, room.Start.Y - 1));
+                        isExist = true;
+                        break;
+                    // 部屋の下側から下側の壁に向かって通路を作る
+                    case "Down" when area.Goal.Y < _mapHeight - 1:
+                        r = room.Start.X + Random.Range(0, room.GetWidth());
+                        _passes.Add(new Area(r, room.Goal.Y + 1, r, area.Goal.Y));
+                        isExist = true;
+                        break;
+                }
             }
         }
     }
 
-    /// <summary>通路を削除する</summary>
-    void CutPass(ref string[,] map)
+    /// <summary>
+    /// 通路を削除する
+    /// マップに反映させてから削除しないと、リストから1本とってきて、通路1マスに対して
+    /// 全部の通路の各マスが隣り合ってるか調べないといけなくなる(通路の本数*1本のマス数*全部の通路の各マスの数)
+    /// </summary>
+    void CutPass(string[,] map)
     {
-        // どの部屋の通路からも接続されなかった通路を削除する
-        for (int i = _passes.Count - 1; i >= 0; i--)
-        {
-            // Area型のインスタンスを通路のリストのi番目で初期化
-            Area pass = _passes[i];
-            // 通路の高さが1より大きければ縦向きの通路とみなす
-            bool isVert = pass.GetHeight() > 1;
-            // 削除の対象となるかどうか
-            bool isCut = true;
-
-            if (isVert)
-            {
-                for (int y = pass.Start.Y; y <= pass.Goal.Y; y++)
-                {
-                    // 通路の左右に他の通路があれば接続されているとみなし、削除対象にしない
-                    if (map[pass.Start.X - 1, y] == "O" || map[pass.Start.X + 1, y] == "O")
-                    {
-                        isCut = false;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                for (int x = pass.Start.X; x <= pass.Goal.X; x++)
-                {
-                    // 通路の上下に他の通路があれば接続されているとみなし、削除対象にしない
-                    if (map[x, pass.Start.Y - 1] == "O" || map[x, pass.Start.Y + 1] == "O")
-                    {
-                        isCut = false;
-                        break;
-                    }
-                }
-            }
-
-            // 削除対象となった通路を削除する
-            if (isCut)
-            {
-                _passes.Remove(pass);
-
-                // マップ上から削除
-                if (isVert)
-                    for (int y = pass.Start.Y; y <= pass.Goal.Y; y++)
-                        map[pass.Start.X, y] = "W";
-                else
-                    for (int x = pass.Start.X; x <= pass.Goal.X; x++)
-                        map[x, pass.Start.Y] = "W";
-            }
-        }
-
         // 上下を基準としてマップ端の壁まで伸びている通路を別の通路との接続点まで削除する
+        // 左右に道のマスが見つかったら繋がっているとみなしてその地点で削除をやめる
         for (int x = 0; x < _mapWidth - 1; x++)
         {
             // マップの上側を調べる
             if (map[x, 0] == "O")
-            {
                 for (int y = 0; y < _mapHeight; y++)
-                {
-                    // 左右に道のマスが見つかったら繋がっているとみなしてその地点で削除をやめる
-                    if (map[x - 1, y] == "O" || map[x + 1, y] == "O")
-                        break;
-                    map[x, y] = "W";
-                }
-            }
+                    if (Cut(x, y, isVert: true)) break;
             // マップの下側を調べる
             if (map[x, _mapHeight - 1] == "O")
-            {
                 for (int y = _mapHeight - 1; y >= 0; y--)
-                {
-                    // 左右に道のマスが見つかったら繋がっているとみなしてその地点で削除をやめる
-                    if (map[x - 1, y] == "O" || map[x + 1, y] == "O")
-                        break;
-                    map[x, y] = "W";
-                }
-            }
+                    if (Cut(x, y, isVert: true)) break;
         }
         // 左右を基準としてマップの端の壁まで伸びている通路を別の通路との接続点まで削除する
+        // 上下に道のマスが見つかったら繋がっているとみなしてその地点で削除をやめる
         for (int y = 0; y < _mapHeight - 1; y++)
         {
             // マップの左側を調べる
             if (map[0, y] == "O")
-            {
                 for (int x = 0; x < _mapWidth; x++)
-                {
-                    // 上下に道のマスが見つかったら繋がっているとみなしてその地点で削除をやめる
-                    if (map[x, y - 1] == "O" || map[x, y + 1] == "O")
-                        break;
-                    map[x, y] = "W";
-                }
-            }
+                    if (Cut(x, y, isVert: false)) break;
             // マップの右側を調べる
             if (map[_mapWidth - 1, y] == "O")
-            {
                 for (int x = _mapWidth - 1; x >= 0; x--)
-                {
-                    // 上下に道のマスが見つかったら繋がっているとみなしてその地点で削除をやめる
-                    if (map[x, y - 1] == "O" || map[x, y + 1] == "O")
-                        break;
-                    map[x, y] = "W";
-                }
-            }
+                    if (Cut(x, y, isVert: false)) break;
         }
+
+        // 指定されたマスの左右または上下を調べて
+        // 他の通路と繋がっていなければマスを壁にし、繋がっているかどうか返す
+        bool Cut(int i, int j, bool isVert)
+        {
+            (int, int) index1 = isVert ? (i - 1, j) : (i, j - 1);
+            (int, int) index2 = isVert ? (i + 1, j) : (i, j + 1);
+
+            bool isConect = false;
+            if (map[index1.Item1, index1.Item2] == "O" || map[index2.Item1, index2.Item2] == "O")
+                isConect = true;
+            else
+                map[i, j] = "W";
+            return isConect;
+        }
+    }
+
+    /// <summary>マップにゴールを設置する</summary>
+    List<Area> GenerateGoal()
+    {
+        // 生成した部屋のリストをランダムに並び替えて先頭のものを返す
+        Area goalRoom = _rooms.OrderBy(r => System.Guid.NewGuid()).FirstOrDefault();
+        // 部屋の中のランダムな位置にゴールを設定
+        int x = Random.Range(goalRoom.Start.X, goalRoom.Goal.X + 1);
+        int y = Random.Range(goalRoom.Start.Y, goalRoom.Goal.Y + 1);
+        return new List<Area>() { new Area(x, y, x, y) };
     }
 }
