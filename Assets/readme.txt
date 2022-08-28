@@ -30,6 +30,9 @@
 ★使用アセット
 	YughuesFreeGroundMaterials
 	YughuesFreeMetalMaterials
+★外部素材
+	効果音ラボ
+	Digital-Architex <= 木目調タイル
 
 	WWWWWWWWWW
 	WOOOOOOOWW
