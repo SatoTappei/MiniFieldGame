@@ -108,7 +108,7 @@ public class MapManager : MonoBehaviour
         _coin = so.Coin;
 
         // マップのもとになる文字列を生成する
-        string mapStr = GetComponent<RandomMapGenerator>().GenerateRandomMap(16, 16);
+        string mapStr = GetComponent<AreaDivisionMapGenerator>().GenerateRandomMap(16, 16);
         // 文字列からマップを生成する
         GenerateMap(mapStr);
         // コインを生成して配置する

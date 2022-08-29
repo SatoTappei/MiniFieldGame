@@ -6,7 +6,7 @@ using System.Linq;
 /// <summary>
 /// 区域分割法を用いてマップを生成する
 /// </summary>
-public class RandomMapGenerator : MonoBehaviour
+public class AreaDivisionMapGenerator : MonoBehaviour
 {
     /// <summary>部屋と通路を現すクラス</summary>
     public class Area

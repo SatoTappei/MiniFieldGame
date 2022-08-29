@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// ステージの壁となるオブジェクト
 /// </summary>
-public class WallPrefab : MonoBehaviour
+public class WallPrefabObject : MonoBehaviour
 {
     void Start()
     {
