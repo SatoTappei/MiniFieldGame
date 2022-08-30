@@ -6,7 +6,7 @@ using System.Linq;
 /// <summary>
 /// 区域分割法を用いてマップを生成する
 /// </summary>
-public class AreaDivisionMapGenerator : MonoBehaviour
+public class AreaDivisionMapGenerator : MapGeneratorBase
 {
     /// <summary>部屋と通路を現すクラス</summary>
     public class Area
@@ -56,17 +56,8 @@ public class AreaDivisionMapGenerator : MonoBehaviour
     /// <summary>マップを分割した後の区域のリスト</summary>
     List<Area> _areas = new List<Area>();
 
-    void Update()
-    {
-        // マップをリロードするテスト
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-        }
-    }
-
     /// <summary>幅と高さに応じたマップを生成し、文字列にして返す</summary>
-    public string GenerateRandomMap(int width, int height)
+    public override string GenerateRandomMap(int width, int height)
     {
         _mapWidth = width;
         _mapHeight = height;
@@ -85,20 +76,6 @@ public class AreaDivisionMapGenerator : MonoBehaviour
         ReplaceTileChar(map, GenerateGoal(), "E");
         CutPass(map);
         return ArrayToString(map);
-    }
-
-    /// <summary>二次元配列を文字列にして返す</summary>
-    string ArrayToString(string[,] array)
-    {
-        string str = "";
-        for (int i = 0; i < array.GetLength(0); i++)
-        {
-            for (int j = 0; j < array.GetLength(1); j++)
-                str += array[i, j];
-            if (i < array.GetLength(0) - 1)
-                str += '\n';
-        }
-        return str;
     }
 
     /// <summary>リストの中身に対応する箇所を任意の文字に置き換える</summary>
