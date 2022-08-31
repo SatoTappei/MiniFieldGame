@@ -24,6 +24,12 @@ public abstract class MapGeneratorBase : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// マップを自動生成して文字列にして返す
+    /// </summary>
+    /// <param name="width">フロアの幅</param>
+    /// <param name="height">フロアの高さ</param>
+    /// <returns>フロアの文字列</returns>
     public abstract string GenerateRandomMap(int width, int height);
 
     /// <summary>二次元配列を文字列にして返す</summary>

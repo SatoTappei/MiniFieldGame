@@ -20,10 +20,16 @@ public class StageDataSO : ScriptableObject
     [Header("コインの最大数"), SerializeField] int _maxCoin;
     /// <summary>ステージに生成するコイン</summary>
     [Header("生成するコイン"), SerializeField] GameObject _coin;
+    /// <summary>フロアに雲を生成するか</summary>
+    [Header("フロアに雲を生成するか"), SerializeField] bool _isCoudy;
+    /// <summary>マップを自動生成するコンポーネント</summary>
+    [Header("マップを自動生成するコンポーネント"), SerializeField] MapGeneratorBase _mapGenerator;
 
     public int TurnLimit { get => _turnLimit; }
     public int MaxEnemy { get => _maxEnemy; }
     public GameObject[] Enemies { get => _enemies; }
     public int MaxCoin { get => _maxCoin; }
     public GameObject Coin { get => _coin; }
+    public bool IsCoudy { get => _isCoudy; }
+    public MapGeneratorBase MapGenerator { get => _mapGenerator; }
 }

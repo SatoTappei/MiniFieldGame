@@ -57,8 +57,6 @@ public class MapManager : MonoBehaviour
         public ItemManager GetMapTileItem(int x, int z) => _mapArray[x, z].OnItem;
     }
 
-    /// <summary生成するマップの文字列</summary>
-    //[TextArea(10, 10), SerializeField] string _mapStr;
     /// <summary>生成するタイルのデータ</summary>
     [SerializeField] Tile[] _tileDatas;
     /// <summary>生成したタイルを登録する親オブジェクト</summary>
@@ -67,6 +65,10 @@ public class MapManager : MonoBehaviour
     [SerializeField] Transform _enemyParent;
     /// <summary>生成したコインを登録する親オブジェクト</summary>
     [SerializeField] Transform _coinParent;
+    /// <summary>タイルを隠す雲</summary>
+    [SerializeField] GameObject _cloud;
+    /// <summary>フロアに雲を生成するか</summary>
+    bool _isCloudy;
     /// <summary>フロアに生成する生成する敵</summary>
     GameObject[] _enemies;
     /// <summary>フロアに生成するコイン</summary>
@@ -81,10 +83,6 @@ public class MapManager : MonoBehaviour
     public int RemainingEnemy() => _enemyParent.childCount;
     /// <summary>ステージに残っているコインの数を返す</summary>
     public int RemainingCoin() => _coinParent.childCount;
-
-    // マップ
-    // 二次元配列にする
-    // 指定の座標のタイルを取得できるようにする
 
     void Awake()
     {
@@ -106,9 +104,10 @@ public class MapManager : MonoBehaviour
     {
         _enemies = so.Enemies;
         _coin = so.Coin;
+        _isCloudy = so.IsCoudy;
 
         // マップのもとになる文字列を生成する
-        string mapStr = GetComponent<AreaDivisionMapGenerator>().GenerateRandomMap(16, 16);
+        string mapStr = so.MapGenerator.GenerateRandomMap(16, 16);
         // 文字列からマップを生成する
         GenerateMap(mapStr);
         // コインを生成して配置する
@@ -138,6 +137,8 @@ public class MapManager : MonoBehaviour
                     var obj = Instantiate(tile.Prefab, new Vector3(i, 0, j), Quaternion.identity);
                     _currentMap._mapArray[i, j] = tile;
                     obj.transform.SetParent(_tileParent);
+                    // タイルの上に雲も生成しておく
+                    if(_isCloudy) Instantiate(_cloud, new Vector3(i, 2, j), Quaternion.identity);
                 }
                 else
                     Debug.LogWarning($"生成できませんでした。文字が登録されてないです。<{lines[i][j]}>");
