@@ -26,15 +26,31 @@ public class EnemyManager : CharacterBase
     /// <summary>このターンの敵の行動を決定する</summary>
     public void RequestAI()
     {
-        // TODO:敵のAIを作る(現在はランダムで行動を決定する)
-        int r = Random.Range(1, 3);
-        _doActionThisTurn = r == 1;
+        // プレイヤーが周囲上下左右マスにいる場合は攻撃
+        // それ以外の場合は移動を選択
+        PosXZ up = GetTargetTile(Direction.Up);
+        PosXZ down = GetTargetTile(Direction.Down);
+        PosXZ left = GetTargetTile(Direction.Left);
+        PosXZ right = GetTargetTile(Direction.Right);
+        MapManager mm = FindObjectOfType<MapManager>();
+        CharacterBase ucb = mm.CurrentMap.GetMapTileActor(up.x, up.z);
+        CharacterBase dcb = mm.CurrentMap.GetMapTileActor(down.x, down.z);
+        CharacterBase lcb = mm.CurrentMap.GetMapTileActor(left.x, left.z);
+        CharacterBase rcb = mm.CurrentMap.GetMapTileActor(right.x, right.z);
 
-        // 移動と行動のどっちをするのかをPlaySceneManagerに教える
-        if (_doActionThisTurn)
+        if (
+            ucb != null && ucb.GetCharacterType() == CharacterType.Player ||
+            dcb != null && dcb.GetCharacterType() == CharacterType.Player ||
+            lcb != null && lcb.GetCharacterType() == CharacterType.Player ||
+            rcb != null && rcb.GetCharacterType() == CharacterType.Player 
+            )
+        {
             FindObjectOfType<PlaySceneManager>().AddActionActor();
+        }
         else
+        {
             FindObjectOfType<PlaySceneManager>().AddMoveActor();
+        }    
     }
 
     /// <summary>ターンの最初に呼ばれる処理</summary>
