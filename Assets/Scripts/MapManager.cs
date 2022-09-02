@@ -37,7 +37,7 @@ public class MapManager : MonoBehaviour
     /// <summary>生成するマップのデータ</summary>
     public class Map
     {
-        /// <summary>マップを文字列の二次元配列で保持しておく</summary>
+        /// <summary>マップをタイルの二次元配列で保持しておく</summary>
         public Tile[,] _mapArray;
 
         public Map(int x, int z)
@@ -77,8 +77,12 @@ public class MapManager : MonoBehaviour
     Dictionary<char, Tile> _tileDic = new Dictionary<char, Tile>();
     /// <summary>生成したマップのデータ、マップやタイルを調べる際にはこれを参照する</summary>
     Map _currentMap;
+    /// <summary>マップの元になる文字列</summary>
+    string _mapStr;
 
     public Map CurrentMap { get => _currentMap; }
+    public string MapStr { get => _mapStr; }
+
     /// <summary>ステージに残っている敵の数を返す</summary>
     public int RemainingEnemy() => _enemyParent.childCount;
     /// <summary>ステージに残っているコインの数を返す</summary>
@@ -107,9 +111,9 @@ public class MapManager : MonoBehaviour
         _isCloudy = so.IsCoudy;
 
         // マップのもとになる文字列を生成する
-        string mapStr = so.MapGenerator.GenerateRandomMap(16, 16);
+        _mapStr = so.MapGenerator.GenerateRandomMap(16, 16);
         // 文字列からマップを生成する
-        GenerateMap(mapStr);
+        GenerateMap(_mapStr);
         // コインを生成して配置する
         GenerateCoinRandom(so.MaxCoin);
         // プレイヤーをランダムな位置に配置する
@@ -117,6 +121,16 @@ public class MapManager : MonoBehaviour
         // 敵を生成して配置する
         for (int i = 0; i < so.MaxEnemy; i++) 
             GenerateEnemyRandom();
+    }
+
+    /// <summary>マップを複製して返す</summary>
+    public string[,] GetMapCopy()
+    {
+        string[,] copy = new string[_currentMap._mapArray.GetLength(0), _currentMap._mapArray.GetLength(1)];
+        for (int i = 0; i < copy.GetLength(0); i++)
+            for (int j = 0; j < copy.GetLength(1); j++)
+                copy[i, j] = _currentMap._mapArray[i, j].Char.ToString();
+        return copy;
     }
 
     /// <summary>文字列からマップを生成する</summary>

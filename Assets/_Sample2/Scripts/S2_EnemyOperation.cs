@@ -40,9 +40,12 @@ public class S2_EnemyOperation : S2_ActorOperation
         return EAct.ActBegin;
     }
 
+    /// <summary>A*アルゴリズムを用いた行動AI</summary>
     EAct AstarActionAI(S2_ActorMovement actorMovement)
     {
+        // プレイヤーのいる方向を返す
         EDir d = GetPlayerDirection(actorMovement);
+        // 静止？
         if (d == EDir.Pause)
         {
             d = AstarMovementAI(actorMovement);
@@ -61,7 +64,7 @@ public class S2_EnemyOperation : S2_ActorOperation
         // ノードクラスのインスタンスを作成
         Node node = new Node();
         // Astarを用いて移動方向を計算して返す
-        return node.GetAstarNextDirection(actorMovement._grid, target._newGrid, GetComponentInParent<S2_Field>());
+        return node.GetAsterNextDirection(actorMovement._grid, target._newGrid, GetComponentInParent<S2_Field>());
     }
 
     /// <summary>
@@ -105,87 +108,96 @@ public class S2_EnemyOperation : S2_ActorOperation
     /// <summary>AStar用のノードの実装</summary>
     private class Node
     {
+        // 2次元上での座標
         public Pos2D grid;
+        // 方向
         public EDir direction;
+        // 実コスト
         public int actualCost = 0;
+        // 推定コスト
         public int estimatedCost = 0;
+        // 親ノード
         public Node parentNode = null;
 
         /// <summary>
-        /// Astarアルゴリズムにて算出した方向を返す
+        /// A*アルゴリズムにて算出した方向を返す
         /// </summary>
-        /// <param name="pos">現在位置</param>
-        /// <param name="target">進むべき目標の位置</param>
+        /// <param name="pos">現在の座標</param>
+        /// <param name="target">次の座標</param>
+        /// <param name="field"></param>
         /// <returns></returns>
-        public EDir GetAstarNextDirection(Pos2D pos, Pos2D target, S2_Field field)
+        public EDir GetAsterNextDirection(Pos2D pos, Pos2D target, S2_Field field)
         {
-            // xz座標軸のクラスをnewする
+            // 現在の座標
             grid = new Pos2D();
-            // それぞれの座標に現在位置を代入する
             grid.x = pos.x;
             grid.z = pos.z;
-            // ノードマップを作成、壁と床をそれぞれ1と0としたint型の配列のマップをメンバーに持つクラスを作成
+            // ノードマップ = int型の配列(二次元ではない)をメンバーに持つクラス
             S2_Array2D nodeMap = field.GetMapData();
-            // ノードマップ上の現在位置に1をセット
+            // ノードマップのこのノードの位置を壁にする
             nodeMap.Set(grid.x, grid.z, 1);
-            // 目標位置とノード型のリストと生成したノードマップを渡してAstarアルゴリズムで計算した結果を格納
+
+            // 目標の座標とノードのリストを渡して計算
             Node node = Astar(target, field, new List<Node>(), nodeMap);
-            // 親のノードがnullの場合は静止を返す
+            // 親のノードがnullつまり移動しない場合は静止を返す
             if (node.parentNode == null) return EDir.Pause;
-            // 親のノードの親のノードがnullでない間はノードに親のノードを代入する <- ここ謎
+            // 親の親のノードがnullじゃない、つまりは現在位置から2つ進んだ先までの間
+            // ノードに親のノードを代入する <- 一つ先の方向が求まる
             while (node.parentNode.parentNode != null) node = node.parentNode;
-            // ノードの方向を返す
+            // ノードの方向、つまり進むべき方向を返す
             return node.direction;
         }
 
         /// <summary>
-        /// 再帰的にAstarアルゴリズムを計算し、結果を返す
+        /// 再帰的にA*アルゴリズムを計算し、結果を返す
         /// </summary>
-        /// <param name="target">目標の位置</param>
+        /// <param name="target">次の座標</param>
         /// <param name="field"></param>
-        /// <param name="openList">オープンしたノードを格納しておくリスト</param>
-        /// <param name="nodeMap"></param>
+        /// <param name="openList">オープンにしたノードを格納しておくリスト</param>
+        /// <param name="nodeMap">ノードマップ(実際のマップをメンバーに持つクラス)</param>
         /// <returns></returns>
         Node Astar(Pos2D target, S2_Field field, List<Node> openList, S2_Array2D nodeMap)
         {
+            //4方向0,1,2,3,4の値の分だけ回す、現在の座標から4方向を調べる
             foreach (EDir d in System.Enum.GetValues(typeof(EDir)))
             {
-                // 方向が静止の場合は処理をスキップ
+                // 方向がPause = 0、つまり静止の場合は処理を飛ばす
                 if (d == EDir.Pause) continue;
-                // 方向を渡してxz座標系での移動先の座標を作成
+                // 方向の座標系を作成
                 Pos2D newGrid = DirUtil.GetNewGrid(grid, d);
-                // 目標の位置と移動先の座標が同じならメソッドが呼び出されたインスタンス自身(呼び出し元の変数node)を返す
+                // 目標とする座標がこの方向の座標と同じなら呼び出し元が返る
                 if (target.x == newGrid.x && target.z == newGrid.z) return this;
-                // 移動先の座標が壁なら処理をスキップ
+                // この方向には壁がある場合は処理を飛ばす <- 開いた箇所は壁にするので2回は計算されない
                 if (nodeMap.Get(newGrid.x, newGrid.z) > 0) continue;
-                // 新しくNodeクラスのインスタンスを生成
+                // 移動先が目標もしくは壁ではない場合、新しくノードを作成する
                 Node node = new Node();
-                // ノードのグリッドを移動先の座標に設定
+                // 座標をその方向に進んだ先の座標に設定する
                 node.grid = newGrid;
-                // 方向を設定
+                // 向きをその方向に設定する
                 node.direction = d;
-                // ノードの親を呼び出し元の変数に設定
+                // 呼び出し元のノードを親として設定する
                 node.parentNode = this;
-                // ノードの実コストを親のノードの実コスト+1に設定
+                // ノードの実コストを親の実コスト+1に設定する
                 node.actualCost = node.parentNode.actualCost + 1;
-                // ノードのグリッドに敵がいたら実コストに全体の敵キャラクターの数の2倍を足す
+                // 任意:ノードに敵がいたら、ノードの実コストにフィールドに存在する敵の数の2倍を足す
                 node.actualCost += field.GetExistActor(node.grid.x, node.grid.z) == null ? 0 : field.enemies.transform.childCount * 2;
-                // ノードの推定コストを ターゲットとのx距離 + ターゲットとのz距離 に設定
+                // ノードの推定コストを計算、目標との距離を計算する
                 node.estimatedCost = Mathf.Abs(target.x - node.grid.x) + Mathf.Abs(target.z - node.grid.z);
-                // ノードをオープンリストに追加
+                // オープンリストに追加する
                 openList.Add(node);
-                // ノードマップのノードを生成したグリッドに1を設定
+                // この方向は二度と計算されないように壁にしておく
                 nodeMap.Set(node.grid.x, node.grid.z, 1);
             }
-            // オープンリストの長さが0、移動できないなら呼び出し元を返す
+            // 開いたノードのリストが0以下、つまり移動できる場所がない場合は呼び出し元を返す
             if (openList.Count < 1) return this;
-            // オープンリストを並び替える、実コストと推定コストを足した値順に並べた後に実コスト順に並べる
-            openList = openList.OrderBy(n => (n.actualCost + n.estimatedCost)).ThenBy(n => n.actualCost).ToList();
-            // 基準ノードをオープンリストの0番とする
+            // 開いたノードのリストをスコア順にソートする
+            openList = openList.OrderBy(n => n.actualCost + n.estimatedCost).ThenBy(n => n.actualCost).ToList();
+            // 一番スコアが小さいノードが次の基準ノードになる
             Node baseNode = openList[0];
-            // オープンリストの先頭(すぐ上で基準ノードにしたもの)をオープンリストから削除する
+            // 開いたノードのリストから一番スコアが小さいノードを削除する
             openList.RemoveAt(0);
-            // 基準ノードを使って再帰的に呼び出す
+            // 再帰的に呼び出す、targetとfieldは参照するのみで弄っていない
+            // openListへの追加とnodeMapの書き換えを行った
             return baseNode.Astar(target, field, openList, nodeMap);
         }
     }

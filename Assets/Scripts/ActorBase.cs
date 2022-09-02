@@ -11,7 +11,7 @@ public abstract class ActorBase : MonoBehaviour
     [SerializeField] protected string _defeatedMessage;
 
     /// <summary>XZïΩñ è„Ç≈ÇÃç¿ïW</summary>
-    protected struct PosXZ
+    public struct PosXZ
     {
         public int x;
         public int z;

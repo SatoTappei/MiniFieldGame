@@ -87,33 +87,42 @@ public class EnemyManager : CharacterBase
         // プレイヤーが移動する場合はStandByの時点で座標が決まっているため
         // 現状は移動を開始するときに移動する座標を決めている。
         // バグがある場合は、移動する座標を決める処理を行う場所を変える
-        // 追記:現状ランダムで移動と攻撃を決めているので移動になった際に通路の行き止まりにいる＆後ろにプレイヤーがいる場合どうしようもない
-        // 対処:周り8マスにプレイヤーがいる場合は攻撃するようにするのでこのターンはその場にとどまる
-        // TODO 敵がプレイヤーを視認したら！マークを出す
-        // プレイヤーの方向に長さ(視界)のRayを飛ばす
-        // 壁にぶつかるRayにする
-        // 壁にぶつからずプレイヤーに到達したらプレイヤーを視認しているとみなす
-
+        bool canMove = false;
         MapManager mm = FindObjectOfType<MapManager>();
 
-        // TODO:現状はランダムで4方向に移動するのでアルゴリズムを使った方法に直す
-        List<(int, int)> dirs = new List<(int, int)>();
-        dirs.Add((1, 0));
-        dirs.Add((0, 1));
-        dirs.Add((-1, 0));
-        dirs.Add((0, -1));
-
-        bool canMove = false;
-        // どこにも移動できない場合はそのターンはその場にとどまる
-        while (!canMove && dirs.Count > 0)
+        // プレイヤーを発見している場合はアルゴリズムを使用して動かす
+        if (_isNotice)
         {
-            int r = Random.Range(0, dirs.Count);
-            _inputDir = GetKeyToDir(dirs[r].Item1, dirs[r].Item2);
-            // 移動しようとしているタイルが移動できるかどうかを調べる <= 変数dirsのxとzが入れ替わっているので注意
-            canMove = mm.CheckCanMoveTile(_currentPosXZ.x + dirs[r].Item2, _currentPosXZ.z + dirs[r].Item1);
-            dirs.RemoveAt(r);
+            // ----------作りかけ、消してもキャラクターが動かなくなるだけで他所に不具合はない-----------
+            // _inputDir = 移動先の座標
+            // 移動先がある場合 canMove = true
+            // 移動先がない場合 canMove = false
+            _inputDir = GetComponent<MoveAlgorithm>().GetMoveDirection();
+            // 移動先の座標を取得
+            _targetPosXZ = GetTargetTile(_inputDir);
+            canMove = mm.CheckCanMoveTile(_targetPosXZ.x, _targetPosXZ.z);
+            // ---------作りかけここまで----------
+
         }
-        // TODO:ランダムで決定ここまで
+        // プレイヤーを発見していない場合はランダムに移動する
+        else
+        {
+            List<(int, int)> dirs = new List<(int, int)>();
+            dirs.Add((1, 0));
+            dirs.Add((0, 1));
+            dirs.Add((-1, 0));
+            dirs.Add((0, -1));
+
+            // どこにも移動できない場合はそのターンはその場にとどまる
+            while (!canMove && dirs.Count > 0)
+            {
+                int r = Random.Range(0, dirs.Count);
+                _inputDir = GetKeyToDir(dirs[r].Item1, dirs[r].Item2);
+                // 移動しようとしているタイルが移動できるかどうかを調べる <= 変数dirsのxとzが入れ替わっているので注意
+                canMove = mm.CheckCanMoveTile(_currentPosXZ.x + dirs[r].Item2, _currentPosXZ.z + dirs[r].Item1);
+                dirs.RemoveAt(r);
+            }
+        }
         
         if (canMove)
         {
