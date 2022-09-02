@@ -7,11 +7,22 @@ using UnityEngine;
 /// </summary>
 public class EnemyManager : CharacterBase
 {
+    /// <summary>プレイヤーを発見時に表示されるアイコン</summary>
+    [SerializeField] GameObject _noticeIcon;
+    /// <summary>視界として飛ばすRayの長さ</summary>
+    [SerializeField] int _sightRange;
     /// <summary>このターンに攻撃をする場合はtrue、移動の場合はfalseになる</summary>
     bool _doActionThisTurn;
+    /// <summary>プレイヤーを発見しているか</summary>
+    bool _isNotice;
 
     /// <summary>PlaySceneManagerがこのぷろぱちぃを見てメソッドを呼び出す</summary>
     public bool DoActionThisTurn { get => _doActionThisTurn; }
+
+    void Awake()
+    {
+        _noticeIcon.SetActive(false);
+    }
 
     void OnEnable()
     {
@@ -26,6 +37,18 @@ public class EnemyManager : CharacterBase
     /// <summary>このターンの敵の行動を決定する</summary>
     public void RequestAI()
     {
+        // プレイヤーが視界に入っているか
+        Transform player = GameObject.FindWithTag("Player").transform;
+        Vector3 dir = (player.position - transform.position).normalized;
+        Vector3 origin = new Vector3(transform.position.x, 1, transform.position.z);
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, _sightRange))
+        {
+            Debug.DrawRay(origin, dir * _sightRange, Color.red, 5);
+            // 飛ばしたRayがプレイヤーにヒットしたらプレイヤーを発見している
+            _isNotice = hit.collider.gameObject.tag == "Player" ? true : false;
+            _noticeIcon.SetActive(_isNotice);
+        }
+
         // プレイヤーが自分の上下左右マスにいる場合は攻撃する
         // それ以外の場合は移動する
         MapManager mm = FindObjectOfType<MapManager>();
@@ -66,6 +89,10 @@ public class EnemyManager : CharacterBase
         // バグがある場合は、移動する座標を決める処理を行う場所を変える
         // 追記:現状ランダムで移動と攻撃を決めているので移動になった際に通路の行き止まりにいる＆後ろにプレイヤーがいる場合どうしようもない
         // 対処:周り8マスにプレイヤーがいる場合は攻撃するようにするのでこのターンはその場にとどまる
+        // TODO 敵がプレイヤーを視認したら！マークを出す
+        // プレイヤーの方向に長さ(視界)のRayを飛ばす
+        // 壁にぶつかるRayにする
+        // 壁にぶつからずプレイヤーに到達したらプレイヤーを視認しているとみなす
 
         MapManager mm = FindObjectOfType<MapManager>();
 
