@@ -26,31 +26,23 @@ public class EnemyManager : CharacterBase
     /// <summary>このターンの敵の行動を決定する</summary>
     public void RequestAI()
     {
-        // プレイヤーが周囲上下左右マスにいる場合は攻撃
-        // それ以外の場合は移動を選択
-        PosXZ up = GetTargetTile(Direction.Up);
-        PosXZ down = GetTargetTile(Direction.Down);
-        PosXZ left = GetTargetTile(Direction.Left);
-        PosXZ right = GetTargetTile(Direction.Right);
+        // プレイヤーが自分の上下左右マスにいる場合は攻撃する
+        // それ以外の場合は移動する
         MapManager mm = FindObjectOfType<MapManager>();
-        CharacterBase ucb = mm.CurrentMap.GetMapTileActor(up.x, up.z);
-        CharacterBase dcb = mm.CurrentMap.GetMapTileActor(down.x, down.z);
-        CharacterBase lcb = mm.CurrentMap.GetMapTileActor(left.x, left.z);
-        CharacterBase rcb = mm.CurrentMap.GetMapTileActor(right.x, right.z);
-
-        if (
-            ucb != null && ucb.GetCharacterType() == CharacterType.Player ||
-            dcb != null && dcb.GetCharacterType() == CharacterType.Player ||
-            lcb != null && lcb.GetCharacterType() == CharacterType.Player ||
-            rcb != null && rcb.GetCharacterType() == CharacterType.Player 
-            )
+        for (int i = 0; i < 4; i++)
         {
-            FindObjectOfType<PlaySceneManager>().AddActionActor();
+            // ↓Directionの値に割り当てた数字を変えるとおかしくなるので注意
+            Direction d = (Direction)(i * 90);
+            PosXZ pos = GetTargetTile(d);
+            CharacterBase cb = mm.CurrentMap.GetMapTileActor(pos.x, pos.z);
+            _doActionThisTurn = cb != null && cb.GetCharacterType() == CharacterType.Player ? true : false;
+            if (_doActionThisTurn) break;
         }
-        else
-        {
+
+        if(_doActionThisTurn)
+            FindObjectOfType<PlaySceneManager>().AddActionActor();
+        else 
             FindObjectOfType<PlaySceneManager>().AddMoveActor();
-        }    
     }
 
     /// <summary>ターンの最初に呼ばれる処理</summary>
