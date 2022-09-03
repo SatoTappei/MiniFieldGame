@@ -78,10 +78,10 @@ public class MapManager : MonoBehaviour
     /// <summary>生成したマップのデータ、マップやタイルを調べる際にはこれを参照する</summary>
     Map _currentMap;
     /// <summary>マップの元になる文字列</summary>
-    string _mapStr;
+    //string _mapStr;
 
     public Map CurrentMap { get => _currentMap; }
-    public string MapStr { get => _mapStr; }
+    //public string MapStr { get => _mapStr; }
 
     /// <summary>ステージに残っている敵の数を返す</summary>
     public int RemainingEnemy() => _enemyParent.childCount;
@@ -111,7 +111,7 @@ public class MapManager : MonoBehaviour
         _isCloudy = so.IsCoudy;
 
         // マップのもとになる文字列を生成する
-        _mapStr = so.MapGenerator.GenerateRandomMap(16, 16);
+        string _mapStr = so.MapGenerator.GenerateRandomMap(16, 16);
         // 文字列からマップを生成する
         GenerateMap(_mapStr);
         // コインを生成して配置する

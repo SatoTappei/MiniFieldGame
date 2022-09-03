@@ -20,6 +20,8 @@ public abstract class ActorBase : MonoBehaviour
     /// <summary>åªç›ÇÃXZïΩñ è„Ç≈ÇÃà íu</summary>
     protected PosXZ _currentPosXZ;
 
+    public PosXZ CurrentPosXZ { get => _currentPosXZ; }
+
     void Start()
     {
 

@@ -136,7 +136,6 @@ public class S2_EnemyOperation : S2_ActorOperation
             S2_Array2D nodeMap = field.GetMapData();
             // ノードマップのこのノードの位置を壁にする
             nodeMap.Set(grid.x, grid.z, 1);
-
             // 目標の座標とノードのリストを渡して計算
             Node node = Astar(target, field, new List<Node>(), nodeMap);
             // 親のノードがnullつまり移動しない場合は静止を返す

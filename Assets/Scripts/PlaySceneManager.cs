@@ -30,7 +30,7 @@ public class PlaySceneManager : MonoBehaviour
     TurnState _currentTurnState;
     /// <summary>プレイヤーを制御する</summary>
     PlayerManager _player;
-    /// <summary>たくさんの敵さんを制御する</summary>
+    /// <summary>たくさんの敵を制御する</summary>
     List<EnemyManager> _enemies = new List<EnemyManager>();
     /// <summary>
     /// このターン死んだキャラクターのリスト、
