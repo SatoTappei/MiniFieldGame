@@ -75,6 +75,10 @@ public class AreaDivisionMapGenerator : MapGeneratorBase
         ReplaceTileChar(map, _rooms, "O");
         ReplaceTileChar(map, GenerateGoal(), "E");
         CutPass(map);
+        // リストの中身を全部Clearする(Rキーでマップを再生成するとバグが出る)
+        _rooms.Clear();
+        _passes.Clear();
+        _areas.Clear();
         return ArrayToString(map);
     }
 
