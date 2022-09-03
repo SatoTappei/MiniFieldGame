@@ -30,7 +30,7 @@ public class DiggingMapGenerator : MapGeneratorBase
         // ŠOŽü‚ð•Ç‚É–ß‚·
         for (int i = 0; i < map.GetLength(0); i++)
             for (int j = 0; j < map.GetLength(1); j++)
-                map[i, j] = i * j == 0 || i == h - 1 || j == w - 1 ? "W" : map[i,j];
+                map[i, j] = i * j == 0 || i == h - 1 || j == w - 1 ? "W" : map[i, j];
         GenerateGoal(map);
 
         return ArrayToString(map);

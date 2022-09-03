@@ -123,7 +123,7 @@ public class MapManager : MonoBehaviour
             GenerateEnemyRandom();
     }
 
-    /// <summary>マップを複製して返す</summary>
+    /// <summary>マップをコピーして返す</summary>
     public string[,] GetMapCopy()
     {
         string[,] copy = new string[_currentMap._mapArray.GetLength(0), _currentMap._mapArray.GetLength(1)];
