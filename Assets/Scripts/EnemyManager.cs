@@ -97,9 +97,7 @@ public class EnemyManager : CharacterBase
             // _inputDir = ˆÚ“®æ‚ÌÀ•W
             // ˆÚ“®æ‚ª‚ ‚éê‡ canMove = true
             // ˆÚ“®æ‚ª‚È‚¢ê‡ canMove = false
-            PosXZ p = FindObjectOfType<PlayerManager>().CurrentPosXZ;
-            _inputDir = GetComponent<MoveAlgorithm>().GetMoveDirection(CurrentPosXZ, p);
-            Debug.Log("ˆÚ“®•ûŒü:" + _inputDir);
+            _inputDir = GetComponent<MoveAlgorithm>().GetMoveDirection();
             // ˆÚ“®æ‚ÌÀ•W‚ğæ“¾
             _targetPosXZ = GetTargetTile(_inputDir);
             canMove = mm.CheckCanMoveTile(_targetPosXZ.x, _targetPosXZ.z);
