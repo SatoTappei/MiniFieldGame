@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public abstract class CharacterBase : ActorBase
 {
-    
     /// <summary>キャラクターの種類</summary>
     public enum CharacterType
     {
@@ -15,16 +14,6 @@ public abstract class CharacterBase : ActorBase
         Enemy,
         // Obstacle,
     }
-
-    /// <summary>キャラクターの方向</summary>
-    public enum Direction
-    {
-        Neutral = 360, // 何も入力されていない状態
-        Up = 0,
-        Down = 180,
-        Right = 90,
-        Left = 270,
-    };
 
     [SerializeField] protected Animator _anim;
     /// <summary>キャラクターが次のタイルに移動するのにかかる時間</summary>
@@ -42,7 +31,7 @@ public abstract class CharacterBase : ActorBase
     /// <summary>現在のキャラクターの向き</summary>
     //Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
-    protected Direction _inputDir;
+    protected ActorDir _inputDir;
     /// <summary>移動する際の移動先の座標</summary>
     protected PosXZ _targetPosXZ;
     /// <summary>行動中かどうか</summary>
@@ -75,14 +64,14 @@ public abstract class CharacterBase : ActorBase
     }
 
     /// <summary>入力に対応したキャラクターの向きを返す</summary>
-    protected Direction GetKeyToDir(float vert, float hori)
+    protected ActorDir GetKeyToDir(float vert, float hori)
     {
-        if (vert == 1) return Direction.Up;
-        else if (vert == -1) return Direction.Down;
-        else if (hori == 1) return Direction.Right;
-        else if (hori == -1) return Direction.Left;
+        if (vert == 1) return ActorDir.Up;
+        else if (vert == -1) return ActorDir.Down;
+        else if (hori == 1) return ActorDir.Right;
+        else if (hori == -1) return ActorDir.Left;
 
-        return Direction.Neutral;
+        return ActorDir.Neutral;
     }
 
     /// <summary>指定した座標に補完しつつ移動させる</summary>
@@ -107,27 +96,27 @@ public abstract class CharacterBase : ActorBase
         FindObjectOfType<PlaySceneManager>().CheckRemMoveActor();
     }
 
-    /// <summary>現在の座標と方向から移動先の座標を取得</summary>
-    protected PosXZ GetTargetTile(Direction dir)
-    {
-        PosXZ target = _currentPosXZ;
+    ///// <summary>現在の座標と方向から移動先の座標を取得</summary>
+    //protected PosXZ GetTargetTile(ActorDir dir)
+    //{
+    //    PosXZ target = _currentPosXZ;
 
-        if (dir == Direction.Up) target.z++;
-        else if (dir == Direction.Down) target.z--;
-        else if (dir == Direction.Right) target.x++;
-        else if (dir == Direction.Left) target.x--;
+    //    if (dir == ActorDir.Up) target.z++;
+    //    else if (dir == ActorDir.Down) target.z--;
+    //    else if (dir == ActorDir.Right) target.x++;
+    //    else if (dir == ActorDir.Left) target.x--;
         
-        // 移動先が壁なら現在の位置を返す、その際はターンを進めないようにする
-        return target;
-    }
+    //    // 移動先が壁なら現在の位置を返す、その際はターンを進めないようにする
+    //    return target;
+    //}
 
     /// <summary>方向に対応したVector3型を返す</summary>
-    protected Vector3 DirectionToVec3(Direction dir)
+    protected Vector3 DirectionToVec3(ActorDir dir)
     {
-        if (dir == Direction.Up) return Vector3.forward;
-        else if (dir == Direction.Down) return Vector3.back;
-        else if (dir == Direction.Right) return Vector3.right;
-        else if (dir == Direction.Left) return Vector3.left;
+        if (dir == ActorDir.Up) return Vector3.forward;
+        else if (dir == ActorDir.Down) return Vector3.back;
+        else if (dir == ActorDir.Right) return Vector3.right;
+        else if (dir == ActorDir.Left) return Vector3.left;
 
         // どれにも該当しないならx/z方向ではなくて上向きのベクトルを返す
         return Vector3.up;
@@ -161,5 +150,5 @@ public abstract class CharacterBase : ActorBase
     public abstract void TurnEnd();
 
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
-    public abstract void Damaged(Direction attackedDir);
+    public abstract void Damaged(ActorDir attackedDir);
 }

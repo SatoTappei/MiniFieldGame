@@ -55,8 +55,8 @@ public class EnemyManager : CharacterBase
         for (int i = 0; i < 4; i++)
         {
             // ↓Directionの値に割り当てた数字を変えるとおかしくなるので注意
-            Direction d = (Direction)(i * 90);
-            PosXZ pos = GetTargetTile(d);
+            ActorDir d = (ActorDir)(i * 90);
+            PosXZ pos = ActorUtility.GetTargetTile(_currentPosXZ, d);
             CharacterBase cb = mm.CurrentMap.GetMapTileActor(pos.x, pos.z);
             _doActionThisTurn = cb != null && cb.GetCharacterType() == CharacterType.Player ? true : false;
             if (_doActionThisTurn) break;
@@ -100,7 +100,7 @@ public class EnemyManager : CharacterBase
             PosXZ p = FindObjectOfType<PlayerManager>().CurrentPosXZ;
             _inputDir = GetComponent<MoveAlgorithm>().GetMoveDirection(_currentPosXZ, p);
             // 移動先の座標を取得
-            _targetPosXZ = GetTargetTile(_inputDir);
+            _targetPosXZ = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
             canMove = mm.CheckCanMoveTile(_targetPosXZ.x, _targetPosXZ.z);
             // ---------作りかけここまで----------
 
@@ -128,7 +128,7 @@ public class EnemyManager : CharacterBase
         if (canMove)
         {
             // 移動先の座標を取得
-            _targetPosXZ = GetTargetTile(_inputDir);
+            _targetPosXZ = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
             // 現在のタイル上の座標から自身の情報を削除しておく
             mm.CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
             // 移動先の座標に自身の情報を登録しておく
@@ -166,7 +166,7 @@ public class EnemyManager : CharacterBase
         // TODO:空振りさせないために"周囲八マスにプレイヤーがいたらそっちを向いて攻撃する"ようにする
 
         // 攻撃するマスの情報を取得
-        PosXZ target = GetTargetTile(_inputDir);
+        PosXZ target = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
         CharacterBase cb = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
         if (cb != null && cb.GetCharacterType() == CharacterType.Player)
@@ -204,7 +204,7 @@ public class EnemyManager : CharacterBase
     /// このキャラクターがダメージを受けたときに呼ばれる処理
     /// </summary>
     /// <param name="attackedDir">攻撃された方向</param>
-    public override void Damaged(Direction attackedDir)
+    public override void Damaged(ActorDir attackedDir)
     {
         FindObjectOfType<ActionLogManager>().DispLog(_defeatedMessage);
         // 自身が死んだことをPlaySceneManagerに伝える

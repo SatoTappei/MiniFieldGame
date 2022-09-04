@@ -59,7 +59,7 @@ public class PlayerManager : CharacterBase
             bool canMove = mm.CheckCanMoveTile((int)(_currentPosXZ.x + hori), (int)(_currentPosXZ.z + vert));
             _inputDir = GetKeyToDir(vert, hori);
             // 移動先の座標を取得
-            _targetPosXZ = GetTargetTile(_inputDir);
+            _targetPosXZ = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
             // 移動の可能不可能に限らず入力された方向にキャラクターの向きだけを変える
             transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
 
@@ -112,7 +112,7 @@ public class PlayerManager : CharacterBase
     {
         _anim.Play("Slash");
         // 攻撃するマスの情報を取得
-        PosXZ target = GetTargetTile(_inputDir);
+        PosXZ target = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
         CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスに敵がいればダメージの処理
         ab?.Damaged(_inputDir);
@@ -145,7 +145,7 @@ public class PlayerManager : CharacterBase
     }
 
     /// <summary>このキャラクターがダメージを受けたときに呼ばれる処理</summary>
-    public override void Damaged(Direction attackedDir)
+    public override void Damaged(ActorDir attackedDir)
     {
         // 攻撃された際に既に体力が0なら何もしない
         if (_lifePoint <= 0)

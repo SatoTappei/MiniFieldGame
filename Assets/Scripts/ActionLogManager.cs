@@ -31,7 +31,7 @@ public class ActionLogManager : MonoBehaviour
         for (int i = 0; i < _parent.childCount - 1; i++)
         {
             Transform trans = _parent.GetChild(i);
-            trans.position = new Vector3(trans.position.x, trans.position.y - 30, trans.position.z);
+            trans.position = new Vector3(trans.position.x, trans.position.y - Screen.height / 18, trans.position.z);
         }
 
         // もし画面に表示されているテキストが4つ以上あれば一番古いものを消す
