@@ -91,7 +91,7 @@ public class EnemyManager : CharacterBase
         MapManager mm = FindObjectOfType<MapManager>();
 
         // プレイヤーを発見している場合はアルゴリズムを使用して動かす
-        if (_isNotice)
+        if (canMove)
         {
             // ----------作りかけ、消してもキャラクターが動かなくなるだけで他所に不具合はない-----------
             // _inputDir = 移動先の座標
