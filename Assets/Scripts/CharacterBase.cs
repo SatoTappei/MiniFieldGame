@@ -96,20 +96,6 @@ public abstract class CharacterBase : ActorBase
         FindObjectOfType<PlaySceneManager>().CheckRemMoveActor();
     }
 
-    ///// <summary>現在の座標と方向から移動先の座標を取得</summary>
-    //protected PosXZ GetTargetTile(ActorDir dir)
-    //{
-    //    PosXZ target = _currentPosXZ;
-
-    //    if (dir == ActorDir.Up) target.z++;
-    //    else if (dir == ActorDir.Down) target.z--;
-    //    else if (dir == ActorDir.Right) target.x++;
-    //    else if (dir == ActorDir.Left) target.x--;
-        
-    //    // 移動先が壁なら現在の位置を返す、その際はターンを進めないようにする
-    //    return target;
-    //}
-
     /// <summary>方向に対応したVector3型を返す</summary>
     protected Vector3 DirectionToVec3(ActorDir dir)
     {
