@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Text;
 
 /// <summary>
 /// 穴掘り法を用いてマップを生成する
@@ -29,8 +28,15 @@ public class DiggingMapGenerator : MapGeneratorBase
         DiggingPass(map, _startMasses);
         // 外周を壁に戻す
         for (int i = 0; i < map.GetLength(0); i++)
-            for (int j = 0; j < map.GetLength(1); j++)
-                map[i, j] = i * j == 0 || i == h - 1 || j == w - 1 ? "W" : map[i, j];
+        {
+            map[i, 0] = "W";
+            map[i, map.GetLength(1) - 1] = "W";
+        }
+        for (int i = 0; i < map.GetLength(1); i++)
+        {
+            map[0, i] = "W";
+            map[map.GetLength(0) - 1, i] = "W";
+        }
         GenerateGoal(map);
 
         return ArrayToString(map);
