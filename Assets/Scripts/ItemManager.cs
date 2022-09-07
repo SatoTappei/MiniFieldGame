@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// フロアに落ちているアイテムを制御する
@@ -14,7 +15,7 @@ public class ItemManager : ActorBase
 
     /// <summary>このアイテムの種類</summary>
     [SerializeField] ItemType _itemType;
-    
+
     /// <summary>このアイテムの種類を返す</summary>
     public ItemType GetItemType() => _itemType;
 
@@ -42,7 +43,7 @@ public class ItemManager : ActorBase
     }
 
     /// <summary>このアイテムを取得した際の処理</summary>
-    public void GetThisItemProc()
+    public void GetThisItem()
     {
         FindObjectOfType<ActionLogManager>().DispLog(_defeatedMessage);
         // TODO:現在はアイテムがコインだけなのでスコアを追加する処理を書いている

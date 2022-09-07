@@ -89,7 +89,7 @@ public class PlayerManager : CharacterBase
         StartCoroutine(Move(_targetPosXZ));
         // 移動先の座標にアイテムがあるか確認して、ある場合は獲得時の処理を実行
         ItemManager im = FindObjectOfType<MapManager>().CurrentMap.GetMapTileItem(_targetPosXZ.x, _targetPosXZ.z);
-        im?.GetThisItemProc();
+        im?.GetThisItem();
     }
 
     /// <summary>キャラクターが移動中に呼ばれる処理</summary>
@@ -117,13 +117,6 @@ public class PlayerManager : CharacterBase
         // 攻撃するマスに敵がいればダメージの処理
         ab?.Damaged(_inputDir);
         SoundManager._instance.Play(ab ? "SE_斬撃" : "SE_ミス");
-
-        // キャラクターの向きを保持しておく
-        // キャラクターの前のマスの情報を取得
-        // 前のマスがnullなら行動終了
-        // 攻撃アニメーション再生
-        // 敵を消す
-        // 行動終了
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>

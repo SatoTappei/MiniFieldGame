@@ -39,6 +39,8 @@ public class MapManager : MonoBehaviour
     {
         /// <summary>マップをタイルの二次元配列で保持しておく</summary>
         public Tile[,] _mapArray;
+        /// <summary>キャラやアイテムの配置に使う床のリスト</summary>
+        public List<(int, int)> _floorList = new List<(int, int)>();
 
         public Map(int x, int z)
         {
@@ -151,6 +153,7 @@ public class MapManager : MonoBehaviour
                     var obj = Instantiate(tile.Prefab, new Vector3(i, 0, j), Quaternion.identity);
                     _currentMap._mapArray[i, j] = tile;
                     obj.transform.SetParent(_tileParent);
+                    if (tile.Type == TileType.Floor) _currentMap._floorList.Add((i, j)); // テスト
                     // タイルの上に雲も生成しておく
                     if(_isCloudy) Instantiate(_cloud, new Vector3(i, 2, j), Quaternion.identity);
                 }
@@ -163,13 +166,17 @@ public class MapManager : MonoBehaviour
     /// <summary>キャラクターをマップ上のランダムなタイルに配置する</summary>
     void SetCharacterRandom(GameObject actor, TileType canMove)
     {
-        // キャラクターが移動可能なタイルのリストを作成
-        List<(int, int)> canMoveTiles = new List<(int, int)>();
+        //// キャラクターを置く床のタイルのリストを作成
+        //List<(int, int)> canMoveTiles = new List<(int, int)>();
 
-        for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
-            for (int j = 0; j < _currentMap._mapArray.GetLength(1); j++)
-                if (_currentMap._mapArray[i, j].Type == canMove && _currentMap.GetMapTileActor(i,j) == null)
-                    canMoveTiles.Add((i, j));
+        //for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
+        //    for (int j = 0; j < _currentMap._mapArray.GetLength(1); j++)
+        //        if (_currentMap._mapArray[i, j].Type == canMove && _currentMap.GetMapTileActor(i,j) == null)
+        //            canMoveTiles.Add((i, j));
+
+        // テスト:床のリストからキャラクターがいない床のリストを生成する
+        List<(int, int)> canMoveTiles = new List<(int, int)>
+            (_currentMap._floorList.Where(f=>_currentMap.GetMapTileActor(f.Item1,f.Item2) == null));
 
         // キャラクターの位置をランダムなタイルの上に設定
         int r = Random.Range(0, canMoveTiles.Count);
@@ -203,12 +210,15 @@ public class MapManager : MonoBehaviour
     void GenerateCoinRandom(int amount)
     {
         // 床のタイルのリストを作成
-        List<(int, int)> floorTiles = new List<(int, int)>();
+        //List<(int, int)> floorTiles = new List<(int, int)>();
 
-        for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
-            for (int j = 0; j < _currentMap._mapArray.GetLength(1); j++)
-                if (_currentMap._mapArray[i, j].Type == TileType.Floor)
-                    floorTiles.Add((i, j));
+        //for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
+        //    for (int j = 0; j < _currentMap._mapArray.GetLength(1); j++)
+        //        if (_currentMap._mapArray[i, j].Type == TileType.Floor)
+        //            floorTiles.Add((i, j));
+
+        // 床のタイルのリストを複製
+        List<(int, int)> floorTiles = new List<(int, int)>(_currentMap._floorList);
 
         // 指定された数だけコインを生成、床のタイルの方が少ない場合はその数だけ生成する
         for (int i = 0; i < Mathf.Min(amount, floorTiles.Count); i++)

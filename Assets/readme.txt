@@ -1,8 +1,20 @@
-﻿★優先タスク
+﻿★優先度高めタスク
 	FloorPrefabObject <- 床タイルの色をスクリプトから設定する、白色で作ってきてカラーを変えるようにする
+	敵がこっちを向いて攻撃するようにする
+	敵の種類を作る
 	フロアに障害物を配置する(移動しない敵)
 	プレイヤーを部屋の中に配置したい <= 生成時にPタイルを作ってそこに配置するなど
 	装備システム(縦、横に広く攻撃)の作成
+	GameManager:ちょっと凝ったフェードを作る
+	PlaySceneManager:スコアの計算式を作る
+	PlaySceneManager:ゲームをリトライする際のフェード
+	PlaySceneManager:タイトルにはいつでも戻れるようにする
+	ステージの幅と高さをステージデータから設定できるようにする
+
+★優先度低めタスク
+	ItemManagerの46行目のGetThisItem関数
+	MapManager、221行目、床のタイルのリストを複製しているが、乱数の方をリストにするやり方を模索する
+	不具合が出たときのために現在はコードを残している。不具合が出たらMapクラスのfloorListを消す
 
 ★用語
 	フロア…マップ全体のこと
@@ -23,9 +35,6 @@
 
 	ゲームが重い時の対処
 	URPAssetのShadow内のSoftShadowsのチェックを外す、DirectionalLightのShadowsのShadowTypeをHardShadowsにする
-
-	AStarアルゴリズム
-	Nodeクラスの実装
 
 ★使用アセット
 	YughuesFreeGroundMaterials

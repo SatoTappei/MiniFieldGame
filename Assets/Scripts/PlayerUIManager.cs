@@ -55,7 +55,6 @@ public class PlayerUIManager : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.Join(trans.DOScale(trans.localScale * 1.2f, 0.15f));
         sequence.Append(trans.DOScale(trans.localScale, 0.15f));
-        sequence.Play();
     }
 
     /// <summary>ÉâÉCÉtÇå∏è≠Ç≥ÇπÇÈ</summary>
@@ -69,6 +68,5 @@ public class PlayerUIManager : MonoBehaviour
         sequence.Join(child.DOMoveY(child.position.y - 100.0f, 1.0f).SetEase(Ease.OutBounce));
         sequence.Join(child.DOMoveX(child.position.x + 25.0f, 1.0f));
         sequence.Join(child.GetComponent<Image>().DOFade(0, 1.0f));
-        sequence.Play();
     }
 }
