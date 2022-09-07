@@ -16,7 +16,7 @@ public class EnemyManager : CharacterBase
     /// <summary>プレイヤーを発見しているか</summary>
     bool _isNotice;
 
-    /// <summary>PlaySceneManagerがこのぷろぱちぃを見てメソッドを呼び出す</summary>
+    /// <summary>PlaySceneManagerがこのプロパティを見てメソッドを呼び出す</summary>
     public bool DoActionThisTurn { get => _doActionThisTurn; }
 
     void Awake()
@@ -93,26 +93,16 @@ public class EnemyManager : CharacterBase
         // プレイヤーを発見している場合はアルゴリズムを使用して動かす
         if (_isNotice)
         {
-            // ----------作りかけ、消してもキャラクターが動かなくなるだけで他所に不具合はない-----------
-            // _inputDir = 移動先の座標
-            // 移動先がある場合 canMove = true
-            // 移動先がない場合 canMove = false
-            PosXZ p = FindObjectOfType<PlayerManager>().CurrentPosXZ;
-            _inputDir = GetComponent<MoveAlgorithm>().GetMoveDirection(_currentPosXZ, p);
+            PosXZ playerPos = FindObjectOfType<PlayerManager>().CurrentPosXZ;
+            _inputDir = GetComponent<MoveAlgorithm>().GetMoveDirection(_currentPosXZ, playerPos);
             // 移動先の座標を取得
             _targetPosXZ = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
             canMove = mm.CheckCanMoveTile(_targetPosXZ.x, _targetPosXZ.z);
-            // ---------作りかけここまで----------
-
         }
-        // プレイヤーを発見していない場合はランダムに移動する
+        // プレイヤーを発見していない場合は4方向いずれかにランダムに移動する
         else
         {
-            List<(int, int)> dirs = new List<(int, int)>();
-            dirs.Add((1, 0));
-            dirs.Add((0, 1));
-            dirs.Add((-1, 0));
-            dirs.Add((0, -1));
+            List<(int, int)> dirs = new List<(int, int)>() { (1, 0), (0, 1), (-1, 0), (0, -1) };
 
             // どこにも移動できない場合はそのターンはその場にとどまる
             while (!canMove && dirs.Count > 0)
@@ -177,8 +167,6 @@ public class EnemyManager : CharacterBase
         else
         {
             SoundManager._instance.Play("SE_ミス");
-            // プレイヤーのダメージを受けるテスト、終わったら消す
-            //FindObjectOfType<PlayerManager>()?.Damaged(_inputDir);
         }
     }
 
@@ -215,8 +203,8 @@ public class EnemyManager : CharacterBase
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
         // 死亡のアニメーションを再生(スケールを0にして見えなくする)
         _anim.Play("Dead");
-        // 被ダメージのエフェクトを生成する
-        Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
+        // 被ダメージのエフェクト、吹き出た血の表示と血だまりの生成
+        _damageEffect.SetActive(true);
         Instantiate(_decalEffect, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(90, 0, 0));
         // ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
         var Obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);

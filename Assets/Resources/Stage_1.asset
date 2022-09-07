@@ -19,4 +19,4 @@ MonoBehaviour:
   _maxCoin: 5
   _coin: {fileID: 7339753214307311976, guid: 25b6860a53b74d845ba4b48b1b4a5bf3, type: 3}
   _isCoudy: 0
-  _mapGenerator: {fileID: 3419603588839430712, guid: 664ae56bde9a4c04e9afd08fdf40af7f, type: 3}
+  _mapGenerator: {fileID: 3765794203346273539, guid: 54fa63906b6a3dd4f91b1b7b99d1d3e4, type: 3}

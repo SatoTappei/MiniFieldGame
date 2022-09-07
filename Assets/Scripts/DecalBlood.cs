@@ -17,13 +17,12 @@ public class DecalBlood : MonoBehaviour
         _dp = GetComponent<DecalProjector>();
         int r = Random.Range(0, _materials.Length);
         _dp.material = _materials[r];
-        float ScaleMag = Random.Range(0.9f, 1.1f);
-        float posMagX = Random.Range(-0.3f, 0.3f);
-        float posMagZ = Random.Range(-0.3f, 0.3f);
+        Vector3 pos = transform.position;
+        Vector3 angle = transform.eulerAngles;
         float rotY = Random.Range(0, 360);
-        transform.localScale *= ScaleMag;
-        transform.position = new Vector3(transform.position.x + posMagX, transform.position.y, transform.position.z + posMagZ);
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, rotY, transform.eulerAngles.z);
+        transform.localScale *= Random.Range(0.9f, 1.1f);
+        transform.position = new Vector3(pos.x + Random.Range(-0.3f, 0.3f), pos.y, pos.z + Random.Range(-0.3f, 0.3f));
+        transform.eulerAngles = new Vector3(angle.x, rotY, angle.z);
     }
 
     void Start()
