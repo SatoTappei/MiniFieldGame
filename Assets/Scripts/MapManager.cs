@@ -174,7 +174,7 @@ public class MapManager : MonoBehaviour
         //        if (_currentMap._mapArray[i, j].Type == canMove && _currentMap.GetMapTileActor(i,j) == null)
         //            canMoveTiles.Add((i, j));
 
-        // テスト:床のリストからキャラクターがいない床のリストを生成する
+        // 床のリストからキャラクターがいない床のリストを生成する
         List<(int, int)> canMoveTiles = new List<(int, int)>
             (_currentMap._floorList.Where(f=>_currentMap.GetMapTileActor(f.Item1,f.Item2) == null));
 
