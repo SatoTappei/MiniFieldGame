@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// 穴掘り法を用いてマップを生成する
@@ -37,7 +38,8 @@ public class DiggingMapGenerator : MapGeneratorBase
             map[0, i] = "W";
             map[map.GetLength(0) - 1, i] = "W";
         }
-        GenerateGoal(map);
+        GenerateGoal(map, "E");
+        GenerateGoal(map, "P");
 
         return ArrayToString(map);
     }
@@ -111,10 +113,10 @@ public class DiggingMapGenerator : MapGeneratorBase
     }
 
     /// <summary>部屋のランダムな箇所にゴールを設置する</summary>
-    void GenerateGoal(string[,] map)
+    void GenerateGoal(string[,] map, string Char)
     {
-        // ゴール候補のマスのリストの中から
-        foreach ((int, int) mass in _goalMasses)
+        // ゴール候補のマスのリストの中から床のマスを探す
+        foreach ((int, int) mass in _goalMasses.Where(i => map[i.Item1,i.Item2] == "O"))
         {
             // 3方向が壁になっているマスを探す
             int count = 0;
@@ -125,7 +127,7 @@ public class DiggingMapGenerator : MapGeneratorBase
 
             if (count == 3)
             {
-                map[mass.Item1, mass.Item2] = "E";
+                map[mass.Item1, mass.Item2] = Char;
                 break;
             }
         }

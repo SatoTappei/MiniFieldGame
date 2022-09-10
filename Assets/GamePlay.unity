@@ -778,6 +778,9 @@ MonoBehaviour:
   - _prefab: {fileID: 2794169106923875099, guid: 5df28154514eef44cb9a932b0928d2b1, type: 3}
     _char: 69
     _type: 0
+  - _prefab: {fileID: 1837077820683073736, guid: 94054c180b53b7e4888fc9a2a1deb3d3, type: 3}
+    _char: 80
+    _type: 0
   _tileParent: {fileID: 882564775}
   _enemyParent: {fileID: 73685321}
   _coinParent: {fileID: 1308180141}

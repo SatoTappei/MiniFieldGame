@@ -118,8 +118,9 @@ public class MapManager : MonoBehaviour
         GenerateMap(_mapStr);
         // コインを生成して配置する
         GenerateCoinRandom(so.MaxCoin);
-        // プレイヤーをランダムな位置に配置する
-        SetCharacterRandom(GameObject.FindWithTag("Player"), TileType.Floor);
+        // プレイヤーを決められた位置(P)に配置する
+        //SetCharacterRandom(GameObject.FindWithTag("Player"), TileType.Floor);
+        SetPlayerTile(GameObject.FindWithTag("Player"));
         // 敵を生成して配置する
         for (int i = 0; i < so.MaxEnemy; i++) 
             GenerateEnemyRandom();
@@ -161,6 +162,16 @@ public class MapManager : MonoBehaviour
                     Debug.LogWarning($"生成できませんでした。文字が登録されてないです。<{lines[i][j]}>");
             }
         }
+    }
+
+    /// <summary>プレイヤーを初期位置に配置する</summary>
+    void SetPlayerTile(GameObject actor)
+    {
+        (int, int) tile = _currentMap._floorList
+            .Find(t => _currentMap.GetMapTile(t.Item1, t.Item2).Char == 'P');
+
+        actor.transform.position = new Vector3(tile.Item1, 0, tile.Item2);
+        actor.GetComponent<CharacterBase>().InitPosXZ();
     }
 
     /// <summary>キャラクターをマップ上のランダムなタイルに配置する</summary>

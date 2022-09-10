@@ -73,9 +73,10 @@ public class AreaDivisionMapGenerator : MapGeneratorBase
         GenerateRoomAndPass();
         ReplaceTileChar(map, _passes, "O");
         ReplaceTileChar(map, _rooms, "O");
-        ReplaceTileChar(map, GenerateGoal(), "E");
+        ReplaceTileChar(map, GetRandomRoomMass(map), "E");
+        ReplaceTileChar(map, GetRandomRoomMass(map), "P");
         CutPass(map);
-        // リストの中身を全部Clearする(Rキーでマップを再生成するとバグが出る)
+        // リストの中身を全部Clearする(Rキーでマップを再生成するとバグる)
         _rooms.Clear();
         _passes.Clear();
         _areas.Clear();
@@ -270,14 +271,62 @@ public class AreaDivisionMapGenerator : MapGeneratorBase
         }
     }
 
-    /// <summary>マップにゴールを設置する</summary>
-    List<Area> GenerateGoal()
+    /// <summary>部屋の中の普通の床のマスをランダムで1マス取得する</summary>
+    List<Area> GetRandomRoomMass(string[,] map)
     {
-        // 生成した部屋のリストをランダムに並び替えて先頭のものを返す
-        Area goalRoom = _rooms.OrderBy(r => System.Guid.NewGuid()).FirstOrDefault();
-        // 部屋の中のランダムな位置にゴールを設定
-        int x = Random.Range(goalRoom.Start.X, goalRoom.Goal.X + 1);
-        int y = Random.Range(goalRoom.Start.Y, goalRoom.Goal.Y + 1);
-        return new List<Area>() { new Area(x, y, x, y) };
+        // 部屋のリストをランダムで並び替える
+        _rooms = _rooms.OrderBy(r => System.Guid.NewGuid()).ToList();
+        // それぞれの部屋に対して普通の床が存在するのか調べる
+        foreach (Area room in _rooms)
+        {
+            // 部屋の中のランダムなマスを最大100回調べる
+            for (int i = 0; i < 100; i++)
+            {
+                int x = Random.Range(room.Start.X, room.Goal.X);
+                int y = Random.Range(room.Start.Y, room.Goal.Y);
+                // 床のマスだったらそのマスを返す
+                if (map[x, y] == "O")
+                    return new List<Area>() { new Area(x, y, x, y) };
+            }
+        }
+
+        Debug.LogError("床のタイルを取得できませんでした。メソッドを修正する必要があります。");
+        return null;
+
+        // 重複なしで調べられるが処理が複雑
+        //foreach (Area room in _rooms)
+        //{
+        //    // 部屋の横の長さが入ったリスト
+        //    List<int> widthList = new List<int>();
+        //    for (int i = room.Start.X; i < room.Goal.X; i++)
+        //    {
+        //        widthList.Add(i);
+        //    }
+        //    // 部屋の縦の長さが入ったリスト
+        //    List<int> heightList = new List<int>();
+        //    for (int i = room.Start.Y; i < room.Goal.Y; i++)
+        //    {
+        //        heightList.Add(i);
+        //    }
+        //    // 横のリストから1つ選ぶ
+        //    int wr = Random.Range(0, widthList.Count);
+        //    // 縦のリストがなくなるまで操作
+        //    while (heightList.Count > 0)
+        //    {
+        //        // 縦のリストから初期位置を選ぶ
+        //        int hr = Random.Range(0, heightList.Count);
+        //        // 指定されたマスが普通の床かどうか調べる
+        //        if (map[widthList[wr], heightList[hr]] == "O")
+        //        {
+        //            int x = widthList[wr];
+        //            int y = heightList[hr];
+        //            return new List<Area>() { new Area(x, y, x, y) };
+        //        }
+        //        else
+        //        {
+        //            heightList.RemoveAt(hr);
+        //        }
+        //    }
+        //}
     }
 }
