@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 1837077820817820916}
   - component: {fileID: 1837077820817820917}
   - component: {fileID: 1837077820817820918}
-  - component: {fileID: 8843524233573597158}
+  - component: {fileID: 4309245973362539675}
   m_Layer: 0
   m_Name: Object
   m_TagString: Untagged
@@ -130,7 +130,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8843524233573597158
+--- !u!114 &4309245973362539675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,7 +139,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1837077820817820920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcfa2c3203f37b240985fe1ac084aa01, type: 3}
+  m_Script: {fileID: 11500000, guid: b490759e29513654191448cb639ef597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mat: {fileID: 2100000, guid: 87b0eccddd2dd3040bebc67b454ed00c, type: 2}
+  _setPrefabMethod:
+    m_PersistentCalls:
+      m_Calls: []
+  colors:
+  - serializedVersion: 2
+    rgba: 4283563951
+  - serializedVersion: 2
+    rgba: 4284215000
+  - serializedVersion: 2
+    rgba: 4283951513
+  - serializedVersion: 2
+    rgba: 4285658019

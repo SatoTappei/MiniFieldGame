@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 596771103251814902}
   - component: {fileID: 596771103251814905}
   - component: {fileID: 596771103251814904}
-  - component: {fileID: 8374464017675195274}
+  - component: {fileID: 5804398407095292355}
   m_Layer: 0
   m_Name: Object
   m_TagString: Untagged
@@ -95,7 +95,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1cbb9bdf957a98f4187d4872f8218123, type: 2}
+  - {fileID: 2100000, guid: d5e3d0f0347e54144803f2a05803cdc0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,7 +130,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 1, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8374464017675195274
+--- !u!114 &5804398407095292355
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,6 +139,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 596771103251814906}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8acfe403300abb44b8735a742026f72a, type: 3}
+  m_Script: {fileID: 11500000, guid: b490759e29513654191448cb639ef597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colors:
+  - serializedVersion: 2
+    rgba: 4283213311
+  - serializedVersion: 2
+    rgba: 4282748379
+  - serializedVersion: 2
+    rgba: 4283674623
+  _setPrefabMethod:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5804398407095292355}
+        m_TargetAssemblyTypeName: BlockTilePrefab, Assembly-CSharp
+        m_MethodName: SetRandomY
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
