@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 
 /// <summary>
@@ -16,6 +17,10 @@ public class EffectUIManager : MonoBehaviour
     [SerializeField] Transform _stageClearEffect;
     /// <summary>ゲームオーバー時の演出に使うオブジェクトの達の親</summary>
     [SerializeField] GameObject _gameOverEffect;
+    /// <summary>"次のステージへ"のボタン</summary>
+    [SerializeField] GameObject _nextStageButton;
+    /// <summary>"リトライする"のボタン</summary>
+    [SerializeField] GameObject _retryButton;
 
     void Awake()
     {
@@ -51,7 +56,7 @@ public class EffectUIManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         _gameStartEffect.GetChild(4).gameObject.SetActive(true);
         //クリックされたらパネルをアニメーションさせて閉じる
-        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
         Sequence sequence2 = DOTween.Sequence();
         sequence2.Append(_gameStartEffect.DOScale(new Vector3(1.25f, 1.25f, 1), 0.15f));
         sequence2.Append(_gameStartEffect.DOScale(Vector3.zero, 0.25f));
@@ -60,6 +65,7 @@ public class EffectUIManager : MonoBehaviour
     /// <summary>ステージクリア時の演出</summary>
     public IEnumerator StageClearEffect(int stageNum, StageDataSO so, int coin, int enemy, int turn, int score)
     {
+        EventSystem.current.SetSelectedGameObject(_nextStageButton);
         _stageClearEffect.gameObject.SetActive(true);
         // 現在のステージ番号を表示
         _stageClearEffect.GetChild(0).GetChild(1).GetComponent<Text>().text = stageNum.ToString();
@@ -94,6 +100,7 @@ public class EffectUIManager : MonoBehaviour
     public IEnumerator GameOverEffect()
     {
         // TODO:ちゃんと作る
+        EventSystem.current.SetSelectedGameObject(_retryButton);
         _gameOverEffect.SetActive(true);
         yield return null;
     }

@@ -117,7 +117,7 @@ public class PlaySceneManager : MonoBehaviour
         // ゲームスタートの演出
         yield return StartCoroutine(_effectUIManager.GameStartEffect(GameManager._instance.CurrentStageNum, so));
         // ヘルプを開けるようにする
-        _helpUIManager.ActiveHelpUI(true);
+        _helpUIManager.enabled = true;
         // 演出が終わったら諸々を初期化する
         _currentTurnState = TurnState.Init;
     }
@@ -142,6 +142,7 @@ public class PlaySceneManager : MonoBehaviour
                 break;
             // プレイヤーの入力を待つ
             case TurnState.Input:
+                if (_helpUIManager.CheckOpenHelp()) break;
                 _player.StandBy();
                 _enemies.ForEach(e => e.StandBy());
                 break;
@@ -174,7 +175,7 @@ public class PlaySceneManager : MonoBehaviour
                 else if (_onGoalTile)
                 {
                     // ヘルプを開けないようにする
-                    _helpUIManager.ActiveHelpUI(false);
+                    _helpUIManager.ForcedClosePanel();
                     // スコアを計算する
                     CalcScore();
                     // ステージクリアの演出を呼び出し、Stateを演出中に切り替える
