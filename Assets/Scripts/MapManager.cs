@@ -74,7 +74,7 @@ public class MapManager : MonoBehaviour
     /// <summary>フロアに生成する生成する敵</summary>
     GameObject[] _enemies;
     /// <summary>フロアに生成する障害物</summary>
-    GameObject[] _obstacles;
+    //GameObject[] _obstacles;
     /// <summary>フロアに生成するコイン</summary>
     GameObject _coin;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
@@ -111,7 +111,7 @@ public class MapManager : MonoBehaviour
     public void Init(StageDataSO so)
     {
         _enemies = so.Enemies;
-        _obstacles = so.Obstacles;
+        //_obstacles = so.Obstacles;
         _coin = so.Coin;
         _isCloudy = so.IsCoudy;
 
@@ -127,8 +127,8 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < so.MaxEnemy; i++)
             GenerateCharacterRandom(_enemies, _enemyParent);
         // 障害物を生成して配置する
-        for (int i = 0; i < so.MaxObst; i++)
-            GenerateCharacterRandom(_obstacles, _enemyParent);
+        //for (int i = 0; i < so.MaxObst; i++)
+        //    GenerateCharacterRandom(_obstacles, _enemyParent);
     }
 
     /// <summary>マップをコピーして返す</summary>

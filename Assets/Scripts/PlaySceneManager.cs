@@ -25,6 +25,7 @@ public class PlaySceneManager : MonoBehaviour
 {
     [SerializeField] PlayerUIManager _playerUIManager;
     [SerializeField] EffectUIManager _effectUIManager;
+    [SerializeField] HelpUIManager _helpUIManager;
     [SerializeField] MapManager _mapManager;
     /// <summary>現在のターンがどの状態かを保持しておく</summary>
     TurnState _currentTurnState;
@@ -115,6 +116,8 @@ public class PlaySceneManager : MonoBehaviour
         yield return new WaitWhile(() => GameManager._instance.IsFading);
         // ゲームスタートの演出
         yield return StartCoroutine(_effectUIManager.GameStartEffect(GameManager._instance.CurrentStageNum, so));
+        // ヘルプを開けるようにする
+        _helpUIManager.ActiveHelpUI(true);
         // 演出が終わったら諸々を初期化する
         _currentTurnState = TurnState.Init;
     }
@@ -170,6 +173,8 @@ public class PlaySceneManager : MonoBehaviour
                 // プレイヤーがゴールの上に乗っていたら
                 else if (_onGoalTile)
                 {
+                    // ヘルプを開けないようにする
+                    _helpUIManager.ActiveHelpUI(false);
                     // スコアを計算する
                     CalcScore();
                     // ステージクリアの演出を呼び出し、Stateを演出中に切り替える
