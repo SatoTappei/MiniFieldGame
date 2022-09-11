@@ -137,7 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 843061456840688380}
   - component: {fileID: 843061456840688383}
-  - component: {fileID: -5746551119098701977}
+  - component: {fileID: 7373826940327850971}
   m_Layer: 0
   m_Name: Enemy_Girl
   m_TagString: Untagged
@@ -184,7 +184,7 @@ MonoBehaviour:
   _ragDoll: {fileID: 7037610115199196517, guid: a83ffb45ed122f545b9ba7c2c13aa831, type: 3}
   _noticeIcon: {fileID: 6355071879193167639}
   _sightRange: 5
---- !u!114 &-5746551119098701977
+--- !u!114 &7373826940327850971
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 843061456840688382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3244b1e2aad2c24a95e92a9079f943b, type: 3}
+  m_Script: {fileID: 11500000, guid: 394e46d1f74d51947991866819ed308e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &890589632899426060

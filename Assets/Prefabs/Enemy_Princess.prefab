@@ -657,7 +657,7 @@ GameObject:
   m_Component:
   - component: {fileID: 843061456840688380}
   - component: {fileID: 843061456840688383}
-  - component: {fileID: -5746551119098701977}
+  - component: {fileID: 3190904917804798162}
   m_Layer: 0
   m_Name: Enemy_Princess
   m_TagString: Untagged
@@ -704,7 +704,8 @@ MonoBehaviour:
   _ragDoll: {fileID: 5851854025821250768, guid: 5dc9661efce85d64cb8fa2ba618c3ea8, type: 3}
   _noticeIcon: {fileID: 7390526212028026760}
   _sightRange: 5
---- !u!114 &-5746551119098701977
+  _actionType: 1
+--- !u!114 &3190904917804798162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -713,7 +714,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 843061456840688382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3244b1e2aad2c24a95e92a9079f943b, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e73e4007be0dc741ac55a28eb2e5467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &843061456864145010

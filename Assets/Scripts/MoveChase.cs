@@ -4,40 +4,22 @@ using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// 敵の移動アルゴリズム
+/// プレイヤーについてくる敵
 /// </summary>
-public class MoveAlgorithm : MonoBehaviour
+public class MoveChase : MoveAlgorithmBase
 {
-    /// <summary>ノード(フロアの各マス)</summary>
-    public class Node
+    void Start()
     {
-        public PosXZ _pos;
-        /// <summary>親から見た方向</summary>
-        public ActorDir _dir;
-        /// <summary>実コスト</summary>
-        public int _actual = 0;
-        /// <summary>推定コスト</summary>
-        public int _estimate = 0;
-        /// <summary>このマスを通過するときのコスト</summary>
-        public int _massCost = 1;
-        public Node _parent = null;
-
-        public Node(PosXZ pos, int massCost)
-        {
-            _pos = pos;
-            _massCost = massCost;
-        }
-        public Node(PosXZ pos, ActorDir dir, Node parent, int massCost)
-        {
-            _pos = pos;
-            _dir = dir;
-            _parent = parent;
-            _massCost = massCost;
-        }
+        
     }
 
-    /// <summary>移動方向を計算する</summary>
-    public ActorDir GetMoveDirection(PosXZ current, PosXZ target)
+    void Update()
+    {
+        
+    }
+
+    /// <summary>移動方向を返す</summary>
+    public override ActorDir GetMoveDirection(PosXZ current, PosXZ target)
     {
         // ノードマップを作成
         string[,] map = FindObjectOfType<MapManager>().GetMapCopy();

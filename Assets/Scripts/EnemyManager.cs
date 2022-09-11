@@ -7,10 +7,19 @@ using UnityEngine;
 /// </summary>
 public class EnemyManager : CharacterBase
 {
+    // 敵の行動タイプ
+    enum ActionType
+    {
+        ActionAndMove,  // 攻撃と移動を行う
+        MoveOnly,       // 移動しか行わない
+    }
+
     /// <summary>プレイヤーを発見時に表示されるアイコン</summary>
     [SerializeField] GameObject _noticeIcon;
     /// <summary>視界として飛ばすRayの長さ</summary>
     [SerializeField] int _sightRange;
+    /// <summary>敵の行動タイプ</summary>
+    [SerializeField] ActionType _actionType;
     /// <summary>このターンに攻撃をする場合はtrue、移動の場合はfalseになる</summary>
     bool _doActionThisTurn;
     /// <summary>プレイヤーを発見しているか</summary>
@@ -47,6 +56,13 @@ public class EnemyManager : CharacterBase
             // 飛ばしたRayがプレイヤーにヒットしたらプレイヤーを発見している
             _isNotice = hit.collider.gameObject.tag == "Player" ? true : false;
             _noticeIcon.SetActive(_isNotice);
+        }
+
+        // 移動しかしない敵なら必ず移動を行う
+        if (_actionType == ActionType.MoveOnly)
+        {
+            FindObjectOfType<PlaySceneManager>().AddMoveActor();
+            return;
         }
 
         // プレイヤーが自分の上下左右マスにいる場合は攻撃する
@@ -94,7 +110,7 @@ public class EnemyManager : CharacterBase
         if (_isNotice)
         {
             PosXZ playerPos = FindObjectOfType<PlayerManager>().CurrentPosXZ;
-            _inputDir = GetComponent<MoveAlgorithm>().GetMoveDirection(_currentPosXZ, playerPos);
+            _inputDir = GetComponent<MoveAlgorithmBase>().GetMoveDirection(_currentPosXZ, playerPos);
             // 移動先の座標を取得
             _targetPosXZ = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
             canMove = mm.CheckCanMoveTile(_targetPosXZ.x, _targetPosXZ.z);
