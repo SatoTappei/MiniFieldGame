@@ -73,6 +73,8 @@ public class MapManager : MonoBehaviour
     bool _isCloudy;
     /// <summary>フロアに生成する生成する敵</summary>
     GameObject[] _enemies;
+    /// <summary>フロアに生成する障害物</summary>
+    GameObject[] _obstacles;
     /// <summary>フロアに生成するコイン</summary>
     GameObject _coin;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
@@ -109,6 +111,7 @@ public class MapManager : MonoBehaviour
     public void Init(StageDataSO so)
     {
         _enemies = so.Enemies;
+        _obstacles = so.Obstacles;
         _coin = so.Coin;
         _isCloudy = so.IsCoudy;
 
@@ -119,11 +122,13 @@ public class MapManager : MonoBehaviour
         // コインを生成して配置する
         GenerateCoinRandom(so.MaxCoin);
         // プレイヤーを決められた位置(P)に配置する
-        //SetCharacterRandom(GameObject.FindWithTag("Player"), TileType.Floor);
         SetPlayerTile(GameObject.FindWithTag("Player"));
         // 敵を生成して配置する
-        for (int i = 0; i < so.MaxEnemy; i++) 
-            GenerateEnemyRandom();
+        for (int i = 0; i < so.MaxEnemy; i++)
+            GenerateCharacterRandom(_enemies, _enemyParent);
+        // 障害物を生成して配置する
+        for (int i = 0; i < so.MaxObst; i++)
+            GenerateCharacterRandom(_obstacles, _enemyParent);
     }
 
     /// <summary>マップをコピーして返す</summary>
@@ -208,12 +213,12 @@ public class MapManager : MonoBehaviour
             return true;
     }
 
-    /// <summary>ランダムな位置に敵を生成する</summary>
-    void GenerateEnemyRandom()
+    /// <summary>ランダムな位置にキャラクターを生成する</summary>
+    void GenerateCharacterRandom(GameObject[] characters, Transform parent)
     {
-        int r = Random.Range(0, _enemies.Length);
-        var obj = Instantiate(_enemies[r], Vector3.zero, Quaternion.identity);
-        obj.transform.SetParent(_enemyParent);
+        int r = Random.Range(0, characters.Length);
+        var obj = Instantiate(characters[r], Vector3.zero, Quaternion.identity);
+        obj.transform.SetParent(parent);
         SetCharacterRandom(obj, TileType.Floor);
     }
 

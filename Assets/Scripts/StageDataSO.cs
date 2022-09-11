@@ -16,6 +16,10 @@ public class StageDataSO : ScriptableObject
     [Header("敵の最大数"), SerializeField] int _maxEnemy;
     /// <summary>フロアに生成する敵</summary>
     [Header("生成する敵"), SerializeField] GameObject[] _enemies;
+    /// <summary>フロアに生成される障害物の最大数</summary>
+    //[Header("障害物の最大数"), SerializeField] int _maxObst;
+    /// <summary>フロアに生成する障害物</summary>
+    //[Header("生成する障害物"), SerializeField] GameObject[] _obstacles;
     /// <summary>フロアに生成されるコインの最大数</summary>
     [Header("コインの最大数"), SerializeField] int _maxCoin;
     /// <summary>ステージに生成するコイン</summary>
@@ -27,6 +31,8 @@ public class StageDataSO : ScriptableObject
 
     public int TurnLimit { get => _turnLimit; }
     public int MaxEnemy { get => _maxEnemy; }
+    //public GameObject[] Obstacles { get => _obstacles; }
+    //public int MaxObst { get => _maxObst; }
     public GameObject[] Enemies { get => _enemies; }
     public int MaxCoin { get => _maxCoin; }
     public GameObject Coin { get => _coin; }

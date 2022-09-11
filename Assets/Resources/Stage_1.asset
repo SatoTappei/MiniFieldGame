@@ -19,6 +19,9 @@ MonoBehaviour:
   - {fileID: 843061456840688382, guid: d1059a5b805c7e545a68966371aca08a, type: 3}
   - {fileID: 843061456840688382, guid: f6e34c71db6e803479f5cbf1d14f2adb, type: 3}
   - {fileID: 843061456840688382, guid: 1ea071931fc24bd4ba6b660b7d5055ec, type: 3}
+  _maxObst: 3
+  _obstacles:
+  - {fileID: 3405217276819327382, guid: 33cf803741abee2478e832b38e7b9a57, type: 3}
   _maxCoin: 5
   _coin: {fileID: 7339753214307311976, guid: 25b6860a53b74d845ba4b48b1b4a5bf3, type: 3}
   _isCoudy: 0

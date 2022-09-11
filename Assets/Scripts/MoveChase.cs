@@ -8,11 +8,6 @@ using System.Linq;
 /// </summary>
 public class MoveChase : MoveAlgorithmBase
 {
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         

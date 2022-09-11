@@ -12,7 +12,7 @@ public abstract class CharacterBase : ActorBase
     {
         Player,
         Enemy,
-        // Obstacle,
+        Obstacle,
     }
 
     [SerializeField] protected Animator _anim;
