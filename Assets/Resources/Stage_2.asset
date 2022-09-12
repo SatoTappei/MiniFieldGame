@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7dc5409473dc84ca162b431ea20800, type: 3}
   m_Name: Stage_2
   m_EditorClassIdentifier: 
+  _width: 16
+  _height: 16
   _turnLimit: 60
   _maxEnemy: 10
   _enemies:
