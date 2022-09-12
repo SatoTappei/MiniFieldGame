@@ -167,6 +167,8 @@ public class PlaySceneManager : MonoBehaviour
                 // プレイヤーが死んだ、もしくは時間切れなら
                 if (_isPlayerDead || _remainingTurn == 0)
                 {
+                    // ヘルプを開けないようにする
+                    _helpUIManager.ForcedClosePanel();
                     // ゲームオーバーの演出を呼び出し、Stateを演出中に切り替える
                     StartCoroutine(_effectUIManager.GameOverEffect());
                     _currentTurnState = TurnState.StandBy;
