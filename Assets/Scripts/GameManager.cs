@@ -46,20 +46,20 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // シーンが読み込まれるたびにフェードインのメソッドを呼ぶ
+            SceneManager.activeSceneChanged += FadeIn;
+
+            foreach (Transform child in _fadeBlockParent)
+            {
+                _fadeBlocks.Add(child.gameObject);
+            }
+            _fadeBlocks = _fadeBlocks.OrderBy(g => System.Guid.NewGuid()).ToList();
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
-
-        foreach (Transform child in _fadeBlockParent)
-        {
-            _fadeBlocks.Add(child.gameObject);
-        }
-        _fadeBlocks = _fadeBlocks.OrderBy(g => System.Guid.NewGuid()).ToList();
-
-        // シーンが読み込まれるたびにフェードインのメソッドを呼ぶ
-        SceneManager.activeSceneChanged += FadeIn;
     }
 
     void Start()
@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
     /// <summary>フェードインする</summary>
     public void FadeIn(Scene _, Scene __)
     {
+        Debug.Log("フェードイン中");
         StartCoroutine(Fade());
 
         IEnumerator Fade()
@@ -87,6 +88,7 @@ public class GameManager : MonoBehaviour
                 _fadeBlocks[i + 1].SetActive(false);
                 _fadeBlocks[i + 2].SetActive(false);
                 yield return new WaitForSeconds(0.01f);
+                Debug.Log("表示させていく");
             }
             _isFading = false;
         }
@@ -95,6 +97,7 @@ public class GameManager : MonoBehaviour
     /// <summary>フェードアウト後、シーンを推移する</summary>
     public void FadeOut(string sceneName)
     {
+        Debug.Log("フェードアウト中");
         _isFading = true;
         StartCoroutine(Fade());
 
@@ -107,6 +110,7 @@ public class GameManager : MonoBehaviour
                 _fadeBlocks[i + 2].SetActive(true);
                 yield return new WaitForSeconds(0.01f);
             }
+            Debug.Log("フェードアウト終了");
             SceneManager.LoadScene(sceneName);
         }
     }
