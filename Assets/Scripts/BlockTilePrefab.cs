@@ -8,7 +8,7 @@ using UnityEngine.Events;
 /// </summary>
 public class BlockTilePrefab : MonoBehaviour
 {
-    /// <summary>ランダムで別の色にするための床のマテリアル</summary>
+    /// <summary>ランダムで別の色にする</summary>
     [SerializeField] Color32[] colors;
     /// <summary>生成後に位置をずらしたり後処理をする</summary>
     [SerializeField] UnityEvent _setPrefabMethod;
