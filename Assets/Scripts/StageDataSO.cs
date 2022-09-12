@@ -8,8 +8,10 @@ using UnityEngine;
 [CreateAssetMenu]
 public class StageDataSO : ScriptableObject
 {
-    //Header("ステージの幅"), SerializeField[SerializeField] int _width;
-    //[Header("ステージ高さ"), SerializeFieldSerializeField] int _height;
+    /// <summary>生成されるステージの幅</summary>
+    [Header("ステージの幅"), SerializeField] int _width;
+    /// <summary>生成されるステージの高さ</summary>
+    [Header("ステージ高さ"), SerializeField] int _height;
     /// <summary>ゲームオーバーまでのターン制限</summary>
     [Header("制限時間"), SerializeField] int _turnLimit;
     /// <summary>フロアに生成される敵の最大数</summary>
@@ -29,6 +31,8 @@ public class StageDataSO : ScriptableObject
     /// <summary>マップを自動生成するコンポーネント</summary>
     [Header("マップを自動生成するコンポーネント"), SerializeField] MapGeneratorBase _mapGenerator;
 
+    public int Width { get => _width; }
+    public int Height { get => _height; }
     public int TurnLimit { get => _turnLimit; }
     public int MaxEnemy { get => _maxEnemy; }
     //public GameObject[] Obstacles { get => _obstacles; }

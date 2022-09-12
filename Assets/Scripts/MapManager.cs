@@ -116,7 +116,7 @@ public class MapManager : MonoBehaviour
         _isCloudy = so.IsCoudy;
 
         // マップのもとになる文字列を生成する
-        _mapStr = so.MapGenerator.GenerateRandomMap(16, 16);
+        _mapStr = so.MapGenerator.GenerateRandomMap(so.Width, so.Height);
         // 文字列からマップを生成する
         GenerateMap(_mapStr);
         // コインを生成して配置する
