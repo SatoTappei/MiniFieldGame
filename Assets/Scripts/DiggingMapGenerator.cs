@@ -38,8 +38,11 @@ public class DiggingMapGenerator : MapGeneratorBase
             map[0, i] = "W";
             map[map.GetLength(0) - 1, i] = "W";
         }
-        GenerateGoal(map, "E");
-        GenerateGoal(map, "P");
+        // 水路を設置する
+        SetWaterPath(map, width, height, 10);
+        // ここまで
+        SetSpotRandom(map, "E");
+        SetSpotRandom(map, "P");
 
         return ArrayToString(map);
     }
@@ -112,8 +115,41 @@ public class DiggingMapGenerator : MapGeneratorBase
             _startMasses.Add((x, y));
     }
 
-    /// <summary>部屋のランダムな箇所にゴールを設置する</summary>
-    void GenerateGoal(string[,] map, string Char)
+    /// <summary>
+    /// 水路を引く
+    /// </summary>
+    /// <param name="tri">試行回数(大きければ水路が増える可能性が上がる)</param>
+    void SetWaterPath(string[,] map, int width, int height,int tri)
+    {
+        for (int i = 0; i < tri; i++)
+        {
+            int wr = Random.Range(1, width / 2) * 2;
+            int hr = Random.Range(1, height / 2) * 2;
+            for (int j = 0; j < 2; j++)
+            {
+                (int, int)[] pair = { (1, 0), (-1, 0), (0, 1), (0, -1) };
+                int dr = Random.Range(0, 4);
+
+                int addX = pair[dr].Item1;
+                int addY = pair[dr].Item2;
+
+                while (wr + addX >= 1 && wr + addX < width - 1 &&
+                    hr + addY >= 1 && hr + addY < height - 1)
+                {
+                    if (map[wr + addX, hr + addY] == "O")
+                    {
+                        break;
+                    }
+                    map[wr + addX, hr + addY] = "S";
+                    addX += pair[dr].Item1;
+                    addY += pair[dr].Item2;
+                }
+            }
+        }
+    }
+
+    /// <summary>ランダムな行き止まりの位置に任意の文字を設置する</summary>
+    void SetSpotRandom(string[,] map, string Char)
     {
         // ゴール候補のマスのリストの中から床のマスを探す
         foreach ((int, int) mass in _goalMasses.Where(i => map[i.Item1,i.Item2] == "O"))

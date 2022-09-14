@@ -44,7 +44,7 @@ public class MoveChase : MoveAlgorithmBase
             // 座標から各方向に進んだ場合の座標を作成する
             PosXZ dirPos = ActorUtility.GetTargetTile(current, dir);
             // この方向に壁がある場合は進めないので処理を飛ばす
-            if (map[dirPos.x, dirPos.z] == "W") continue;
+            if (map[dirPos.x, dirPos.z] == "W" || map[dirPos.x, dirPos.z] == "S") continue;
             // この方向が壁ではない場合、新しくノードを作成する
             Node node = new Node(dirPos, dir, currentNode, 1);
             // ノードの実コストと推定コストを設定する
