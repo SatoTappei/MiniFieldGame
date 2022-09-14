@@ -269,6 +269,7 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>次のステージに進む</summary>
     public void MoveNextStage()
     {
+        SoundManager._instance.Play("SE_決定");
         // もし最後のステージならリザルトに飛ぶ
         string scene = GameManager._instance.CheckAllClear() ? "Result" : "GamePlay";
         // ステージ番号を一つ進める
@@ -279,6 +280,7 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>ゲームをリトライする</summary>
     public void RetryGamePlay()
     {
+        SoundManager._instance.Play("SE_決定");
         GameManager._instance.FadeOut("GamePlay");
         // フェードさせる
     }
@@ -286,6 +288,7 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>タイトルに戻る</summary>
     public void MoveTitle()
     {
+        SoundManager._instance.Play("SE_決定");
         GameManager._instance.FadeOut("Title");
         // タイトルにはいつでも戻れるようにする、ミスったらすぐやり直せるように
     }

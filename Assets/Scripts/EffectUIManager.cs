@@ -52,11 +52,12 @@ public class EffectUIManager : MonoBehaviour
         sequence1.Join(_gameStartEffect.DOScale(new Vector3(1, 0.01f, 1), 0.5f));
         sequence1.Append(_gameStartEffect.DOScale(Vector3.one, 0.15f));
         sequence1.Append(_gameStartEffect.DOShakeScale(0.15f, 0.25f));
-        //// アニメーションが始まって1秒後に"左クリックをしてね"のボタンを表示
+        //// アニメーションが始まって1秒後に"スペースキーを押してね"のボタンを表示
         yield return new WaitForSeconds(1.0f);
         _gameStartEffect.GetChild(4).gameObject.SetActive(true);
         //クリックされたらパネルをアニメーションさせて閉じる
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        SoundManager._instance.Play("SE_決定");
         Sequence sequence2 = DOTween.Sequence();
         sequence2.Append(_gameStartEffect.DOScale(new Vector3(1.25f, 1.25f, 1), 0.15f));
         sequence2.Append(_gameStartEffect.DOScale(Vector3.zero, 0.25f));

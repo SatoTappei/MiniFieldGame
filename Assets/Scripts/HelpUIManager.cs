@@ -47,6 +47,7 @@ public class HelpUIManager : MonoBehaviour
     /// <summary>ƒwƒ‹ƒv‚ðŠJ‚­</summary>
     public void OpenPanel()
     {
+        SoundManager._instance.Play("SE_Œˆ’è");
         EventSystem.current.SetSelectedGameObject(_closeButton);
         _isHelpping = true;
         _background.SetActive(true);
@@ -60,6 +61,7 @@ public class HelpUIManager : MonoBehaviour
     /// <summary>ƒwƒ‹ƒv‚ð•Â‚¶‚é</summary>
     public void ClosePanel()
     {
+        SoundManager._instance.Play("SE_Œˆ’è");
         _closeButton.GetComponent<Button>().interactable = false;
         Sequence sequence = DOTween.Sequence();
         sequence.Join(_frame.DOScale(new Vector3(1.25f, 1.25f, 1), 0.15f));

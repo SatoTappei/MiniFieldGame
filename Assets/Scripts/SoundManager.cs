@@ -41,7 +41,7 @@ public class SoundManager : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
 
         // •¶Žš—ñ‚ÅSoundData‚ðŽw’è‚Å‚«‚é‚æ‚¤‚É‚·‚é

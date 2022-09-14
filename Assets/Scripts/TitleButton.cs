@@ -38,6 +38,7 @@ public class TitleButton : MonoBehaviour
     /// <summary>ボタンがクリックされたときに呼ばれる</summary>
     public void PushButton()
     {
+        SoundManager._instance.Play("SE_タイトルボタン");
         Sequence sequence = DOTween.Sequence();
         sequence.Append(_cg.DOFade(0, 0.33f).SetEase(Ease.Flash, 5));
         sequence.AppendCallback(() => _clickEvent.Invoke());
