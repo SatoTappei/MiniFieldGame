@@ -170,7 +170,11 @@ public class PlaySceneManager : MonoBehaviour
                     // ヘルプを開けないようにする
                     _helpUIManager.ForcedClosePanel();
                     // ゲームオーバーの演出を呼び出し、Stateを演出中に切り替える
-                    StartCoroutine(_effectUIManager.GameOverEffect());
+                    //StartCoroutine(_effectUIManager.GameOverEffect());
+                    if (_isPlayerDead)
+                        StartCoroutine(_effectUIManager.GameOverEffect());
+                    else if(_remainingTurn == 0)
+                        StartCoroutine(_effectUIManager.TimeOverEffect());
                     _currentTurnState = TurnState.StandBy;
                 }
                 // プレイヤーがゴールの上に乗っていたら

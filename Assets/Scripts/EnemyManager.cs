@@ -217,14 +217,16 @@ public class EnemyManager : CharacterBase
         psm.AddDeadCharacter(gameObject);
         // タイル上の情報を削除する
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
-        // 死亡のアニメーションを再生(スケールを0にして見えなくする)
-        _anim.Play("Dead");
-        // 被ダメージのエフェクト、吹き出た血の表示と血だまりの生成
-        _damageEffect.SetActive(true);
-        Instantiate(_decalEffect, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(90, 0, 0));
-        // ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
-        var Obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
-        Vector3 vec = DirectionToVec3(attackedDir);
-        Obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
+        // 死亡の演出を行う
+        Death(attackedDir);
+        //// 死亡のアニメーションを再生(スケールを0にして見えなくする)
+        //_anim.Play("Dead");
+        //// 被ダメージのエフェクト、吹き出た血の表示と血だまりの生成
+        //_damageEffect.SetActive(true);
+        //Instantiate(_decalEffect, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(90, 0, 0));
+        //// ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
+        //var Obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
+        //Vector3 vec = DirectionToVec3(attackedDir);
+        //Obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
     }
 }

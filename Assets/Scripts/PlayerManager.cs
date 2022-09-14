@@ -162,12 +162,14 @@ public class PlayerManager : CharacterBase
             PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
             psm.PlayerIsDead();
             psm.AddDeadCharacter(gameObject);
-            // 死亡のアニメーションを再生
-            _anim.Play("Dead");
-            // ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
-            var obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
-            Vector3 vec = DirectionToVec3(attackedDir);
-            obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
+            // 死亡の演出を行う
+            Death(attackedDir);
+            //// 死亡のアニメーションを再生
+            //_anim.Play("Dead");
+            //// ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
+            //var obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
+            //Vector3 vec = DirectionToVec3(attackedDir);
+            //obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
         }
         else
         {

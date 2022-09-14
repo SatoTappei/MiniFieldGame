@@ -41,6 +41,7 @@ public class ActionLogManager : MonoBehaviour
             child.GetComponentInChildren<Animator>().Play("FadeOut");
             // e‚Ì0”Ô–Ú‚Ìq‚ğÁ‚·‚©‚çÁ‚·‘ÎÛ‚Ì‚à‚Ì‚Íe‚ğ•Ê‚Ì‚à‚Ì‚É‚µ‚Ä‚¨‚­
             child.transform.SetParent(transform);
+            child.transform.GetChild(1).gameObject.SetActive(false);
             Destroy(child, 2.0f);
         }
     }

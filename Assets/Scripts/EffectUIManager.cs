@@ -101,8 +101,20 @@ public class EffectUIManager : MonoBehaviour
     public IEnumerator GameOverEffect()
     {
         // TODO:ちゃんと作る
+        SoundManager._instance.Play("SE_チーン");
         EventSystem.current.SetSelectedGameObject(_retryButton);
         _gameOverEffect.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        SoundManager._instance.Play("SE_がめおべら文字演出");
+        _gameOverEffect.transform.GetChild(0).transform.DORotate(new Vector3(0, 0, -8.5f), 0.05f);
+
         yield return null;
+    }
+
+    /// <summary>時間切れでゲームオーバーになった際の演出</summary>
+    public IEnumerator TimeOverEffect()
+    {
+        FindObjectOfType<PlayerManager>().Death(ActorDir.Neutral);
+        yield return StartCoroutine(GameOverEffect());
     }
 }
