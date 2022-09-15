@@ -7,9 +7,6 @@ using UnityEngine;
 /// </summary>
 public abstract class MapGeneratorBase : MonoBehaviour
 {
-    /// <summary>デバッグ用にRキーでシーンの再読み込みをさせるかどうか</summary>
-    [SerializeField] bool isDebug;
-
     void Start()
     {
         
@@ -17,11 +14,7 @@ public abstract class MapGeneratorBase : MonoBehaviour
 
     void Update()
     {
-        // マップをリロードするテスト
-        if (Input.GetKeyDown(KeyCode.R) && isDebug)
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-        }
+
     }
 
     /// <summary>
@@ -43,6 +36,7 @@ public abstract class MapGeneratorBase : MonoBehaviour
             if (i < array.GetLength(0) - 1)
                 str += '\n';
         }
+        Debug.Log(str); // デバッグ用に残しておく
         return str;
     }
 }

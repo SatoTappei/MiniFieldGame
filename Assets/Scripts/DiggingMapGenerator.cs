@@ -40,7 +40,7 @@ public class DiggingMapGenerator : MapGeneratorBase
         }
         // 水路を設置する
         SetWaterPath(map, width, height, 10);
-        // ここまで
+        // ゴールとスタートを設置する
         SetSpotRandom(map, "E");
         SetSpotRandom(map, "P");
 
@@ -156,10 +156,14 @@ public class DiggingMapGenerator : MapGeneratorBase
         {
             // 3方向が壁になっているマスを探す
             int count = 0;
-            if (map[mass.Item1 - 1, mass.Item2] == "W") count++;
-            if (map[mass.Item1 + 1, mass.Item2] == "W") count++;
-            if (map[mass.Item1, mass.Item2 - 1] == "W") count++;
-            if (map[mass.Item1, mass.Item2 + 1] == "W") count++;
+            if (map[mass.Item1 - 1, mass.Item2] == "W" ||
+                map[mass.Item1 - 1, mass.Item2] == "S") count++;
+            if (map[mass.Item1 + 1, mass.Item2] == "W" ||
+                map[mass.Item1 + 1, mass.Item2] == "S") count++;
+            if (map[mass.Item1, mass.Item2 - 1] == "W" ||
+                map[mass.Item1, mass.Item2 - 1] == "S") count++;
+            if (map[mass.Item1, mass.Item2 + 1] == "W" ||
+                map[mass.Item1, mass.Item2 + 1] == "S") count++;
 
             if (count == 3)
             {

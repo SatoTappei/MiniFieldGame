@@ -69,6 +69,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] Transform _coinParent;
     /// <summary>タイルを隠す雲</summary>
     [SerializeField] GameObject _cloud;
+    /// <summary>デバッグ用にRキーでシーンの再読み込みをさせるかどうか</summary>
+    [SerializeField] bool isDebug;
     /// <summary>フロアに雲を生成するか</summary>
     bool _isCloudy;
     /// <summary>フロアに生成する生成する敵</summary>
@@ -104,7 +106,11 @@ public class MapManager : MonoBehaviour
 
     void Update()
     {
-        
+        // マップをリロードするテスト
+        if (Input.GetKeyDown(KeyCode.R) && isDebug)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        }
     }
 
     /// <summary>ステージの初期化、開始時にPlayerSceneManagerから呼ばれる</summary>
