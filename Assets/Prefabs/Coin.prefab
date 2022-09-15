@@ -143,3 +143,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defeatedMessage: "\u7565\u596A\u884C\u70BA\u624B\u5F53\u3001\u30B9\u30B3\u30A2+100"
   _itemType: 0
+  _getParticle: {fileID: 4877669948531426439, guid: 3b18ba0864a01624aad5cdebc741475f, type: 3}

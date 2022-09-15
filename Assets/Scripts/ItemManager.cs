@@ -15,6 +15,8 @@ public class ItemManager : ActorBase
 
     /// <summary>このアイテムの種類</summary>
     [SerializeField] ItemType _itemType;
+    /// <summary>任意:このアイテムを獲得したときに出る演出</summary>
+    [SerializeField] GameObject _getParticle;
 
     /// <summary>このアイテムの種類を返す</summary>
     public ItemType GetItemType() => _itemType;
@@ -50,6 +52,7 @@ public class ItemManager : ActorBase
         FindObjectOfType<PlaySceneManager>().AddScore(100);
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileItem(_currentPosXZ.x, _currentPosXZ.z, null);
         SoundManager._instance.Play("SE_コイン");
+        Instantiate(_getParticle, transform.position, Quaternion.identity);
         Destroy(gameObject);
         Debug.Log("コインを獲得");
     }

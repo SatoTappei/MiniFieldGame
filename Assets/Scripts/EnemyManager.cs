@@ -226,6 +226,7 @@ public class EnemyManager : CharacterBase
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileCharacter(_currentPosXZ.x, _currentPosXZ.z, null);
         // 死亡の演出を行う
         Death(attackedDir);
+        _noticeIcon.SetActive(false);
         //// 死亡のアニメーションを再生(スケールを0にして見えなくする)
         //_anim.Play("Dead");
         //// 被ダメージのエフェクト、吹き出た血の表示と血だまりの生成

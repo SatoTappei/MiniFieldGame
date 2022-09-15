@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 1837077820817820917}
   - component: {fileID: 1837077820817820918}
   - component: {fileID: 4309245973362539675}
+  - component: {fileID: 8834557801244053679}
   m_Layer: 0
   m_Name: Object
   m_TagString: Untagged
@@ -142,9 +143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b490759e29513654191448cb639ef597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _setPrefabMethod:
-    m_PersistentCalls:
-      m_Calls: []
   colors:
   - serializedVersion: 2
     rgba: 4283563951
@@ -154,3 +152,19 @@ MonoBehaviour:
     rgba: 4283951513
   - serializedVersion: 2
     rgba: 4285658019
+  _setPrefabMethod:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &8834557801244053679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837077820817820920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70cc236d38800b745ab16eeaedb3115b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bloodDecal: {fileID: 6910050840410955261, guid: ab81af4fd1b3b214a82d5d125202d0a0, type: 3}
