@@ -35,4 +35,20 @@ public class TitleManager : MonoBehaviour
         
         GameManager._instance.FadeOut("GamePlay");
     }
+
+    /// <summary>ゲーム終了の処理</summary>
+    public void ExitGame()
+    {
+        // 先にDoTweenのコンポーネントが破棄されるとエラーが出るので
+        // DotWeenを使用したオブジェクトをすべて破棄する
+        Destroy(GameObject.Find("BackgroundObjects"));
+        Destroy(GameObject.Find("Canvas"));
+
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_STANDALONE
+        Application.Quit();
+#endif
+    }
 }

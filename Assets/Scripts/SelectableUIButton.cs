@@ -7,7 +7,7 @@ using DG.Tweening;
 /// <summary>
 /// 同じメニューにボタンが2つ以上ある場合に選択された＆選択が外れたの処理をする
 /// </summary>
-public class PlaySceneUIButton : MonoBehaviour
+public class SelectableUIButton : MonoBehaviour
 {
     Image _img;
     /// <summary>ボタンが選ばれているときの色</summary>
@@ -15,7 +15,7 @@ public class PlaySceneUIButton : MonoBehaviour
     /// <summary>ボタンのデフォルトの色</summary>
     Color32 _defaultColor;
 
-    void Awake()
+    protected virtual void Awake()
     {
         _img = GetComponent<Image>();
         _defaultColor = _img.color;

@@ -1,26 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using DG.Tweening;
 
 /// <summary>
 /// タイトルのボタンを制御する
 /// </summary>
-public class TitleButton : MonoBehaviour
+public class TitleSceneMainButton : SelectableUIButton
 {
-    CanvasGroup _cg;
+    Image _img;
     /// <summary>タイトルボタンをクリックしたときに呼ばれるイベント</summary>
     [SerializeField] UnityEvent _clickEvent;
 
-    void Awake()
+    protected override void Awake()
     {
-        _cg = GetComponent<CanvasGroup>();
+        base.Awake();
+        _img = GetComponent<Image>();
     }
 
     void Start()
     {
-        Idle();
+        //Idle();
     }
 
     void Update()
@@ -32,7 +34,7 @@ public class TitleButton : MonoBehaviour
     public void Idle()
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(_cg.DOFade(0.5f, 2.0f).SetDelay(0.5f)).SetLoops(-1, LoopType.Yoyo);
+        sequence.Append(_img.DOFade(0.5f, 2.0f).SetDelay(0.5f)).SetLoops(-1, LoopType.Yoyo);
     }
 
     /// <summary>ボタンがクリックされたときに呼ばれる</summary>
@@ -40,7 +42,7 @@ public class TitleButton : MonoBehaviour
     {
         SoundManager._instance.Play("SE_タイトルボタン");
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(_cg.DOFade(0, 0.33f).SetEase(Ease.Flash, 5));
+        sequence.Append(_img.DOFade(0, 0.33f).SetEase(Ease.Flash, 5));
         sequence.AppendCallback(() => _clickEvent.Invoke());
     }
 }
