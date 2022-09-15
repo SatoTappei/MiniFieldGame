@@ -36,7 +36,7 @@ public abstract class MapGeneratorBase : MonoBehaviour
             if (i < array.GetLength(0) - 1)
                 str += '\n';
         }
-        Debug.Log(str); // デバッグ用に残しておく
+        //Debug.Log(str); // デバッグ用に残しておく
         return str;
     }
 }

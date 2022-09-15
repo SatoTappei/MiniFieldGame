@@ -20,6 +20,8 @@ public class EnemyManager : CharacterBase
     [SerializeField] int _sightRange;
     /// <summary>敵の行動タイプ</summary>
     [SerializeField] ActionType _actionType;
+    /// <summary>攻撃する相手がいる座標</summary>
+    PosXZ _attackTargetPos;
     /// <summary>このターンに攻撃をする場合はtrue、移動の場合はfalseになる</summary>
     bool _doActionThisTurn;
     /// <summary>プレイヤーを発見しているか</summary>
@@ -71,11 +73,17 @@ public class EnemyManager : CharacterBase
         for (int i = 0; i < 4; i++)
         {
             // ↓Directionの値に割り当てた数字を変えるとおかしくなるので注意
-            ActorDir d = (ActorDir)(i * 90);
-            PosXZ pos = ActorUtility.GetTargetTile(_currentPosXZ, d);
+            ActorDir checkDir = (ActorDir)(i * 90);
+            PosXZ pos = ActorUtility.GetTargetTile(_currentPosXZ, checkDir);
             CharacterBase cb = mm.CurrentMap.GetMapTileActor(pos.x, pos.z);
             _doActionThisTurn = cb != null && cb.GetCharacterType() == CharacterType.Player ? true : false;
-            if (_doActionThisTurn) break;
+            // 攻撃する場合は敵の方を向くように向きと攻撃するタイルを保持しておく
+            if (_doActionThisTurn)
+            {
+                _inputDir = checkDir;
+                _attackTargetPos = pos;
+                break;
+            }
         }
 
         if(_doActionThisTurn)
@@ -168,11 +176,10 @@ public class EnemyManager : CharacterBase
     {
         _anim.Play("Slash");
 
-        // 現在は攻撃する際にプレイヤーがいるかどうか判定しているので空振りが起こる
-        // TODO:空振りさせないために"周囲八マスにプレイヤーがいたらそっちを向いて攻撃する"ようにする
+        // ターゲットの方向を向いて攻撃する
+        PosXZ target = _attackTargetPos;
+        transform.rotation = Quaternion.Euler(0, (float)_inputDir, 0);
 
-        // 攻撃するマスの情報を取得
-        PosXZ target = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
         CharacterBase cb = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスにプレイヤーがいればダメージの処理
         if (cb != null && cb.GetCharacterType() == CharacterType.Player)
