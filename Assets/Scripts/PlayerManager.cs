@@ -15,6 +15,12 @@ public class PlayerManager : CharacterBase
     /// </summary>
     int _lifePoint = 3;
 
+    /// <summary>アイテムを獲得して2マス先に攻撃できる状態か</summary>
+    bool _powerUp;
+
+    /// <summary>パワーアップ状態になる</summary>
+    public void SetPowerUp() => _powerUp = true;
+
     void OnEnable()
     {
         // PlaySceneManagerのStateで制御するために自身を登録しておく
@@ -111,12 +117,21 @@ public class PlayerManager : CharacterBase
     public override void ActionStart()
     {
         _anim.Play("Slash");
+        MapManager mm = FindObjectOfType<MapManager>();
         // 攻撃するマスの情報を取得
         PosXZ target = ActorUtility.GetTargetTile(_currentPosXZ, _inputDir);
-        CharacterBase ab = FindObjectOfType<MapManager>().CurrentMap.GetMapTileActor(target.x, target.z);
+        CharacterBase cb = mm.CurrentMap.GetMapTileActor(target.x, target.z);
         // 攻撃するマスに敵がいればダメージの処理
-        ab?.Damaged(_inputDir);
-        SoundManager._instance.Play(ab ? "SE_斬撃" : "SE_ミス");
+        cb?.Damaged(_inputDir);
+        // パワーアップ状態ならもう1マス先の敵にも攻撃する
+        CharacterBase bcb = null;
+        if (_powerUp)
+        {
+            PosXZ backTarget = ActorUtility.GetTargetTile(target, _inputDir);
+            bcb = mm.CurrentMap.GetMapTileActor(backTarget.x, backTarget.z);
+            bcb?.Damaged(_inputDir);
+        }
+        SoundManager._instance.Play(cb || bcb ? "SE_斬撃" : "SE_ミス");
     }
 
     /// <summary>キャラクターが行動中に呼ばれる処理</summary>

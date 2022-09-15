@@ -18,7 +18,11 @@ MonoBehaviour:
   _maxEnemy: 15
   _enemies:
   - {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
+  _maxItem: 1
+  _items:
+  - {fileID: 8636436348122328418, guid: 1a372b6d2c5057f4ebfcc6d7ea197484, type: 3}
   _maxCoin: 15
-  _coin: {fileID: 7339753214307311976, guid: 25b6860a53b74d845ba4b48b1b4a5bf3, type: 3}
+  _coins:
+  - {fileID: 7339753214307311976, guid: 25b6860a53b74d845ba4b48b1b4a5bf3, type: 3}
   _isCoudy: 1
   _mapGenerator: {fileID: 3765794203346273539, guid: 54fa63906b6a3dd4f91b1b7b99d1d3e4, type: 3}

@@ -11,6 +11,7 @@ public class ItemManager : ActorBase
     public enum ItemType
     {
         Coin,
+        PowerUp,
     }
 
     /// <summary>このアイテムの種類</summary>
@@ -19,7 +20,7 @@ public class ItemManager : ActorBase
     [SerializeField] GameObject _getParticle;
 
     /// <summary>このアイテムの種類を返す</summary>
-    public ItemType GetItemType() => _itemType;
+    //public ItemType GetItemType() => _itemType;
 
     void Start()
     {
@@ -47,13 +48,21 @@ public class ItemManager : ActorBase
     /// <summary>このアイテムを取得した際の処理</summary>
     public void GetThisItem()
     {
+        // TODO:アイテムの種類が増えてきたらif文じゃ見栄えが良くないので直す
         FindObjectOfType<ActionLogManager>().DispLog(_defeatedMessage);
-        // TODO:現在はアイテムがコインだけなのでスコアを追加する処理を書いている
-        FindObjectOfType<PlaySceneManager>().AddScore(100);
+        if (_itemType == ItemType.Coin)
+        {
+            FindObjectOfType<PlaySceneManager>().AddScore(100);
+            SoundManager._instance.Play("SE_コイン");
+        }
+        if (_itemType == ItemType.PowerUp)
+        {
+            FindObjectOfType<PlayerManager>().SetPowerUp();
+            SoundManager._instance.Play("SE_パワーアップ");
+        }
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileItem(_currentPosXZ.x, _currentPosXZ.z, null);
         SoundManager._instance.Play("SE_コイン");
         Instantiate(_getParticle, transform.position, Quaternion.identity);
         Destroy(gameObject);
-        Debug.Log("コインを獲得");
     }
 }
