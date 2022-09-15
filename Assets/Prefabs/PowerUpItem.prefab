@@ -175,4 +175,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defeatedMessage: "\u30D1\u30EF\u30FC\u30A2\u30C3\u30D7\uFF012\u30DE\u30B9\u5148\u307E\u3067\u653B\u6483\u3067\u304D\u308B\u305E\uFF01"
   _itemType: 1
+  _icon: {fileID: 21300000, guid: 9884c8d90600ed14889e71949b23f0a8, type: 3}
   _getParticle: {fileID: 1060181521669433928, guid: 30b1f339319717b46a9a0e3a22b67e7a, type: 3}

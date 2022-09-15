@@ -17,6 +17,8 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] Text _scoreText;
     /// <summary>ライフポイントを表すアイコンの親</summary>
     [SerializeField] Transform _lifePointItem;
+    /// <summary>パワーアップのアイテム</summary>
+    [SerializeField] Image _equipIcon;
 
     void Start()
     {
@@ -68,5 +70,12 @@ public class PlayerUIManager : MonoBehaviour
         sequence.Join(child.DOMoveY(child.position.y - 100.0f, 1.0f).SetEase(Ease.OutBounce));
         sequence.Join(child.DOMoveX(child.position.x + 25.0f, 1.0f));
         sequence.Join(child.GetComponent<Image>().DOFade(0, 1.0f));
+    }
+
+    /// <summary>装備アイコンの画像を変更する</summary>
+    public void SetEquipIcon(Sprite sprite)
+    {
+        _equipIcon.sprite = sprite;
+        _equipIcon.color = new Color32(255, 255, 255, 255);
     }
 }

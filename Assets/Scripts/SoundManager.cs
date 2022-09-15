@@ -28,7 +28,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>“¯‚¶‰¹‚ğ˜A‘±‚µ‚Ä–Â‚ç‚¹‚é‚Ü‚Å‚ÌŠÔŠu</summary>
     [SerializeField] float _distance;
     /// <summary>•¡”“¯‚É‰¹‚ğÄ¶‚Å‚«‚é‚æ‚¤‚É‚½‚­‚³‚ñ‚Â‚¯‚Ä‚¨‚­</summary>
-    AudioSource[] _audioSources = new AudioSource[10];
+    AudioSource[] _audioSources = new AudioSource[15];
     Dictionary<string, SoundData> _dic = new Dictionary<string, SoundData>();
     
 

@@ -16,6 +16,8 @@ public class ItemManager : ActorBase
 
     /// <summary>このアイテムの種類</summary>
     [SerializeField] ItemType _itemType;
+    /// <summary>このアイテムのアイコン</summary>
+    [SerializeField] Sprite _icon;
     /// <summary>任意:このアイテムを獲得したときに出る演出</summary>
     [SerializeField] GameObject _getParticle;
 
@@ -58,6 +60,7 @@ public class ItemManager : ActorBase
         if (_itemType == ItemType.PowerUp)
         {
             FindObjectOfType<PlayerManager>().SetPowerUp();
+            FindObjectOfType<PlayerUIManager>().SetEquipIcon(_icon);
             SoundManager._instance.Play("SE_パワーアップ");
         }
         FindObjectOfType<MapManager>().CurrentMap.SetMapTileItem(_currentPosXZ.x, _currentPosXZ.z, null);
