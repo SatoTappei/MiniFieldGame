@@ -44,7 +44,6 @@ public class TitleManager : MonoBehaviour
         Destroy(GameObject.Find("BackgroundObjects"));
         Destroy(GameObject.Find("Canvas"));
 
-
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_STANDALONE

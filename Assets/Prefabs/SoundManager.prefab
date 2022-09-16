@@ -55,9 +55,30 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 665db56e58fd50d4fb2d9ff31b210c4c, type: 3}
     volume: 1
   - key: "SE_\u30EA\u30B6\u30EB\u30C81"
-    clip: {fileID: 8300000, guid: cfb64dca83687ae4c9a898429af018c4, type: 3}
+    clip: {fileID: 8300000, guid: 5ca8854ed911d4547b12d284c47f9068, type: 3}
     volume: 1
   - key: "SE_\u30EA\u30B6\u30EB\u30C82"
-    clip: {fileID: 8300000, guid: 5ca8854ed911d4547b12d284c47f9068, type: 3}
+    clip: {fileID: 8300000, guid: 552945ca89df753499bc6d52e51898b0, type: 3}
+    volume: 1
+  - key: "SE_\u30BF\u30A4\u30C8\u30EB\u30DC\u30BF\u30F3"
+    clip: {fileID: 8300000, guid: 5e66fb4e03af23b409ce6fc78ee58a2f, type: 3}
+    volume: 1
+  - key: "SE_\u6C7A\u5B9A"
+    clip: {fileID: 8300000, guid: ce0534ccfd1400c45bd8c4017ca2bb9b, type: 3}
+    volume: 1
+  - key: "SE_\u30DC\u30BF\u30F3\u9078\u629E"
+    clip: {fileID: 8300000, guid: 942ad3d3a071ba54e959ec112939d79b, type: 3}
+    volume: 1
+  - key: "SE_\u7206\u767A"
+    clip: {fileID: 8300000, guid: 096ab4bc587cb424da571e30c0c36ec6, type: 3}
+    volume: 1
+  - key: "SE_\u30C1\u30FC\u30F3"
+    clip: {fileID: 8300000, guid: fa5464471f7a96f44b5d8fa41400af69, type: 3}
+    volume: 1
+  - key: "SE_\u304C\u3081\u304A\u3079\u3089\u6587\u5B57\u6F14\u51FA"
+    clip: {fileID: 8300000, guid: 771551f5454136b4a86c286946f2685d, type: 3}
+    volume: 1
+  - key: "SE_\u30D1\u30EF\u30FC\u30A2\u30C3\u30D7"
+    clip: {fileID: 8300000, guid: 973b5104c8472d7449409c4bf11dd459, type: 3}
     volume: 1
   _distance: 0.05
