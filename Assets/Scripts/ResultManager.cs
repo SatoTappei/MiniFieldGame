@@ -10,17 +10,27 @@ public class ResultManager : MonoBehaviour
 {
     [SerializeField] ResultUIManager _resultUIManager;
 
+    /// <summary>入力されたプレイヤーの名前を保持する</summary>
     string _scoreName;
+    /// <summary>名前の入力が終わったらtrueになる</summary>
+    bool _finishedNameEntry;
 
     IEnumerator Start()
     {
         // スコアの表示が終わるまでは入力できないようにする
         _resultUIManager.SetSelectedDummyButton();
+        // フェードインが終わるのを待つ
+        yield return new WaitWhile(() => GameManager._instance.IsFading);
         // スコアを表示させる
         yield return StartCoroutine(_resultUIManager.DispClearScore(9999/*GameManager._instance.TotalScore*/));
         // スコアネームを入力する
         _resultUIManager.SetSelectedDefaultButton();
-        yield return null;
+        // スコアネームを入力し終えるまで待つ
+        yield return new WaitUntil(() => _finishedNameEntry);
+        // ネームエントリーを終えてランキング画面へ移行する
+        MoveRanking();
+        // ランキングに反映
+        SetRanking();
     }
 
     void Update()
@@ -50,16 +60,35 @@ public class ResultManager : MonoBehaviour
             _scoreName = "^^;";
             _resultUIManager.SetScoreName(_scoreName);
         }
+        SoundManager._instance.Play("SE_タイトルボタン");
         // ダミーのボタンを選択状態にして入力を防ぐ
         _resultUIManager.SetSelectedDummyButton();
+        // ネームエントリーが終わったフラグを立てる
+        _finishedNameEntry = true;
+    }
+
+    /// <summary>ランキング画面に移行する</summary>
+    void MoveRanking()
+    {
         // スコアネーム入力画面を閉じてランキング画面へ移行する
         _resultUIManager.ChangeToRankingPanel();
-        SoundManager._instance.Play("SE_タイトルボタン");
         // ランキング画面へ移行して少し待ってからボタンを押せるようにする
         DOVirtual.DelayedCall(1.5f, () =>
         {
             _resultUIManager.SetSelectedBackTitleButton();
         });
+    }
+
+    /// <summary>ランキングに反映させる</summary>
+    void SetRanking()
+    {
+        // 今回のリザルトをセーブデータに反映させる
+        // 今回のリザルトをcsvに保存
+        // csvからデータを読み込む
+        // 読み込んだデータをスコアの高い順にソートする
+        // 上から5番目までを反映させる
+
+        //_resultUIManager.SetRankingItem();
     }
 
     /// <summary>タイトルに戻る</summary>

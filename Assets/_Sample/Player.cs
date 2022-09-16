@@ -178,7 +178,7 @@ public class Player : MapObjectBase
             player._attack -= CurrentWeapon._attack;
         }
 
-        var saveData = new SaveData();
+        var saveData = new dd();
         saveData._level = _level;
         saveData._life = _life;
         saveData._attack = _attack;
@@ -205,7 +205,7 @@ public class Player : MapObjectBase
         var mapManager = FindObjectOfType<MapSceneManager>();
         mapManager._gameOver.SetActive(true);
 
-        SaveData.Destroy();
+        dd.Destroy();
     }
 
     public override bool AttackTo(MapObjectBase other)
@@ -337,7 +337,7 @@ public class Player : MapObjectBase
         }
     }
 
-    public void Recover(SaveData saveData)
+    public void Recover(dd saveData)
     {
         CurrentWeapon = null;
         _level = saveData._level;

@@ -24,6 +24,8 @@ public class ResultUIManager : MonoBehaviour
     [SerializeField] GameObject _defaultInputButton;
     /// <summary>タイトルに戻るのボタン</summary>
     [SerializeField] GameObject _backTitleButton;
+    /// <summary>ランキングに表示される各リザルトのオブジェクトの親</summary>
+    [SerializeField] Transform _rankingItemParent;
 
     void Start()
     {
@@ -70,6 +72,19 @@ public class ResultUIManager : MonoBehaviour
         sequence.Append(clearScorePanel.DOMoveY(-600, 0.25f).SetDelay(1.0f).SetRelative());
         // ランキングパネルを下にスライドさせる
         sequence.Join(_rankingPanel.transform.DOMoveY(-600, 0.25f).SetRelative());
+    }
+
+    /// <summary>ランキングの各リザルトのオブジェクトをセットする</summary>
+    public void SetRankingItem(int rank, string name, int score)
+    {
+        if (rank < 1 || rank > _rankingItemParent.childCount)
+        {
+            Debug.LogWarning("渡された順位を表示するオブジェクトがありません。:" + rank);
+            return;
+        }
+
+        GameObject go = _rankingItemParent.GetChild(rank - 1).gameObject;
+        go.GetComponent<ResultRankingItem>().SetResult(name, score);
     }
 
     /// <summary>ダミーのボタンを選択状態にしてキーの入力を防ぐ</summary>

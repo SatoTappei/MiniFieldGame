@@ -23,7 +23,7 @@ public class MapSceneManager : MonoBehaviour
     {
         _gameOver.SetActive(false);
         var map = GetComponent<Map>();
-        var saveData = SaveData.Recover();
+        var saveData = dd.Recover();
         if(saveData != null)
         {
             try

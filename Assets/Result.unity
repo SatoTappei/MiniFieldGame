@@ -493,6 +493,7 @@ MonoBehaviour:
   _rankingPanel: {fileID: 809239854}
   _defaultInputButton: {fileID: 1226908744}
   _backTitleButton: {fileID: 371223862}
+  _rankingItemParent: {fileID: 1853685077}
 --- !u!1 &203844586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,7 +1291,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4208580424108581549, guid: defc73dba35573548b3984a9a3910712, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4208580424108581551, guid: defc73dba35573548b3984a9a3910712, type: 3}
       propertyPath: m_RootOrder

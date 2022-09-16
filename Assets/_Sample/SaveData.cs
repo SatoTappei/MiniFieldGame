@@ -7,7 +7,7 @@ using System;
 /// セーブデータの処理
 /// </summary>
 [Serializable]
-public class SaveData
+public class dd
 {
     public int _level;
     public int _life;
@@ -23,12 +23,12 @@ public class SaveData
         PlayerPrefs.SetString("save", json);
     }
 
-    public static SaveData Recover()
+    public static dd Recover()
     {
         if (PlayerPrefs.HasKey("save"))
         {
             var json = PlayerPrefs.GetString("save");
-            return JsonUtility.FromJson<SaveData>(json);
+            return JsonUtility.FromJson<dd>(json);
         }
         else
         {
