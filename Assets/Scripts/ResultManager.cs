@@ -27,6 +27,12 @@ public class ResultManager : MonoBehaviour
         _resultUIManager.SetSelectedDefaultButton();
         // スコアネームを入力し終えるまで待つ
         yield return new WaitUntil(() => _finishedNameEntry);
+        // 前回までのリザルトのデータをロードする
+        SaveDataManager.Load();
+        // 今回のリザルトをセーブする
+        SaveDataManager.Save(_scoreName, 9999/*GameManager._instance.TotalScore*/);
+        // ランキングに反映させる
+        SetRanking();
         // ネームエントリーを終えてランキング画面へ移行する
         MoveRanking();
         // ランキングに反映
@@ -35,7 +41,20 @@ public class ResultManager : MonoBehaviour
 
     void Update()
     {
-        
+        //// セーブとロードのテスト、終わったら消す
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    string[] ns = { "TPI", "TKS", "HOG", "PIY" };
+        //    int r = Random.Range(0, 4);
+        //    int score = Random.Range(0, 10000);
+        //    SaveDataManager.Save(ns[r], score);
+        //    Debug.Log("セーブデータをセーブしました");
+        //}
+        //else if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    SaveDataManager.Load();
+        //    Debug.Log("セーブデータをロードしました");
+        //}
     }
 
     /// <summary>スコアネームに文字を追加する</summary>
@@ -87,8 +106,12 @@ public class ResultManager : MonoBehaviour
         // csvからデータを読み込む
         // 読み込んだデータをスコアの高い順にソートする
         // 上から5番目までを反映させる
-
-        //_resultUIManager.SetRankingItem();
+        int max = SaveDataManager.GetDataCount();
+        for (int i = 1; i <= max; i++)
+        {
+            SaveDataManager.Result result = SaveDataManager.GetRankResult(i);
+            _resultUIManager.SetRankingItem(i, result._name, result._score);
+        }
     }
 
     /// <summary>タイトルに戻る</summary>
