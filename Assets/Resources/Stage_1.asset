@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7dc5409473dc84ca162b431ea20800, type: 3}
   m_Name: Stage_1
   m_EditorClassIdentifier: 
-  _width: 16
-  _height: 16
-  _turnLimit: 30
-  _maxEnemy: 5
+  _width: 12
+  _height: 12
+  _turnLimit: 60
+  _maxEnemy: 6
   _enemies:
   - {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
   - {fileID: 843061456840688382, guid: d1059a5b805c7e545a68966371aca08a, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
   _maxItem: 1
   _items:
   - {fileID: 8636436348122328418, guid: 1a372b6d2c5057f4ebfcc6d7ea197484, type: 3}
-  _maxCoin: 50
+  _maxCoin: 35
   _coins:
   - {fileID: 7339753214307311976, guid: 25b6860a53b74d845ba4b48b1b4a5bf3, type: 3}
   _isCoudy: 0

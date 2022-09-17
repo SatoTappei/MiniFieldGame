@@ -88,7 +88,7 @@ public class MapManager : MonoBehaviour
     /// <summary>フロアに生成する障害物</summary>
     //GameObject[] _obstacles;
     /// <summary>フロアに生成するコイン</summary>
-    GameObject[] _coins;
+    //GameObject[] _coins;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
     Dictionary<char, Tile> _tileDic = new Dictionary<char, Tile>();
     /// <summary>生成したマップのデータ、マップやタイルを調べる際にはこれを参照する</summary>
@@ -128,7 +128,7 @@ public class MapManager : MonoBehaviour
     {
         _enemies = so.Enemies;
         //_obstacles = so.Obstacles;
-        _coins = so.Coins;
+        //_coins = so.Coins;
         _isCloudy = so.IsCoudy;
 
         // マップのもとになる文字列を生成する
@@ -137,7 +137,7 @@ public class MapManager : MonoBehaviour
         GenerateMap(_mapStr);
         // コインを生成して配置する
         //GenerateCoinRandom(so.MaxCoin);
-        GenerateItemRandom(so.Coins, so.MaxCoin);
+        GenerateItemRandom(so.Coins, so.MaxCoin, _coinParent);
         GenerateItemRandom(so.Items, so.MaxItem);
         // プレイヤーを決められた位置(P)に配置する
         SetPlayerTile(GameObject.FindWithTag("Player"));

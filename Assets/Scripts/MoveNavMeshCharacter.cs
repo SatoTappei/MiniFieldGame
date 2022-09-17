@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
-/// タイトル画面で走り回っているキャラクター
+/// ナビメッシュを使用して移動するキャラクター
 /// </summary>
-public class TitleCharacter : MonoBehaviour
+public class MoveNavMeshCharacter : MonoBehaviour
 {
     [SerializeField] Transform[] _targets;
     NavMeshAgent _agent;

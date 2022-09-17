@@ -71,9 +71,9 @@ public class EffectUIManager : MonoBehaviour
         // 現在のステージ番号を表示
         _stageClearEffect.GetChild(0).GetChild(1).GetComponent<Text>().text = stageNum.ToString();
         // 各リザルトをポップさせるアニメーション付きで表示させる
-        yield return StartCoroutine(Pop(1, (so.MaxCoin - coin).ToString() + " / " + so.MaxCoin.ToString()));
-        yield return StartCoroutine(Pop(2, (so.MaxEnemy - enemy).ToString() + " / " + so.MaxEnemy.ToString()));
-        yield return StartCoroutine(Pop(3, (so.TurnLimit - turn).ToString() + " / " + so.TurnLimit.ToString()));
+        yield return StartCoroutine(Pop(1, (so.MaxCoin - coin) + " / " + so.MaxCoin));
+        yield return StartCoroutine(Pop(2, (so.MaxEnemy - enemy) + " / " + so.MaxEnemy));
+        yield return StartCoroutine(Pop(3, (so.TurnLimit - turn) + " / " + so.TurnLimit));
         // スコアは0から現在の値まで加算されるアニメーションで表示する
         Sequence sequence = DOTween.Sequence();
         Transform scoreTrans = _stageClearEffect.GetChild(4).GetChild(1);
@@ -102,8 +102,8 @@ public class EffectUIManager : MonoBehaviour
     {
         // TODO:ちゃんと作る
         SoundManager._instance.Play("SE_チーン");
-        EventSystem.current.SetSelectedGameObject(_retryButton);
         _gameOverEffect.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(_retryButton);
         yield return new WaitForSeconds(1.5f);
         SoundManager._instance.Play("SE_がめおべら文字演出");
         _gameOverEffect.transform.GetChild(0).transform.DORotate(new Vector3(0, 0, -8.5f), 0.05f);
