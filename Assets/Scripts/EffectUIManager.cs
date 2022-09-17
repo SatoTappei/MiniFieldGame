@@ -66,8 +66,11 @@ public class EffectUIManager : MonoBehaviour
     /// <summary>ステージクリア時の演出</summary>
     public IEnumerator StageClearEffect(int stageNum, StageDataSO so, int coin, int enemy, int turn, int score)
     {
-        EventSystem.current.SetSelectedGameObject(_nextStageButton);
         _stageClearEffect.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(_nextStageButton);
+        // 最後のステージか否かで表示する内容を切り替える
+        string label = GameManager._instance.CheckAllClear() ? "リザルトへ" : "次のステージへ";
+        _stageClearEffect.GetChild(5).GetComponentInChildren<Text>().text = label;
         // 現在のステージ番号を表示
         _stageClearEffect.GetChild(0).GetChild(1).GetComponent<Text>().text = stageNum.ToString();
         // 各リザルトをポップさせるアニメーション付きで表示させる

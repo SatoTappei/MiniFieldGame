@@ -22,6 +22,7 @@ public class ResultManager : MonoBehaviour
         // フェードインが終わるのを待つ
         yield return new WaitWhile(() => GameManager._instance.IsFading);
         // スコアを表示させる
+        SoundManager._instance.Play("SE_カタカタ");
         yield return StartCoroutine(_resultUIManager.DispClearScore(9999/*GameManager._instance.TotalScore*/));
         // スコアネームを入力する
         _resultUIManager.SetSelectedDefaultButton();

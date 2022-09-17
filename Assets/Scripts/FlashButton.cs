@@ -8,7 +8,7 @@ using DG.Tweening;
 /// <summary>
 /// タイトルのボタンを制御する
 /// </summary>
-public class TitleSceneMainButton : SelectableUIButton
+public class FlashButton : SelectableUIButton
 {
     Image _img;
     /// <summary>タイトルボタンをクリックしたときに呼ばれるイベント</summary>

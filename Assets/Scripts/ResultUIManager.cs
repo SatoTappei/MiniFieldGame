@@ -42,7 +42,7 @@ public class ResultUIManager : MonoBehaviour
     {
         bool finish = false;
         Sequence sequence = DOTween.Sequence();
-        sequence.Join(_clearScoreText.DOCounter(0, score, 1.5f));
+        sequence.Join(_clearScoreText.DOCounter(0, score, 2.0f));
         sequence.Append(_clearScoreText.transform.DOScale(1.2f, 0.15f));
         sequence.Append(_clearScoreText.transform.DOScale(1.0f, 0.15f));
         sequence.AppendCallback(() =>
