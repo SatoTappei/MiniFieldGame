@@ -88,7 +88,6 @@ public class GameManager : MonoBehaviour
                 _fadeBlocks[i + 1].SetActive(false);
                 _fadeBlocks[i + 2].SetActive(false);
                 yield return new WaitForSeconds(0.01f);
-                Debug.Log("•\Ž¦‚³‚¹‚Ä‚¢‚­");
             }
             _isFading = false;
         }

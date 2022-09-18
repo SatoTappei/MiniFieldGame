@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63538e70181136749a2539d440e79f0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defeatedMessage: "\u30D1\u30EF\u30FC\u30A2\u30C3\u30D7\uFF012\u30DE\u30B9\u5148\u307E\u3067\u653B\u6483\u3067\u304D\u308B\u305E\uFF01"
+  _defeatedMessage: "2\u30DE\u30B9\u653B\u6483\uFF01\u58C1\u306E\u5411\u3053\u3046\u307E\u3067\u5C4A\u304F\u305E\uFF01"
   _itemType: 1
   _icon: {fileID: 21300000, guid: 9884c8d90600ed14889e71949b23f0a8, type: 3}
   _getParticle: {fileID: 1060181521669433928, guid: 30b1f339319717b46a9a0e3a22b67e7a, type: 3}

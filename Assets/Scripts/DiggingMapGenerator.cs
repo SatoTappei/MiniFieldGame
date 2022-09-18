@@ -168,6 +168,7 @@ public class DiggingMapGenerator : MapGeneratorBase
             if (count == 3)
             {
                 map[mass.Item1, mass.Item2] = Char;
+                Debug.Log(Char + "Çê∂ê¨ÇµÇ‹ÇµÇΩ");
                 break;
             }
         }

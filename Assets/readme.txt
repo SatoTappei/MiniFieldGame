@@ -1,8 +1,6 @@
 ﻿★優先度高めタスク
-	2マス攻撃の時、壁の向こうに攻撃でき無いようにする、もしくはエフェクトを付けてらしく見せる
 	全体的に音楽を入れる
-	リザルトシーンのカメラ演出、フロア内をぐるぐるめぐる感じのやつ作る、
-		ターゲットの背後を追うカメラを作る
+	1ステージ目で生成時に壁に埋まるバグ
 
 ★優先度低めタスク
 	ItemManagerの46行目のGetThisItem関数
@@ -33,8 +31,7 @@
 	URPAssetのShadow内のSoftShadowsのチェックを外す、DirectionalLightのShadowsのShadowTypeをHardShadowsにする
 
 ★使用アセット
-	YughuesFreeGroundMaterials
-	YughuesFreeMetalMaterials
+	Furniture_ges1
 ★外部素材
 	効果音ラボ
 	Digital-Architex <= 木目調タイル

@@ -23,7 +23,7 @@ public class ResultManager : MonoBehaviour
         yield return new WaitWhile(() => GameManager._instance.IsFading);
         // スコアを表示させる
         SoundManager._instance.Play("SE_カタカタ");
-        yield return StartCoroutine(_resultUIManager.DispClearScore(9999/*GameManager._instance.TotalScore*/));
+        yield return StartCoroutine(_resultUIManager.DispClearScore(GameManager._instance.TotalScore));
         // スコアネームを入力する
         _resultUIManager.SetSelectedDefaultButton();
         // スコアネームを入力し終えるまで待つ
@@ -31,7 +31,7 @@ public class ResultManager : MonoBehaviour
         // 前回までのリザルトのデータをロードする
         SaveDataManager.Load();
         // 今回のリザルトをセーブする
-        SaveDataManager.Save(_scoreName, 9999/*GameManager._instance.TotalScore*/);
+        SaveDataManager.Save(_scoreName, GameManager._instance.TotalScore);
         // ランキングに反映させる
         SetRanking();
         // ネームエントリーを終えてランキング画面へ移行する
@@ -102,11 +102,6 @@ public class ResultManager : MonoBehaviour
     /// <summary>ランキングに反映させる</summary>
     void SetRanking()
     {
-        // 今回のリザルトをセーブデータに反映させる
-        // 今回のリザルトをcsvに保存
-        // csvからデータを読み込む
-        // 読み込んだデータをスコアの高い順にソートする
-        // 上から5番目までを反映させる
         int max = SaveDataManager.GetDataCount();
         for (int i = 1; i <= max; i++)
         {
