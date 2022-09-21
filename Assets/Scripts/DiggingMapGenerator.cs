@@ -26,6 +26,8 @@ public class DiggingMapGenerator : MapGeneratorBase
                 map[i, j] = i * j == 0 || i == h - 1 || j == w - 1 ? "O" : "W";
         // 穴を掘る
         _startMasses.Add((1, 1));
+        // 一本道だった際にゴールまたはスタートが生成されないのを防ぐためにゴールマスとしても追加
+        _goalMasses.Add((1, 1));
         DiggingPass(map, _startMasses);
         // 外周を壁に戻す
         for (int i = 0; i < map.GetLength(0); i++)
@@ -152,7 +154,9 @@ public class DiggingMapGenerator : MapGeneratorBase
     void SetSpotRandom(string[,] map, string Char)
     {
         // ゴール候補のマスのリストの中から床のマスを探す
-        foreach ((int, int) mass in _goalMasses.Where(i => map[i.Item1,i.Item2] == "O"))
+        foreach ((int, int) mass in _goalMasses
+            .OrderBy(r => System.Guid.NewGuid())
+            .Where(i => map[i.Item1,i.Item2] == "O"))
         {
             // 3方向が壁になっているマスを探す
             int count = 0;

@@ -17,6 +17,7 @@ public class ResultManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        SoundManager._instance.Play("BGM_ほのぼの1");
         // スコアの表示が終わるまでは入力できないようにする
         _resultUIManager.SetSelectedDummyButton();
         // フェードインが終わるのを待つ
@@ -113,6 +114,7 @@ public class ResultManager : MonoBehaviour
     /// <summary>タイトルに戻る</summary>
     public void MoveTitle()
     {
+        SoundManager._instance.FadeOutBGM();
         GameManager._instance.FadeOut("Title");
     }
 }

@@ -13,7 +13,7 @@ public class TitleManager : MonoBehaviour
 
     void Start()
     {
-        
+        SoundManager._instance.Play("BGM_‚Ù‚Ì‚Ú‚Ì1");
     }
 
     void Update()
@@ -34,6 +34,7 @@ public class TitleManager : MonoBehaviour
         GameManager._instance.ResetStageNum();
         
         GameManager._instance.FadeOut("GamePlay");
+        SoundManager._instance.FadeOutBGM();
     }
 
     /// <summary>ƒQ[ƒ€I—¹‚Ìˆ—</summary>

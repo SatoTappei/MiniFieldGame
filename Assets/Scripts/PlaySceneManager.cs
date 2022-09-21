@@ -102,6 +102,7 @@ public class PlaySceneManager : MonoBehaviour
 
     IEnumerator Start()
     {
+        SoundManager._instance.Play("BGM_ほのぼの2");
         // 現在のステージのデータを動的に読み込む
         so = Resources.Load($"Stage_{GameManager._instance.CurrentStageNum}", typeof(StageDataSO)) as StageDataSO;
         // マップを生成する
@@ -273,6 +274,7 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>次のステージに進む</summary>
     public void MoveNextStage()
     {
+        SoundManager._instance.FadeOutBGM();
         SoundManager._instance.Play("SE_決定");
         // もし最後のステージならリザルトに飛ぶ
         string scene = GameManager._instance.CheckAllClear() ? "Result" : "GamePlay";
@@ -284,6 +286,7 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>ゲームをリトライする</summary>
     public void RetryGamePlay()
     {
+        SoundManager._instance.FadeOutBGM();
         SoundManager._instance.Play("SE_決定");
         GameManager._instance.FadeOut("GamePlay");
         // フェードさせる
@@ -292,6 +295,7 @@ public class PlaySceneManager : MonoBehaviour
     /// <summary>タイトルに戻る</summary>
     public void MoveTitle()
     {
+        SoundManager._instance.FadeOutBGM();
         SoundManager._instance.Play("SE_決定");
         GameManager._instance.FadeOut("Title");
         // タイトルにはいつでも戻れるようにする、ミスったらすぐやり直せるように

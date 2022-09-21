@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using System.Linq;
 
 /// <summary>
@@ -106,6 +107,9 @@ public class SoundManager : MonoBehaviour
 
     /// <summary>再生中のBGMを止める</summary>
     public void StopBGM() => _audioSources[_audioSources.Length - 1].Stop();
+
+    /// <summary>BGMをフェードアウトさせる</summary>
+    public void FadeOutBGM(float duration = 0.5f) => _audioSources[_audioSources.Length - 1].DOFade(0, duration);
 
     /// <summary>SEを鳴らすためのAudioSourceを取得</summary>
     AudioSource GetAudioSource()
