@@ -13,9 +13,13 @@ public class MoveChase : MoveAlgorithmBase
         
     }
 
+    /// <summary>デバッグ用の試行回数カウント</summary>
+    int _algoCount;
+
     /// <summary>移動方向を返す</summary>
     public override ActorDir GetMoveDirection(PosXZ current, PosXZ target)
     {
+        _algoCount = 0;
         // ノードマップを作成
         string[,] map = FindObjectOfType<MapManager>().GetMapCopy();
         // 基準ノード(現在の座標)を作成
@@ -23,7 +27,8 @@ public class MoveChase : MoveAlgorithmBase
         // 現在の位置を2回調べないようにノードマップ上では壁にしておく
         map[baseNode._pos.x, baseNode._pos.z] = "W";
         // 目標までのノードを計算する
-        Node node = CalcMoveAlgorithm(baseNode, current, target, new List<Node>(), map);
+        Node node = CalcTargetNode(baseNode, current, target, new List<Node>(), map);
+        Debug.Log("試行回数は" + _algoCount + "回");
         // 親のノードがnullつまり移動しない場合は静止を返す
         if (node._parent == null) return ActorDir.Neutral;
         // 親の親ノードがnullじゃない、つまりは現在位置から2つ進んだ先までの間
@@ -34,8 +39,9 @@ public class MoveChase : MoveAlgorithmBase
     }
 
     /// <summary>目標までのノードを計算して返す</summary>
-    public Node CalcMoveAlgorithm(Node currentNode, PosXZ current, PosXZ target, List<Node> openNodes, string[,] map)
+    public Node CalcTargetNode(Node currentNode, PosXZ current, PosXZ target, List<Node> openNodes, string[,] map)
     {
+        _algoCount++;
         // 上下左右を調べる
         foreach (ActorDir dir in System.Enum.GetValues(typeof(ActorDir)))
         {
@@ -67,6 +73,6 @@ public class MoveChase : MoveAlgorithmBase
         openNodes.RemoveAt(0);
         // 再帰的に呼び出す、targetは参照するのみで弄っていない
         // openListへの追加とnodeMapの書き換えを行った
-        return CalcMoveAlgorithm(nextNode, nextNode._pos, target, openNodes, map);
+        return CalcTargetNode(nextNode, nextNode._pos, target, openNodes, map);
     }
 }

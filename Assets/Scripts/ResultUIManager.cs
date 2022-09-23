@@ -18,8 +18,6 @@ public class ResultUIManager : MonoBehaviour
     [SerializeField] GameObject _inputButtonParent;
     /// <summary>ボタンを選択していない状態にするためのダミーのボタン</summary>
     [SerializeField] GameObject _dummyButton;
-    /// <summary>スコアランキングのパネル</summary>
-    [SerializeField] GameObject _rankingPanel;
     /// <summary>デフォルトのスコアネームを入力するボタン</summary>
     [SerializeField] GameObject _defaultInputButton;
     /// <summary>タイトルに戻るのボタン</summary>
@@ -68,10 +66,14 @@ public class ResultUIManager : MonoBehaviour
         sequence.Join(_scoreNameText.DOFade(0, 0.33f).SetEase(Ease.Flash, 5));
         sequence.Append(_scoreNameText.DOFade(255, 0.01f));
         // スコアネーム入力画面を下にスライドさせる
+        // ビルド後になぜかズレるので調整する
+#if UNITY_EDITOR
+        int pos = -350;
+#elif UNITY_STANDALONE
+        int pos = -635;
+#endif
         Transform clearScorePanel = _inputButtonParent.transform.parent;
-        sequence.Append(clearScorePanel.DOMoveY(-600, 0.25f).SetDelay(1.0f).SetRelative());
-        // ランキングパネルを下にスライドさせる
-        sequence.Join(_rankingPanel.transform.DOMoveY(-600, 0.25f).SetRelative());
+        sequence.Append(clearScorePanel.DOMoveY(pos, 0.25f).SetDelay(1.0f));
     }
 
     /// <summary>ランキングの各リザルトのオブジェクトをセットする</summary>

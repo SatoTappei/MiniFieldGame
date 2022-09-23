@@ -9,7 +9,6 @@ public abstract class ActorBase : MonoBehaviour
 {
     /// <summary>撃破された時に出るログのメッセージ</summary>
     [SerializeField] protected string _defeatedMessage;
-
     /// <summary>現在のXZ平面上での位置</summary>
     protected PosXZ _currentPosXZ;
 

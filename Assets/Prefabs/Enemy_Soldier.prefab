@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03825ec2e0482ed4db8cc8e3c4a7ef17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defeatedMessage: "\u6B8B\u8650\u884C\u70BA\u624B\u5F53\u3001\u30B9\u30B3\u30A2+0"
+  _defeatedMessage: "\u6B8B\u8650\u884C\u70BA\u624B\u5F53 +100"
   _anim: {fileID: 1544250394843928223}
   _characterType: 1
   _canMoveTile: 00000000
@@ -153,6 +153,8 @@ MonoBehaviour:
   _ragDoll: {fileID: 5897898465951814908, guid: f2b5a930190da5947b4966423a531fea, type: 3}
   _noticeIcon: {fileID: 6355071879193167639}
   _sightRange: 5
+  _actionType: 0
+  _score: 100
 --- !u!114 &3489920187885627344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1508,6 +1510,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df381a15c8c23d4a81cbc8392b0aaa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackEffect: {fileID: 0}
+  _effectParent: {fileID: 0}
 --- !u!1 &5759181172429031852
 GameObject:
   m_ObjectHideFlags: 0

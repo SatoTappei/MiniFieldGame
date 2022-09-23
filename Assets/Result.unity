@@ -2021,7 +2021,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2050733687}
-  - {fileID: 809239855}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2046,7 +2045,6 @@ MonoBehaviour:
   _scoreNameText: {fileID: 869802351}
   _inputButtonParent: {fileID: 2026054744}
   _dummyButton: {fileID: 1526810648}
-  _rankingPanel: {fileID: 809239854}
   _defaultInputButton: {fileID: 1226908744}
   _backTitleButton: {fileID: 371223862}
   _rankingItemParent: {fileID: 1853685077}
@@ -7241,7 +7239,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 809239854}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7249,8 +7247,8 @@ RectTransform:
   - {fileID: 255706209}
   - {fileID: 1853685077}
   - {fileID: 371223863}
-  m_Father: {fileID: 194225177}
-  m_RootOrder: 1
+  m_Father: {fileID: 2050733687}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15773,6 +15771,7 @@ RectTransform:
   - {fileID: 435221742}
   - {fileID: 869802350}
   - {fileID: 1526810649}
+  - {fileID: 809239855}
   m_Father: {fileID: 194225177}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

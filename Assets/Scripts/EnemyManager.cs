@@ -20,6 +20,8 @@ public class EnemyManager : CharacterBase
     [SerializeField] int _sightRange;
     /// <summary>敵の行動タイプ</summary>
     [SerializeField] ActionType _actionType;
+    /// <summary>倒した時に加算されるスコア</summary>
+    [SerializeField] int _score;
     /// <summary>攻撃する相手がいる座標</summary>
     PosXZ _attackTargetPos;
     /// <summary>このターンに攻撃をする場合はtrue、移動の場合はfalseになる</summary>
@@ -95,7 +97,7 @@ public class EnemyManager : CharacterBase
     /// <summary>ターンの最初に呼ばれる処理</summary>
     public override void TurnInit()
     {
-        Debug.Log(gameObject.name + " ターンの初めに初期化します");
+        //Debug.Log(gameObject.name + " ターンの初めに初期化します");
     }
 
     /// <summary>キー入力待ち中に呼ばれる処理</summary>
@@ -107,7 +109,7 @@ public class EnemyManager : CharacterBase
     /// <summary>キャラクターが移動を開始するときに呼ばれる処理</summary>
     public override void MoveStart()
     {
-        Debug.Log(gameObject.name + " 移動開始します");
+        //Debug.Log(gameObject.name + " 移動開始します");
         // プレイヤーが移動する場合はStandByの時点で座標が決まっているため
         // 現状は移動を開始するときに移動する座標を決めている。
         // バグがある場合は、移動する座標を決める処理を行う場所を変える
@@ -217,9 +219,10 @@ public class EnemyManager : CharacterBase
     /// <param name="attackedDir">攻撃された方向</param>
     public override void Damaged(ActorDir attackedDir)
     {
+        PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
+        psm.AddScore(_score);
         FindObjectOfType<ActionLogManager>().DispLog(_defeatedMessage);
         // 自身が死んだことをPlaySceneManagerに伝える
-        PlaySceneManager psm = FindObjectOfType<PlaySceneManager>();
         psm.RemoveEnemy(this);
         psm.AddDeadCharacter(gameObject);
         // タイル上の情報を削除する

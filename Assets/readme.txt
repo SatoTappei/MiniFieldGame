@@ -1,5 +1,6 @@
 ﻿★優先度高めタスク
-	全体的に音楽を入れる
+D69762 195
+352C2C 5 -5 shadow
 
 ★優先度低めタスク
 	ItemManagerの46行目のGetThisItem関数

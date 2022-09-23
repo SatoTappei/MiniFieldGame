@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _width: 24
   _height: 24
-  _turnLimit: 120
+  _turnLimit: 200
   _maxEnemy: 15
   _enemies:
   - {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}

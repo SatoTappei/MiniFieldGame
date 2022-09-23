@@ -60,10 +60,16 @@ public static class SaveDataManager
     {
         // ロード→セーブの順で行うのでこのタイミングでnewする
         _resultData = new ResultData();
-        
+
+#if UNITY_EDITOR
+        string path = Application.dataPath;
+#elif UNITY_STANDALONE
+        string path = Application.persistentDataPath;
+#endif
+
         try
         {
-            using (StreamReader sr = new StreamReader(Application.dataPath + "/saveData.json"))
+            using (StreamReader sr = new StreamReader(path + "/saveData.json"))
             {
                 string str = sr.ReadToEnd();
                 _resultData = JsonUtility.FromJson<ResultData>(str);
