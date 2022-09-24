@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Linq;
 
@@ -103,6 +104,14 @@ public class SoundManager : MonoBehaviour
         source.volume = data.volume;
         source.loop = true;
         source.Play();
+    }
+
+    /// <summary>Ä¶’†‚ÌŒø‰Ê‰¹‚ğ‘S‚Ä~‚ß‚é</summary>
+    public void StopSEAll()
+    {
+        foreach (AudioSource source in _audioSources)
+            if(source.isPlaying)
+                source.Stop();
     }
 
     /// <summary>Ä¶’†‚ÌBGM‚ğ~‚ß‚é</summary>

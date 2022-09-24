@@ -9,6 +9,8 @@ public class PlayerManager : CharacterBase
 {
     /// <summary>ダメージを受けた際に表示されるメッセージ</summary>
     [SerializeField] string _damagedMessage;
+    /// <summary>体力が1になったときに表示される演出</summary>
+    //[SerializeField] GameObject _dyingEffect;
     /// <summary>
     /// プレイヤーの体力、
     /// 3以上にするにはUIのアイコンも増やさないといけないのでインスペクターには表示させない
@@ -169,6 +171,11 @@ public class PlayerManager : CharacterBase
         _lifePoint--;
         FindObjectOfType<PlayerUIManager>().DecreaseLifePoint(_lifePoint);
 
+        // 体力が1になったら瀕死の演出を行う
+        //if (_lifePoint == 1)
+        //{
+        //    Instantiate(_dyingEffect, Vector3.zero, Quaternion.identity);
+        //}
         // 体力が0になったら
         if (_lifePoint == 0) 
         {

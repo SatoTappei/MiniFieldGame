@@ -19,6 +19,8 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] Transform _lifePointItem;
     /// <summary>パワーアップのアイテム</summary>
     [SerializeField] Image _equipIcon;
+    /// <summary>瀕死の演出</summary>
+    [SerializeField] GameObject _dyingEffect;
 
     void Start()
     {
@@ -62,6 +64,8 @@ public class PlayerUIManager : MonoBehaviour
     /// <summary>ライフを減少させる</summary>
     public void DecreaseLifePoint(int life)
     {
+        // ライフが1になったら瀕死の演出をする
+        if (life == 1) _dyingEffect.SetActive(true);
         // ライフが0以下の場合は処理しない
         if (life < 0) return;
 

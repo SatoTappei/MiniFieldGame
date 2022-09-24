@@ -33,6 +33,12 @@ public static class SaveDataManager
     /// <summary>ランキングの表示に使う読み込んだリザルトのデータ</summary>
     static ResultData _resultData;
 
+#if UNITY_EDITOR
+    static string path = Application.dataPath;
+#elif UNITY_STANDALONE
+    string path = Application.persistentDataPath;
+#endif
+
     /// <summary>現在いくつリザルトが保存されているかを返す</summary>
     public static int GetDataCount() => _resultData._results.Count;
     /// <summary>指定した順位のリザルトを返す(1位 = 1)</summary>
@@ -47,7 +53,7 @@ public static class SaveDataManager
         _resultData._results = _resultData._results.OrderByDescending(r => r._score).Take(5).ToList();
 
         string json = JsonUtility.ToJson(_resultData);
-        using (StreamWriter sw = new StreamWriter(Application.dataPath + "/saveData.json"))
+        using (StreamWriter sw = new StreamWriter(path + "/saveData.json"))
         {
             sw.Write(json);
             sw.Flush();
@@ -60,12 +66,6 @@ public static class SaveDataManager
     {
         // ロード→セーブの順で行うのでこのタイミングでnewする
         _resultData = new ResultData();
-
-#if UNITY_EDITOR
-        string path = Application.dataPath;
-#elif UNITY_STANDALONE
-        string path = Application.persistentDataPath;
-#endif
 
         try
         {
