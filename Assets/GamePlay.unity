@@ -961,7 +961,6 @@ MonoBehaviour:
   _enemyParent: {fileID: 73685321}
   _coinParent: {fileID: 1308180141}
   _cloud: {fileID: 2488360258042843196, guid: a095b32c211fb084d9613960b38299c0, type: 3}
-  isDebug: 1
 --- !u!1 &281578644
 GameObject:
   m_ObjectHideFlags: 0
@@ -2942,7 +2941,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 45
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!224 &942375046
 RectTransform:
