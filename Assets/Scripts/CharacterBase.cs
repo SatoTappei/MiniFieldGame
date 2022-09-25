@@ -114,8 +114,10 @@ public abstract class CharacterBase : ActorBase
         // 死亡のアニメーションを再生(スケールを0にして見えなくする)
         _anim.Play("Dead");
         // 被ダメージのエフェクト、吹き出た血の表示と血だまりの生成
-        _damageEffect.SetActive(true);
-        Instantiate(_decalEffect, new Vector3(transform.position.x, 0.15f, transform.position.z), Quaternion.Euler(90, 0, 0));
+        if (_damageEffect != null)
+            _damageEffect.SetActive(true);
+        if (_decalEffect != null)
+            Instantiate(_decalEffect, new Vector3(transform.position.x, 0.15f, transform.position.z), Quaternion.Euler(90, 0, 0));
         // ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
         var Obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
         Vector3 vec = DirectionToVec3(attackedDir);

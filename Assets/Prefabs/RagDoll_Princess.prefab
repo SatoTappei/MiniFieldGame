@@ -2251,7 +2251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifeTime: 1
-  _destroyedEff: {fileID: 7715049304902338415, guid: 05c1979b1cf68c04f90f92a7089fd302, type: 3}
+  _destroyedEff: {fileID: 0}
   _effTrans: {fileID: 6390161930826062238}
   _soundEffectName: "SE_\u7206\u767A"
   _doCameraShake: 1

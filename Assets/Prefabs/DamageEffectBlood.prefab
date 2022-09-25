@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 5618022227958457795}
   - component: {fileID: 2614534316413268912}
   m_Layer: 0
-  m_Name: ReturnBlood
+  m_Name: DamageEffectBlood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

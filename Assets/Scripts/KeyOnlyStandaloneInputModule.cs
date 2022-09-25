@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace Hoge
 {
-    [AddComponentMenu("Event/KeyOnlyStandaloneInputModule")]
+    //[AddComponentMenu("Event/KeyOnlyStandaloneInputModule")]
     /// <summary>
     /// A BaseInputModule designed for mouse / keyboard / controller input.
     /// </summary>

@@ -10,15 +10,8 @@ using DG.Tweening;
 /// </summary>
 public class FlashButton : SelectableUIButton
 {
-    Image _img;
     /// <summary>タイトルボタンをクリックしたときに呼ばれるイベント</summary>
     [SerializeField] UnityEvent _clickEvent;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        _img = GetComponent<Image>();
-    }
 
     void Start()
     {

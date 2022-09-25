@@ -166,7 +166,8 @@ public class PlayerManager : CharacterBase
 
         _anim.Play("Damage");
         // 被ダメージのエフェクトを生成する、高さだけキャラクターの胸の位置に設定する
-        Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
+        if (_damageEffect != null)
+            Instantiate(_damageEffect, new Vector3(transform.position.x, 0.9f, transform.position.z), Quaternion.identity);
         // 体力を減らしてUIに反映させる、HPが0より小さくなってしまうが、呼び出したメソッド側で弾くので今のところは問題ない
         _lifePoint--;
         FindObjectOfType<PlayerUIManager>().DecreaseLifePoint(_lifePoint);

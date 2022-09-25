@@ -17,9 +17,10 @@ MonoBehaviour:
   _turnLimit: 60
   _maxEnemy: 6
   _enemies:
-  - {fileID: 843061456840688382, guid: d1059a5b805c7e545a68966371aca08a, type: 3}
   - {fileID: 843061456840688382, guid: f6e34c71db6e803479f5cbf1d14f2adb, type: 3}
+  - {fileID: 843061456840688382, guid: d1059a5b805c7e545a68966371aca08a, type: 3}
   - {fileID: 843061456840688382, guid: 1ea071931fc24bd4ba6b660b7d5055ec, type: 3}
+  - {fileID: 843061456840688382, guid: ed230dbe5f501e64fbcd898d4be50e1a, type: 3}
   _maxItem: 1
   _items:
   - {fileID: 8636436348122328418, guid: 1a372b6d2c5057f4ebfcc6d7ea197484, type: 3}

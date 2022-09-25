@@ -3931,8 +3931,8 @@ MonoBehaviour:
   _anim: {fileID: 1267937347650918571}
   _characterType: 0
   _canMoveTile: 00000000
-  _damageEffect: {fileID: 5618022227958457794, guid: 136371d0315a35f4cb24a26b49e40f49, type: 3}
-  _decalEffect: {fileID: 6910050840410955261, guid: ab81af4fd1b3b214a82d5d125202d0a0, type: 3}
+  _damageEffect: {fileID: 0}
+  _decalEffect: {fileID: 0}
   _ragDoll: {fileID: 5337509658344242847, guid: 20df8a79b70eb554b80b3a0bdf9bf60b, type: 3}
   _damagedMessage: "\u30D7\u30EC\u30A4\u30E4\u30FC\u304C\u30C0\u30E1\u30FC\u30B8\u3092\u53D7\u3051\u305F"
 --- !u!4 &1151769356

@@ -36,7 +36,7 @@ public static class SaveDataManager
 #if UNITY_EDITOR
     static string path = Application.dataPath;
 #elif UNITY_STANDALONE
-    string path = Application.persistentDataPath;
+    static string path = Application.persistentDataPath;
 #endif
 
     /// <summary>Œ»İ‚¢‚­‚ÂƒŠƒUƒ‹ƒg‚ª•Û‘¶‚³‚ê‚Ä‚¢‚é‚©‚ğ•Ô‚·</summary>

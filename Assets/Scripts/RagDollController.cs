@@ -18,6 +18,7 @@ public class RagDollController : MonoBehaviour
     void Awake()
     {
         _rbs = GetComponentsInChildren<Rigidbody>();
+        SoundManager._instance.Play("SE_‚«‚á‚ ‚ ");
     }
 
     void Start()

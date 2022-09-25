@@ -11074,6 +11074,10 @@ PrefabInstance:
       value: "BGM_\u307B\u306E\u307C\u306E2"
       objectReference: {fileID: 0}
     - target: {fileID: 2090085630265387644, guid: 56c2f91baeee00b48ac1052a75cfd658, type: 3}
+      propertyPath: _soundDatas.Array.data[16].key
+      value: "SE_\u304D\u3083\u3042\u3042"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2090085630265387644, guid: 56c2f91baeee00b48ac1052a75cfd658, type: 3}
       propertyPath: _soundDatas.Array.data[12].clip
       value: 
       objectReference: {fileID: 8300000, guid: 518d3419fdea9504083b22105ca35360, type: 3}
@@ -11090,6 +11094,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: c40828d70527a3943ac63a8e61c2f0eb, type: 3}
     - target: {fileID: 2090085630265387644, guid: 56c2f91baeee00b48ac1052a75cfd658, type: 3}
+      propertyPath: _soundDatas.Array.data[16].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8bf7377bfbe7f614c9493d2484416eb9, type: 3}
+    - target: {fileID: 2090085630265387644, guid: 56c2f91baeee00b48ac1052a75cfd658, type: 3}
       propertyPath: _soundDatas.Array.data[12].volume
       value: 1
       objectReference: {fileID: 0}
@@ -11103,6 +11111,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2090085630265387644, guid: 56c2f91baeee00b48ac1052a75cfd658, type: 3}
       propertyPath: _soundDatas.Array.data[15].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2090085630265387644, guid: 56c2f91baeee00b48ac1052a75cfd658, type: 3}
+      propertyPath: _soundDatas.Array.data[16].volume
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2090085630265387645, guid: 56c2f91baeee00b48ac1052a75cfd658, type: 3}

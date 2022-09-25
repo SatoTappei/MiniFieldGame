@@ -110,7 +110,6 @@ public class EffectUIManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         SoundManager._instance.Play("SE_‚ª‚ß‚¨‚×‚ç•¶š‰‰o");
         _gameOverEffect.transform.GetChild(0).transform.DORotate(new Vector3(0, 0, -8.5f), 0.05f);
-
         yield return null;
     }
 

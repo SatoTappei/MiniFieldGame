@@ -179,8 +179,8 @@ MonoBehaviour:
   _anim: {fileID: 8448754217160054033}
   _characterType: 1
   _canMoveTile: 00000000
-  _damageEffect: {fileID: 1493453550190424508}
-  _decalEffect: {fileID: 6910050840410955261, guid: ab81af4fd1b3b214a82d5d125202d0a0, type: 3}
+  _damageEffect: {fileID: 0}
+  _decalEffect: {fileID: 0}
   _ragDoll: {fileID: 7037610115199196517, guid: a83ffb45ed122f545b9ba7c2c13aa831, type: 3}
   _noticeIcon: {fileID: 6355071879193167639}
   _sightRange: 5
@@ -2143,10 +2143,5 @@ PrefabInstance:
 --- !u!4 &1493453550190424507 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5618022227958457797, guid: 136371d0315a35f4cb24a26b49e40f49, type: 3}
-  m_PrefabInstance: {fileID: 6435337534306456702}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1493453550190424508 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5618022227958457794, guid: 136371d0315a35f4cb24a26b49e40f49, type: 3}
   m_PrefabInstance: {fileID: 6435337534306456702}
   m_PrefabAsset: {fileID: 0}

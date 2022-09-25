@@ -9,7 +9,7 @@ using DG.Tweening;
 /// </summary>
 public class SelectableUIButton : MonoBehaviour
 {
-    Image _img;
+    protected Image _img;
     /// <summary>ボタンが選ばれているときの色</summary>
     [SerializeField] Color32 _selectColor;
     /// <summary>ボタンのデフォルトの色</summary>
