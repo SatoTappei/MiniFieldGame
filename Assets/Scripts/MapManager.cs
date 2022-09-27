@@ -165,7 +165,7 @@ public class MapManager : MonoBehaviour
         // 文字列を一列ずつに分解する
         string[] lines = mapStr.Split('\n');
         // マップのデータを初期化、マップの幅が行ごとに違う場合(ジャグ配列)にはエラーが出るので注意
-        _currentMap = new Map(lines[0].Length, lines.Length);
+        _currentMap = new Map(lines.Length, lines[0].Length);
 
         for (int i = 0; i < lines.Length; i++)
         {

@@ -17,12 +17,12 @@ public class DiggingMapGenerator : MapGeneratorBase
     public override string GenerateRandomMap(int width, int height)
     {
         // 渡された数が偶数なら-1して奇数に直す
-        int w = width % 2 != 0 ? width : width - 1;
         int h = height % 2 != 0 ? height : height - 1;
+        int w = width % 2 != 0 ? width : width - 1;
         // 外周を通路、それ以外を壁にする
         string[,] map = new string[h, w];
-        for (int i = 0; i < map.GetLength(0); i++)
-            for (int j = 0; j < map.GetLength(1); j++)
+        for (int i = 0; i < /*map.GetLength(0)*/h; i++)
+            for (int j = 0; j < /*map.GetLength(1)*/w; j++)
                 map[i, j] = i * j == 0 || i == h - 1 || j == w - 1 ? "O" : "W";
         // 穴を掘る
         _startMasses.Add((1, 1));
@@ -41,7 +41,7 @@ public class DiggingMapGenerator : MapGeneratorBase
             map[map.GetLength(0) - 1, i] = "W";
         }
         // 水路を設置する
-        SetWaterPath(map, width, height, 10);
+        SetWaterPath(map, w, h, 10);
         // ゴールとスタートを設置する
         SetSpotRandom(map, "E");
         SetSpotRandom(map, "P");
@@ -125,8 +125,8 @@ public class DiggingMapGenerator : MapGeneratorBase
     {
         for (int i = 0; i < tri; i++)
         {
-            int wr = Random.Range(1, width / 2) * 2;
-            int hr = Random.Range(1, height / 2) * 2;
+            int baseX = Random.Range(0, width / 2) * 2;
+            int baseY = Random.Range(0, height / 2) * 2;
             for (int j = 0; j < 2; j++)
             {
                 (int, int)[] pair = { (1, 0), (-1, 0), (0, 1), (0, -1) };
@@ -134,15 +134,18 @@ public class DiggingMapGenerator : MapGeneratorBase
 
                 int addX = pair[dr].Item1;
                 int addY = pair[dr].Item2;
-
-                while (wr + addX >= 1 && wr + addX < width - 1 &&
-                    hr + addY >= 1 && hr + addY < height - 1)
+                
+                while (baseX + addX >= 0 && baseX + addX < width - 1 &&
+                       baseY + addY >= 0 && baseY + addY < height - 1)
                 {
-                    if (map[wr + addX, hr + addY] == "O")
+                    //int xx = baseX + addX;
+                    //int yy = baseX + addY;
+                    //Debug.Log($"xは0～{width / 2 * 2}、yは0～{height / 2 * 2}、壁({xx},{yy})");
+                    if (map[baseY + addY, baseX + addX] == "O")
                     {
                         break;
                     }
-                    map[wr + addX, hr + addY] = "S";
+                    map[baseY + addY, baseX + addX] = "S";
                     addX += pair[dr].Item1;
                     addY += pair[dr].Item2;
                 }
