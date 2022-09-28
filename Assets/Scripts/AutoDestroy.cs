@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using Cinemachine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 指定した時間後に自動で削除されるオブジェクト
@@ -20,22 +20,20 @@ public class AutoDestroy : MonoBehaviour
     /// <summary>カメラを揺らすか</summary>
     [SerializeField] bool _doCameraShake;
 
-    void Start()
+    async void Start()
     {
-        DOVirtual.DelayedCall(_lifeTime, () =>
+        await UniTask.Delay(System.TimeSpan.FromSeconds(_lifeTime));
+        Destroy(gameObject);
+        // エフェクトとその生成箇所が設定されていたら
+        if (_destroyedEff != null && _effTrans != null)
+            Instantiate(_destroyedEff, _effTrans.position, Quaternion.identity);
+        // 音が設定されていたら
+        if (_soundEffectName != "")
+            SoundManager._instance.Play(_soundEffectName);
+        // カメラを揺らすフラグがオンならば
+        if (_doCameraShake)
         {
-            Destroy(gameObject);
-            // エフェクトとその生成箇所が設定されていたら
-            if (_destroyedEff != null && _effTrans != null)
-                Instantiate(_destroyedEff, _effTrans.position, Quaternion.identity);
-            // 音が設定されていたら
-            if (_soundEffectName != "")
-                SoundManager._instance.Play(_soundEffectName);
-            // カメラを揺らすフラグがオンならば
-            if (_doCameraShake)
-            {
-                FindObjectOfType<CinemachineImpulseSource>().GenerateImpulse();
-            }
-        });
+            FindObjectOfType<CinemachineImpulseSource>().GenerateImpulse();
+        }
     }
 }

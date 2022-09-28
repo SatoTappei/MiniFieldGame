@@ -9,17 +9,16 @@ using DG.Tweening;
 /// </summary>
 public class DyingEffect : MonoBehaviour
 {
-    Image _img;
-
     void Awake()
     {
-        _img = GetComponent<Image>();
+        Image _img = GetComponent<Image>();
+        DOTween.Sequence().Append(_img.DOFade(0.5f, 2.0f).SetDelay(0.5f)).SetLoops(-1, LoopType.Yoyo);
+        SoundManager._instance.Play("SE_•mŽ€");
     }
 
     void Start()
     {
-        DOTween.Sequence().Append(_img.DOFade(0.5f, 2.0f).SetDelay(0.5f)).SetLoops(-1, LoopType.Yoyo);
-        SoundManager._instance.Play("SE_•mŽ€");
+
     }
 
     void Update()

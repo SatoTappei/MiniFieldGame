@@ -36,20 +36,6 @@ public abstract class MoveAlgorithmBase : MonoBehaviour
         }
     }
 
-    /// <summary>そのタイルに敵がいるかどうかを調べるためにMapManagerへの参照を持つ</summary>
-    //MapManager _mapManager;
-
-    //void Start()
-    //{
-    //    _mapManager = FindObjectOfType<MapManager>();
-    //}
-
     /// <summary>移動方向を返す</summary>
     public abstract ActorDir GetMoveDirection(PosXZ current, PosXZ target);
-
-    /// <summary>指定したタイルに何かいるかチェックする</summary>
-    //public bool CheckTile(int x, int y)
-    //{
-    //    return _mapManager.CurrentMap.GetMapTileActor(x, y);
-    //}
 }

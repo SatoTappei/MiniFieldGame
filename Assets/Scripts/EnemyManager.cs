@@ -30,7 +30,8 @@ public class EnemyManager : CharacterBase
     bool _isNotice;
 
     /// <summary>PlaySceneManagerがこのプロパティを見てメソッドを呼び出す</summary>
-    public bool DoActionThisTurn { get => _doActionThisTurn; }
+    //public bool DoActionThisTurn { get => _doActionThisTurn; }
+    public bool GetDoActionThisTurn() => _doActionThisTurn;
 
     void Awake()
     {

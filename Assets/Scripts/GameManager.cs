@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// ゲームマネージャー
@@ -74,45 +75,35 @@ public class GameManager : MonoBehaviour
         
     }
 
-    // 今回は特殊なフェードをするのでFadeImageオブジェクトは使わないので、Alphaを0にして透明にしてある。
-
-    /// <summary>フェードインする</summary>
-    public void FadeIn(Scene _, Scene __)
+    ///// <summary>フェードインする</summary>
+    public async void FadeIn(Scene _, Scene __)
     {
         Debug.Log("フェードイン中");
-        StartCoroutine(Fade());
 
-        IEnumerator Fade()
+        for (int i = 0; i < _fadeBlocks.Count; i += 3)
         {
-            for (int i = 0; i < _fadeBlocks.Count; i += 3)
-            {
-                _fadeBlocks[i].SetActive(false);
-                _fadeBlocks[i + 1].SetActive(false);
-                _fadeBlocks[i + 2].SetActive(false);
-                yield return new WaitForSeconds(0.01f);
-            }
-            _isFading = false;
+            _fadeBlocks[i].SetActive(false);
+            _fadeBlocks[i + 1].SetActive(false);
+            _fadeBlocks[i + 2].SetActive(false);
+            await UniTask.Delay(System.TimeSpan.FromSeconds(0.01f));
         }
+        _isFading = false;
     }
 
     /// <summary>フェードアウト後、シーンを推移する</summary>
-    public void FadeOut(string sceneName)
+    public async void FadeOut(string sceneName)
     {
         Debug.Log("フェードアウト中");
         _isFading = true;
-        StartCoroutine(Fade());
 
-        IEnumerator Fade()
+        for (int i = 0; i < _fadeBlocks.Count; i += 3)
         {
-            for (int i = 0; i < _fadeBlocks.Count; i += 3)
-            {
-                _fadeBlocks[i].SetActive(true);
-                _fadeBlocks[i + 1].SetActive(true);
-                _fadeBlocks[i + 2].SetActive(true);
-                yield return new WaitForSeconds(0.01f);
-            }
-            Debug.Log("フェードアウト終了");
-            SceneManager.LoadScene(sceneName);
+            _fadeBlocks[i].SetActive(true);
+            _fadeBlocks[i + 1].SetActive(true);
+            _fadeBlocks[i + 2].SetActive(true);
+            await UniTask.Delay(System.TimeSpan.FromSeconds(0.01f));
         }
+        Debug.Log("フェードアウト終了");
+        SceneManager.LoadScene(sceneName);
     }
 }

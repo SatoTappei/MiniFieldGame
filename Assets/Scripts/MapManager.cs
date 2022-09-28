@@ -66,7 +66,7 @@ public class MapManager : MonoBehaviour
             {
                 return null;
             }
-        } /*=> _mapArray[x, z].OnCharacter;*/
+        }
     }
 
     /// <summary>生成するタイルのデータ</summary>
@@ -79,14 +79,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] Transform _coinParent;
     /// <summary>タイルを隠す雲</summary>
     [SerializeField] GameObject _cloud;
-    /// <summary>フロアに雲を生成するか</summary>
-    bool _isCloudy;
     /// <summary>フロアに生成する生成する敵</summary>
     GameObject[] _enemies;
-    /// <summary>フロアに生成する障害物</summary>
-    //GameObject[] _obstacles;
-    /// <summary>フロアに生成するコイン</summary>
-    //GameObject[] _coins;
     /// <summary>文字に対応したタイルが格納してある辞書型</summary>
     Dictionary<char, Tile> _tileDic = new Dictionary<char, Tile>();
     /// <summary>生成したマップのデータ、マップやタイルを調べる際にはこれを参照する</summary>
@@ -127,14 +121,11 @@ public class MapManager : MonoBehaviour
     public void Init(StageDataSO so)
     {
         _enemies = so.Enemies;
-        //_obstacles = so.Obstacles;
-        //_coins = so.Coins;
-        _isCloudy = so.IsCoudy;
 
         // マップのもとになる文字列を生成する
         _mapStr = so.MapGenerator.GenerateRandomMap(so.Width, so.Height);
         // 文字列からマップを生成する
-        GenerateMap(_mapStr);
+        GenerateMap(_mapStr, so.IsCoudy);
         // コインを生成して配置する
         //GenerateCoinRandom(so.MaxCoin);
         GenerateItemRandom(so.Coins, so.MaxCoin, _coinParent);
@@ -144,9 +135,6 @@ public class MapManager : MonoBehaviour
         // 敵を生成して配置する
         for (int i = 0; i < so.MaxEnemy; i++)
             GenerateCharacterRandom(_enemies, _enemyParent);
-        // 障害物を生成して配置する
-        //for (int i = 0; i < so.MaxObst; i++)
-        //    GenerateCharacterRandom(_obstacles, _enemyParent);
     }
 
     /// <summary>マップをコピーして返す</summary>
@@ -160,7 +148,7 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary>文字列からマップを生成する</summary>
-    void GenerateMap(string mapStr)
+    void GenerateMap(string mapStr, bool isCloudy)
     {
         // 文字列を一列ずつに分解する
         string[] lines = mapStr.Split('\n');
@@ -179,7 +167,7 @@ public class MapManager : MonoBehaviour
                     obj.transform.SetParent(_tileParent);
                     if (tile.Type == TileType.Floor) _currentMap._floorList.Add((i, j)); // テスト
                     // タイルの上に雲も生成しておく
-                    if(_isCloudy) Instantiate(_cloud, new Vector3(i, 2, j), Quaternion.identity);
+                    if(isCloudy) Instantiate(_cloud, new Vector3(i, 2, j), Quaternion.identity);
                 }
                 else
                     Debug.LogWarning($"生成できませんでした。文字が登録されてないです。<{lines[i][j]}>");
@@ -200,14 +188,6 @@ public class MapManager : MonoBehaviour
     /// <summary>キャラクターをマップ上のランダムなタイルに配置する</summary>
     void SetCharacterRandom(GameObject actor, TileType canMove)
     {
-        //// キャラクターを置く床のタイルのリストを作成
-        //List<(int, int)> canMoveTiles = new List<(int, int)>();
-
-        //for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
-        //    for (int j = 0; j < _currentMap._mapArray.GetLength(1); j++)
-        //        if (_currentMap._mapArray[i, j].Type == canMove && _currentMap.GetMapTileActor(i,j) == null)
-        //            canMoveTiles.Add((i, j));
-
         // 床のリストからキャラクターがいない床のリストを生成する
         List<(int, int)> canMoveTiles = new List<(int, int)>
             (_currentMap._floorList.Where(f=>_currentMap.GetMapTileActor(f.Item1,f.Item2) == null));
@@ -239,33 +219,6 @@ public class MapManager : MonoBehaviour
         obj.transform.SetParent(parent);
         SetCharacterRandom(obj, TileType.Floor);
     }
-
-    /// <summary>ランダムな位置に指定された数だけコインを生成する</summary>
-    //void GenerateCoinRandom(int amount)
-    //{
-    //    // 床のタイルのリストを作成
-    //    //List<(int, int)> floorTiles = new List<(int, int)>();
-
-    //    //for (int i = 0; i < _currentMap._mapArray.GetLength(0); i++)
-    //    //    for (int j = 0; j < _currentMap._mapArray.GetLength(1); j++)
-    //    //        if (_currentMap._mapArray[i, j].Type == TileType.Floor)
-    //    //            floorTiles.Add((i, j));
-
-    //    // 床のタイルのリストを複製
-    //    List<(int, int)> floorTiles = new List<(int, int)>(_currentMap._floorList);
-
-    //    // 指定された数だけコインを生成、床のタイルの方が少ない場合はその数だけ生成する
-    //    for (int i = 0; i < Mathf.Min(amount, floorTiles.Count); i++)
-    //    {
-    //        int r = Random.Range(0, floorTiles.Count);
-    //        int x = floorTiles[r].Item1;
-    //        int y = floorTiles[r].Item2;
-    //        var obj = Instantiate(_coin, new Vector3(x, 0.5f, y), Quaternion.identity);
-    //        obj.GetComponent<ItemManager>().InitPosXZ();
-    //        obj.transform.SetParent(_coinParent);
-    //        floorTiles.RemoveAt(r);
-    //    }
-    //}
 
     /// <summary>指定された数だけ渡されたアイテムを生成する</summary>
     void GenerateItemRandom(GameObject[] items, int amount, Transform parent = null)

@@ -61,8 +61,8 @@ public class AreaDivisionMapGenerator : MapGeneratorBase
     {
         _mapWidth = width;
         _mapHeight = height;
-        // 部屋の最大数を設定(16*16のマップで最大6部屋を基準に設定)
-        _roomNumMax = width * height / 42;
+        // 部屋の最大数を設定(16*16のマップで最大4部屋を基準に設定)
+        _roomNumMax = 4/*width * height / 64*/;
 
         string[,] map = new string[height, width];
         for (int i = 0; i < map.GetLength(0); i++)
@@ -292,41 +292,5 @@ public class AreaDivisionMapGenerator : MapGeneratorBase
 
         Debug.LogError("床のタイルを取得できませんでした。メソッドを修正する必要があります。");
         return null;
-
-        // 重複なしで調べられるが処理が複雑
-        //foreach (Area room in _rooms)
-        //{
-        //    // 部屋の横の長さが入ったリスト
-        //    List<int> widthList = new List<int>();
-        //    for (int i = room.Start.X; i < room.Goal.X; i++)
-        //    {
-        //        widthList.Add(i);
-        //    }
-        //    // 部屋の縦の長さが入ったリスト
-        //    List<int> heightList = new List<int>();
-        //    for (int i = room.Start.Y; i < room.Goal.Y; i++)
-        //    {
-        //        heightList.Add(i);
-        //    }
-        //    // 横のリストから1つ選ぶ
-        //    int wr = Random.Range(0, widthList.Count);
-        //    // 縦のリストがなくなるまで操作
-        //    while (heightList.Count > 0)
-        //    {
-        //        // 縦のリストから初期位置を選ぶ
-        //        int hr = Random.Range(0, heightList.Count);
-        //        // 指定されたマスが普通の床かどうか調べる
-        //        if (map[widthList[wr], heightList[hr]] == "O")
-        //        {
-        //            int x = widthList[wr];
-        //            int y = heightList[hr];
-        //            return new List<Area>() { new Area(x, y, x, y) };
-        //        }
-        //        else
-        //        {
-        //            heightList.RemoveAt(hr);
-        //        }
-        //    }
-        //}
     }
 }

@@ -171,12 +171,6 @@ public class PlayerManager : CharacterBase
         // 体力を減らしてUIに反映させる、HPが0より小さくなってしまうが、呼び出したメソッド側で弾くので今のところは問題ない
         _lifePoint--;
         FindObjectOfType<PlayerUIManager>().DecreaseLifePoint(_lifePoint);
-
-        // 体力が1になったら瀕死の演出を行う
-        //if (_lifePoint == 1)
-        //{
-        //    Instantiate(_dyingEffect, Vector3.zero, Quaternion.identity);
-        //}
         // 体力が0になったら
         if (_lifePoint == 0) 
         {
@@ -187,12 +181,6 @@ public class PlayerManager : CharacterBase
             psm.AddDeadCharacter(gameObject);
             // 死亡の演出を行う
             Death(attackedDir);
-            //// 死亡のアニメーションを再生
-            //_anim.Play("Dead");
-            //// ラグドールを生成して攻撃された方向とは逆に吹っ飛ばす
-            //var obj = Instantiate(_ragDoll, transform.position, Quaternion.identity);
-            //Vector3 vec = DirectionToVec3(attackedDir);
-            //obj.GetComponent<RagDollController>().Dir = new Vector3(vec.x, 0.5f, vec.z).normalized;
         }
         else
         {

@@ -699,8 +699,8 @@ MonoBehaviour:
   _anim: {fileID: 843061458001716465}
   _characterType: 1
   _canMoveTile: 00000000
-  _damageEffect: {fileID: 0}
-  _decalEffect: {fileID: 0}
+  _damageEffect: {fileID: 5618022227958457794, guid: 136371d0315a35f4cb24a26b49e40f49, type: 3}
+  _decalEffect: {fileID: 6910050840410955261, guid: ab81af4fd1b3b214a82d5d125202d0a0, type: 3}
   _ragDoll: {fileID: 5851854025821250768, guid: 5dc9661efce85d64cb8fa2ba618c3ea8, type: 3}
   _noticeIcon: {fileID: 7390526212028026760}
   _sightRange: 5

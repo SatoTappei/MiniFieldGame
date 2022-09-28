@@ -8,15 +8,13 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public class DecalBlood : MonoBehaviour
 {
-    DecalProjector _dp;
     /// <summary>”ò‚ÑŽU‚Á‚½ŒŒ‚ÌŽí—Þ</summary>
     [SerializeField] Material[] _materials;
 
     void Awake()
     {
-        _dp = GetComponent<DecalProjector>();
         int r = Random.Range(0, _materials.Length);
-        _dp.material = _materials[r];
+        GetComponent<DecalProjector>().material = _materials[r];
         Vector3 pos = transform.position;
         Vector3 angle = transform.eulerAngles;
         float rotY = Random.Range(0, 360);

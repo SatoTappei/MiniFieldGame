@@ -21,9 +21,6 @@ public class ItemManager : ActorBase
     /// <summary>任意:このアイテムを獲得したときに出る演出</summary>
     [SerializeField] GameObject _getParticle;
 
-    /// <summary>このアイテムの種類を返す</summary>
-    //public ItemType GetItemType() => _itemType;
-
     void Start()
     {
         

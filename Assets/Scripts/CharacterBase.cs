@@ -28,8 +28,6 @@ public abstract class CharacterBase : ActorBase
     [SerializeField] protected GameObject _decalEffect;
     /// <summary>キャラクターが死んだときに出るラグドール</summary>
     [SerializeField] protected GameObject _ragDoll;
-    /// <summary>現在のキャラクターの向き</summary>
-    //Direction _currentDir = Direction.Up;
     /// <summary>入力された方向、キャラクターの移動に使用する。敵の場合は自動で決まる</summary>
     protected ActorDir _inputDir;
     /// <summary>移動する際の移動先の座標</summary>
@@ -77,7 +75,6 @@ public abstract class CharacterBase : ActorBase
     /// <summary>指定した座標に補完しつつ移動させる</summary>
     protected IEnumerator Move(PosXZ target)
     {
-        //MapManager mm = FindObjectOfType<MapManager>();
         Vector3 currentPos = new Vector3(_currentPosXZ.x, 0, _currentPosXZ.z);
         Vector3 targetPos = new Vector3(target.x, 0, target.z);
 

@@ -213,11 +213,11 @@ public class PlaySceneManager : MonoBehaviour
         // プレイヤーが移動する
         _player.MoveStart();
         // 敵が移動する
-        _enemies.Where(e => !e.DoActionThisTurn).ToList().ForEach(e => e.MoveStart());
+        _enemies.Where(e => !e.GetDoActionThisTurn()).ToList().ForEach(e => e.MoveStart());
         // 移動するキャラクターが全員終わるまで次の処理に進まないようにする
         yield return new WaitUntil(() => _endActorMoveAll);
         // 敵が順番に行動する
-        foreach (EnemyManager e in _enemies.Where(e => e.DoActionThisTurn))
+        foreach (EnemyManager e in _enemies.Where(e => e.GetDoActionThisTurn()))
         {
             _endActorAction = false;
             e.ActionStart();
@@ -239,7 +239,7 @@ public class PlaySceneManager : MonoBehaviour
         // 敵全員が行動を決定する
         _enemies.ForEach(e => e.RequestAI());
         // 敵が順番に行動する
-        foreach (EnemyManager e in _enemies.Where(e => e.DoActionThisTurn))
+        foreach (EnemyManager e in _enemies.Where(e => e.GetDoActionThisTurn()))
         {
             _endActorAction = false;
             e.ActionStart();
@@ -249,7 +249,7 @@ public class PlaySceneManager : MonoBehaviour
         if (_moveActorCount > 0)
         {
             // 敵を移動させる
-            _enemies.Where(e => !e.DoActionThisTurn).ToList().ForEach(e => e.MoveStart());
+            _enemies.Where(e => !e.GetDoActionThisTurn()).ToList().ForEach(e => e.MoveStart());
             // 敵が全員移動を終えるまで次の処理に進まないようにする
             yield return new WaitUntil(() => _endActorMoveAll);
         }
@@ -267,7 +267,7 @@ public class PlaySceneManager : MonoBehaviour
         // 経過したターンの割合 
         int turn = Mathf.FloorToInt(1.0f * (so.TurnLimit - _remainingTurn) / so.TurnLimit);
 
-        // TODO:スコアの計算式
+        // スコアの計算式
         _currentScore += coin * 100 + enemy * 100 + turn * 100;
     }
 
@@ -289,7 +289,6 @@ public class PlaySceneManager : MonoBehaviour
         SoundManager._instance.FadeOutBGM();
         SoundManager._instance.Play("SE_決定");
         GameManager._instance.FadeOut("GamePlay");
-        // フェードさせる
     }
 
     /// <summary>タイトルに戻る</summary>
@@ -298,6 +297,5 @@ public class PlaySceneManager : MonoBehaviour
         SoundManager._instance.FadeOutBGM();
         SoundManager._instance.Play("SE_決定");
         GameManager._instance.FadeOut("Title");
-        // タイトルにはいつでも戻れるようにする、ミスったらすぐやり直せるように
     }
 }
